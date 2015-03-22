@@ -28,7 +28,7 @@
     'category': 'Manufacturing',
     'depends': [
         'sale_mrp_link',
-        'mrp_schedule',
+        'mrp_schedule_state',
     ],
     'description': """
 
