@@ -34,7 +34,6 @@ class MrpProduction(orm.Model):
                 mo_ids = []
                 for production in self.browse(
                         cr, uid, mrp_ids, context=context):
-                    print production.name
                     if production.state not in ['ready']:
                         procurable_sale = procurable_sale and False
                     else:
@@ -45,6 +44,6 @@ class MrpProduction(orm.Model):
         return True
 
     def action_ready(self, cr, uid, ids, context=None):
-        " Standard method "
-        super(MrpProduction, self).action_ready(cr, uid, ids, context=context)
+        res = super(MrpProduction, self).action_ready(cr, uid, ids, context=context)
         self.set_planable_mo(cr, uid, ids, context=context)
+        return res
