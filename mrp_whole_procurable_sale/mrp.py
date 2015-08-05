@@ -34,13 +34,15 @@ class MrpProduction(orm.Model):
                 mo_ids = []
                 for production in self.browse(
                         cr, uid, mrp_ids, context=context):
-                    if production.state not in ['ready']:
+                    if production.state == 'confirmed':
                         procurable_sale = procurable_sale and False
                     else:
                         mo_ids.append(production.id)
                 if procurable_sale:
                     vals = {'schedule_state': 'todo'}
                     self.write(cr, uid, mo_ids, vals, context=context)
+            else:
+                mo.write(cr, uid, {'schedule_state': 'todo'})
         return True
 
     def action_ready(self, cr, uid, ids, context=None):
