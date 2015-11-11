@@ -57,12 +57,14 @@ class ProductTemplate(models.Model):
     def create(self, vals):
         bom_vals = self._extract_bom_line(vals)
         record = super(ProductTemplate, self).create(vals)
-        record._process_bom_vals(bom_vals)
+        if bom_vals:
+            record._process_bom_vals(bom_vals)
         return record
 
     @api.multi
     def write(self, vals):
         bom_vals = self._extract_bom_line(vals)
         res = super(ProductTemplate, self).write(vals)
-        self._process_bom_vals(bom_vals)
+        if bom_vals:
+            self._process_bom_vals(bom_vals)
         return res
