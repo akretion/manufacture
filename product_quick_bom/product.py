@@ -68,3 +68,10 @@ class ProductTemplate(models.Model):
         if bom_vals:
             self._process_bom_vals(bom_vals)
         return res
+
+    @api.multi
+    def unlink(self):
+        for record in self:
+            if record.bom_ids:
+                record.bom_ids.unlink()
+        return super(ProductTemplate, self).unlink()
