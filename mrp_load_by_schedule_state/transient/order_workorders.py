@@ -8,15 +8,15 @@
 #
 ##############################################################################
 
-from openerp.osv import orm
+from openerp import models, api
 
 
-class OrderWorkorder(orm.TransientModel):
+class OrderWorkorder(models.TransientModel):
     _name = 'order.workorder'
 
-    def order_workorders(self, cr, uid, ids, context=None):
-        MrpWorkcenter = self.pool['mrp.workcenter']
-        active_ids = context.get('active_ids', [])
-        MrpWorkcenter.button_order_workorder(
-            cr, uid, active_ids, context=context)
+    @api.multi
+    def order_workorders(self):
+        MrpWorkcenter = self.env['mrp.workcenter']
+        active_ids = self.env.context.get('active_ids', [])
+        MrpWorkcenter.button_order_workorder()
         return True

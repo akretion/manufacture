@@ -29,6 +29,7 @@
     'depends': [
         'mrp_schedule_state',
         'mrp_load',
+        'mrp_operation_dependency',
     ],
     'description': """
 .. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
