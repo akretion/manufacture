@@ -77,17 +77,6 @@ class MrpRoutingWorkcenter(models.Model):
     priority = fields.Integer('Priority')
 
 
-class MrpBom(models.Model):
-    _inherit = 'mrp.bom'
-
-    @api.model
-    def _prepare_wc_line(self, bom, wc_use, level=0, factor=1):
-        res = super(MrpBom, self)._prepare_wc_line(
-            bom, wc_use, factor=factor, level=level)
-        res['priority'] = wc_use.priority
-        return res
-
-
 class MrpProductionWorkcenterLine(models.Model):
     _inherit = 'mrp.production.workcenter.line'
     _order = 'sequence'
