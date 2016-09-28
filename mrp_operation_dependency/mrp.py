@@ -35,7 +35,7 @@ class MrpProductionWorkcenterLine(models.Model):
                     ['production_id', '=', line.production_id.id],
                     ['routing_line_id', 'in', routing_line_ids],
                     ])
-                line.dependency_ids = [(6 ,0, [depend_lines.ids])] 
+                line.dependency_ids = [(6 ,0, depend_lines.ids)] 
 
     @api.multi
     def _get_dependency_for_ids(self):
@@ -46,7 +46,7 @@ class MrpProductionWorkcenterLine(models.Model):
                     ['production_id', '=', line.production_id.id],
                     ['routing_line_id', 'in', routing_line_ids],
                     ])
-            line.dependency_for_ids = [(6 ,0, [depend_lines.ids])]
+            line.dependency_for_ids = [(6 ,0, depend_lines.ids)]
 
     @api.multi
     @api.depends('state', 'routing_line_id')
