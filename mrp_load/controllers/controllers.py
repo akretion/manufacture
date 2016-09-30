@@ -20,7 +20,6 @@ class Action(main.Action):
                 if action_id == mrp_action_id:
                     env['mrp.workcenter'].auto_recompute_load()
             except ValueError:
-                raise
                 if action_id == 'mrp.mrp_workcenter_action':
                     env['mrp.workcenter'].auto_recompute_load()
         return super(Action, self).load(
