@@ -21,10 +21,55 @@
 ###############################################################################
 
 from openerp import fields, models, api
+from openerp.osv import fields as old_fields
 
 
 class MrpProductionWorkcenterLine(models.Model):
     _inherit = 'mrp.production.workcenter.line'
+
+    def _is_pending(self, cr, uid, ids, field, args, context=None):
+        result = {}
+        for line in self.browse(cr, uid, ids, context=context):
+            result[line.id] = False
+            for depend_line in line.dependency_ids:
+                if depend_line.state != 'done':
+                    result[line.id] = True
+                    break
+        for line_id, val in result.items():
+            self.write(cr, uid, line_id, {
+                'pending': val,
+                }, context=context)
+        return result
+
+    def _get_operation_from_dependency(self, cr, uid, ids, context=None):
+        res = []
+        if context is None:
+            context = {}
+        elif context.get('create_line'):
+            res = ids[:]
+        for line in self.read(cr, uid, ids, ['dependency_for_ids'],
+                              context=context):
+            res.extend(line['dependency_for_ids'])
+        return res
+
+    # Keep pending in old api for now else it won't recompute, because
+    # dependency_ids is not stored. I am not sure it is a good idea to
+    # Store it.
+    _columns = {
+        'pending': old_fields.function(
+            _is_pending,
+            type='boolean',
+            string='Pending',
+            select=True,
+            store={
+                'mrp.production.workcenter.line': [
+                    _get_operation_from_dependency,
+                    ['state', 'routing_line_id'],
+                    10,
+                ],
+            },
+        ),
+    }
 
     @api.multi
     def _get_dependency_ids(self):
@@ -46,22 +91,23 @@ class MrpProductionWorkcenterLine(models.Model):
                     ['production_id', '=', line.production_id.id],
                     ['routing_line_id', 'in', routing_line_ids],
                     ])
-            line.dependency_for_ids = [(6 ,0, depend_lines.ids)]
+                line.dependency_for_ids = [(6 ,0, depend_lines.ids)]
 
-    @api.multi
-    @api.depends('state', 'routing_line_id')
-    def _is_pending(self):
-        for line in self:
-            result[line.id] = False
-            for depend_line in line.dependency_ids:
-                if depend_line.state != 'done':
-                    line.pending = True
-                    break
+#    @api.multi
+#    @api.depends('dependency_ids.state', 'dependency_ids.routing_line_id')
+#    def _is_pending(self):
+#        print 'll', self
+#        for line in self:
+#            result[line.id] = False
+#            for depend_line in line.dependency_ids:
+#                if depend_line.state != 'done':
+#                    line.pending = True
+#                    break
 
 
-    pending = fields.Boolean(
-        '_is_pending',
-        store=True)
+#    pending = fields.Boolean(
+#        '_is_pending',
+#        store=True)
 
     routing_line_id = fields.Many2one(
         'mrp.routing.workcenter',
