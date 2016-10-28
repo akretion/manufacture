@@ -136,7 +136,7 @@ class MrpWorkcenter(models.Model):
 
     @api.multi
     def button_order_workorder(self):
-        workcenter_obj = self.env['mrp.production.workcenter.line']
+        workorder_obj = self.env['mrp.production.workcenter.line']
         for workcenter in self:
             if not workcenter.ordering_key_id:
                 raise UserError(
