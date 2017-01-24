@@ -52,6 +52,13 @@ class MrpProductionWorkcenterLine(models.Model):
             res.extend(line['dependency_for_ids'])
         return res
 
+    def _get_operation_rom_routing_line(self, cr, uid, ids, context=None):
+        res = self.pool['mrp.production.workcenter.line'].search(cr, uid,
+            [('routing_line_id', 'in', ids),
+             ('state', 'not in', ('cancel', 'done'))])
+        print len(res)
+        return res
+
     # Keep pending in old api for now else it won't recompute, because
     # dependency_ids is not stored. I am not sure it is a good idea to
     # Store it.
@@ -65,6 +72,11 @@ class MrpProductionWorkcenterLine(models.Model):
                 'mrp.production.workcenter.line': [
                     _get_operation_from_dependency,
                     ['state', 'routing_line_id'],
+                    10,
+                ],
+                'mrp.routing.workcenter': [
+                    _get_operation_rom_routing_line,
+                    ['dependency_ids'],
                     10,
                 ],
             },
