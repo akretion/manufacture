@@ -18,5 +18,6 @@ class OrderWorkorder(models.TransientModel):
     def order_workorders(self):
         MrpWorkcenter = self.env['mrp.workcenter']
         active_ids = self.env.context.get('active_ids', [])
-        MrpWorkcenter.button_order_workorder()
+        workcenters = MrpWorkcenter.browse(active_ids)
+        workcenters.button_order_workorder()
         return True
