@@ -1,19 +1,41 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* product_quick_bom
+# 	* product_quick_bom
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-13 16:24+0000\n"
-"PO-Revision-Date: 2015-09-13 16:24+0000\n"
+"POT-Creation-Date: 2017-08-21 11:34+0000\n"
+"PO-Revision-Date: 2017-08-21 13:35+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"Language: fr\n"
+"X-Generator: Poedit 2.0.1\n"
+
+#. module: product_quick_bom
+#: view:quick.add.component:product_quick_bom.view_quick_add_component_form
+msgid "... are added to these products"
+msgstr "... sont ajoutés à ces produits"
+
+#. module: product_quick_bom
+#: model:ir.actions.act_window,name:product_quick_bom.quick_add_component_act_window
+msgid "Add components"
+msgstr "Ajouter des composants"
+
+#. module: product_quick_bom
+#: view:quick.add.component:product_quick_bom.view_quick_add_component_form
+msgid "Add components to products"
+msgstr "Ajouter des composants aux produits"
+
+#. module: product_quick_bom
+#: view:quick.add.component:product_quick_bom.view_quick_add_component_form
+msgid "Apply"
+msgstr "Appliquer"
 
 #. module: product_quick_bom
 #: model:ir.model,name:product_quick_bom.model_mrp_bom
@@ -31,12 +53,82 @@ msgid "Bom line"
 msgstr "Composant"
 
 #. module: product_quick_bom
+#: view:quick.add.component:product_quick_bom.view_quick_add_component_form
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: product_quick_bom
+#: field:quick.add.component,product_ids:0
+msgid "Components"
+msgstr "Composants"
+
+#. module: product_quick_bom
+#: field:quick.add.component,create_uid:0
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: product_quick_bom
+#: field:quick.add.component,create_date:0
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: product_quick_bom
+#: field:quick.add.component,display_name:0
+msgid "Display Name"
+msgstr "Display Name"
+
+#. module: product_quick_bom
+#: field:quick.add.component,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: product_quick_bom
 #: help:product.template,bom_line_ids:0
 msgid "If you product is manufactured you can selecthere the componant to product them"
 msgstr "Si votre produit est fabriqué vous pouvez définir les composants ici"
+
+#. module: product_quick_bom
+#: field:quick.add.component,__last_update:0
+msgid "Last Modified on"
+msgstr "Modifié le"
+
+#. module: product_quick_bom
+#: field:quick.add.component,write_uid:0
+msgid "Last Updated by"
+msgstr "Modifié par"
+
+#. module: product_quick_bom
+#: field:quick.add.component,write_date:0
+msgid "Last Updated on"
+msgstr "Modifié le"
+
+#. module: product_quick_bom
+#: field:mrp.bom.line,product_tmpl_id:0
+msgid "Product"
+msgstr "Product"
 
 #. module: product_quick_bom
 #: model:ir.model,name:product_quick_bom.model_product_template
 msgid "Product Template"
 msgstr "Modèle d'article"
 
+#. module: product_quick_bom
+#: field:quick.add.component,product_qty:0
+msgid "Product qty"
+msgstr "Quantité de produit"
+
+#. module: product_quick_bom
+#: field:quick.add.component,product_tmpl_ids:0
+msgid "Products"
+msgstr "Produits"
+
+#. module: product_quick_bom
+#: code:addons/product_quick_bom/wizards/add_component.py:35
+#, python-format
+msgid "Products with updated boms"
+msgstr "Products with updated boms"
+
+#. module: product_quick_bom
+#: view:quick.add.component:product_quick_bom.view_quick_add_component_form
+msgid "These components ..."
+msgstr "Ces composants ..."
