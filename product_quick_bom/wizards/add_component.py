@@ -30,6 +30,8 @@ class QuickAddComponent(models.TransientModel):
             'bom_line_ids': [(0, 0, {
                 'product_qty': self.product_qty,
                 'product_id': x.id}) for x in self.product_ids]})
+        if len(self.product_tmpl_ids._ids) == 1:
+            return
         domain = [('id', 'in', self.product_tmpl_ids._ids)]
         return {
             'name': _("Products with updated boms"),
