@@ -30,15 +30,12 @@
     "license": "AGPL-3",
     "application": False,
     "installable": True,
-    "external_dependencies": {
-        "python": [],
-        "bin": [],
-    },
     "depends": [
         "mrp",
     ],
     "data": [
         "product_view.xml",
+        "wizards/add_component.xml",
     ],
     "demo": [
     ],

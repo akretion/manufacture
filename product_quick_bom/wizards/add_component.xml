@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+<data>
+
+    <record id="view_quick_add_component_form" model="ir.ui.view">
+        <field name="model">quick.add.component</field>
+        <field name="active" eval="True" />
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div>
+                        <h2>Add components to products</h2>
+                    </div>
+                    <group>
+                        <field name="product_qty"/>
+                    </group>
+                    <group col="1">
+                        <separator string="These components ..."/>
+                        <field name="product_ids" nolabel="1">
+                            <tree>
+                                <field name="name"/>
+                                <field name="default_code"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group col="1">
+                        <separator string="... are added to these products"/>
+                        <field name="product_tmpl_ids" nolabel="1">
+                            <tree>
+                                <field name="name"/>
+                                <field name="default_code"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            <footer>
+                <button name="apply" string="Apply"
+                        type="object" class="oe_highlight"/>
+                <button special="cancel" string="Cancel" class="oe_link"/>
+            </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="quick_add_component_act_window" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Add components</field>
+        <field name="res_model">quick.add.component</field>
+        <field name="src_model">product.template</field>
+        <field name="view_mode">form,tree</field>
+        <field name="target">new</field>
+    </record>
+    <record id="quick_add_component_values" model="ir.values">
+        <field eval="'client_action_multi'" name="key2"/>
+        <field eval="'product.template'" name="model"/>
+        <field name="name">Add components</field>
+        <field eval="'ir.actions.act_window,'+str(quick_add_component_act_window)" name="value"/>
+    </record>
+
+</data>
+</openerp>
