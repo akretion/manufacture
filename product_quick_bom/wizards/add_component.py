@@ -31,8 +31,10 @@ class QuickAddComponent(models.TransientModel):
                 'product_qty': self.product_qty,
                 'product_id': x.id}) for x in self.product_ids]})
         if len(self.product_tmpl_ids._ids) == 1:
+            # we stay on this same record
             return
         domain = [('id', 'in', self.product_tmpl_ids._ids)]
+        # we move to the list of records updated
         return {
             'name': _("Products with updated boms"),
             'type': 'ir.actions.act_window',
