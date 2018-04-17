@@ -52,7 +52,7 @@
             <attribute name="invisible">1</attribute>
         </xpath>
         <xpath expr="//tree/field[@name='date_planned']" position="after">
-            <field name="planned_mo"/>
+            <field name="schedule_mo"/>
         </xpath>
     </field>
 </record>
