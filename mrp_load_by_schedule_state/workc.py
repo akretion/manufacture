@@ -148,6 +148,7 @@ class MrpWorkcenter(models.Model):
             prod_lines = workorder_obj.search([
                 ('state', 'not in', STATIC_STATES),
                 ('workcenter_id', '=', workcenter.id),
+                ('schedule_state', '=', 'scheduled')
                 ], order=', '.join(order_by))
             count = 1
             for prod_line in prod_lines:
