@@ -30,20 +30,24 @@ class MrpProduction(models.Model):
             warehouse = production.location_src_id.get_warehouse()
             mto_with_no_move_dest_id = warehouse.mrp_mto_mts_forecast_qty
             for move in self.move_raw_ids:
-                if (move.state == 'confirmed' and move.location_id in
-                        move.product_id.mrp_mts_mto_location_ids and not
-                        mto_with_no_move_dest_id):
+                if (move.state == 'confirmed' and move.product_id.mrp_mts_mto_location_ids):
+
                     domain = [('product_id', '=', move.product_id.id),
                               ('move_dest_id', '=', move.id)]
                     if move.group_id:
                         domain.append(('group_id', '=', move.group_id.id))
                     procurement = self.env['procurement.order'].search(domain)
                     if not procurement:
-                        # We have to split the move because we can't have
-                        # a part of the move that have ancestors and not the
-                        # other else it won't ever be reserved.
-                        qty_to_procure = (move.remaining_qty -
-                                          move.reserved_availability)
+                        if not mto_with_no_move_dest_id:
+                            # We have to split the move because we can't have
+                            # a part of the move that have ancestors and not the
+                            # other else it won't ever be reserved.
+                            qty_to_procure = (move.remaining_qty -
+                                              move.reserved_availability)
+                        else:
+                            qty_to_procure = production.get_mto_qty_to_procure(move)
+                        if not qty_to_procure:
+                            continue
                         if qty_to_procure < move.product_uom_qty:
                             move.do_unreserve()
                             new_move_id = move.split(
@@ -55,25 +59,14 @@ class MrpProduction(models.Model):
                             move.action_assign()
                         else:
                             new_move = move
+                        new_move.state = 'waiting'
 
                         proc_dict = self._prepare_mto_procurement(
-                            new_move, qty_to_procure,
-                            mto_with_no_move_dest_id)
-                        self.env['procurement.order'].create(proc_dict)
-
-                if (move.state == 'confirmed' and move.location_id in
-                        move.product_id.mrp_mts_mto_location_ids and
-                        move.procure_method == 'make_to_stock' and
-                        mto_with_no_move_dest_id):
-                    qty_to_procure = production.get_mto_qty_to_procure(move)
-                    if qty_to_procure > 0.0:
-                        proc_dict = self._prepare_mto_procurement(
-                            move, qty_to_procure, mto_with_no_move_dest_id)
-                        proc_dict.pop('move_dest_id', None)
+                            new_move, qty_to_procure)
                         self.env['procurement.order'].create(proc_dict)
         return res
 
-    def _prepare_mto_procurement(self, move, qty, mto_with_no_move_dest_id):
+    def _prepare_mto_procurement(self, move, qty):
         """Prepares a procurement for a MTO product."""
         origin = ((move.group_id and move.group_id.name + ":") or "") + \
                  ((move.name and move.name + ":") or "") + 'MTO -> Production'
@@ -94,9 +87,10 @@ class MrpProduction(models.Model):
             'route_ids': [(6, 0, route_ids.ids)],
             'warehouse_id': warehouse_id,
             'priority': move.priority,
+            'move_dest_id': move.id,
         }
-        if not mto_with_no_move_dest_id:
-            vals['move_dest_id'] = move.id
+#        if not mto_with_no_move_dest_id:
+#            vals['move_dest_id'] = move.id
         return vals
 
     @api.model
