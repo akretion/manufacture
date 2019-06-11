@@ -17,7 +17,7 @@ class MrpProduction(models.Model):
         super(MrpProduction, self)._adjust_procure_method()
 
     def _check_mts_mto_admissible(self, move):
-        if (move.state == 'confirmed' and \
+        if (move.state == 'confirmed' and
                 move.product_id.mrp_mts_mto_location_ids):
             return True
         return False
@@ -35,8 +35,8 @@ class MrpProduction(models.Model):
         for production in self:
             warehouse = production.location_src_id.get_warehouse()
             mto_with_no_move_dest_id = warehouse.mrp_mto_mts_forecast_qty
-            for move in self.move_raw_ids:
-                if self._check_mts_mto_admissible(move):
+            for move in production.move_raw_ids:
+                if production._check_mts_mto_admissible(move):
                     domain = [('product_id', '=', move.product_id.id),
                               ('move_dest_id', '=', move.id)]
                     if move.group_id:
