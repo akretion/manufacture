@@ -22,7 +22,8 @@ class StockMove(models.Model):
         res = super(StockMove, self).split(
             qty=qty, restrict_lot_id=restrict_lot_id,
             restrict_partner_id=restrict_partner_id)
-        production = self.raw_material_production_id
-        self.unit_factor = self.product_uom_qty / (
-            production.product_qty - production.qty_produced)
+        for move in self:
+            production = move.raw_material_production_id
+            move.unit_factor = move.product_uom_qty / (
+                production.product_qty - production.qty_produced)
         return res
