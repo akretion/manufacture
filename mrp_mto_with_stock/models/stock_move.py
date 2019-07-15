@@ -11,10 +11,12 @@ class StockMove(models.Model):
     @api.multi
     def _prepare_move_split_vals(self, defaults):
         defaults = super(StockMove, self)._prepare_move_split_vals(defaults)
-        quantity = defaults['product_uom_qty']
-        production = self.raw_material_production_id
-        factor = quantity / (production.product_qty - production.qty_produced)
-        defaults['unit_factor'] = factor
+        if self.raw_material_production_id:
+            production = self.raw_material_production_id
+            quantity = defaults['product_uom_qty']
+            factor = quantity / (
+                production.product_qty - production.qty_produced)
+            defaults['unit_factor'] = factor
         return defaults
 
     @api.multi
@@ -23,7 +25,8 @@ class StockMove(models.Model):
             qty=qty, restrict_lot_id=restrict_lot_id,
             restrict_partner_id=restrict_partner_id)
         for move in self:
-            production = move.raw_material_production_id
-            move.unit_factor = move.product_uom_qty / (
-                production.product_qty - production.qty_produced)
+            if move.raw_material_production_id:
+                production = move.raw_material_production_id
+                move.unit_factor = move.product_uom_qty / (
+                    production.product_qty - production.qty_produced)
         return res
