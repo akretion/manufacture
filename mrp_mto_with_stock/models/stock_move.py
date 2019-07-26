@@ -14,8 +14,9 @@ class StockMove(models.Model):
         if self.raw_material_production_id:
             production = self.raw_material_production_id
             quantity = defaults['product_uom_qty']
-            factor = quantity / (
-                production.product_qty - production.qty_produced)
+            original_quantity = (
+                production.product_qty - production.qty_produced) or 1.0
+            factor = quantity / original_quantity
             defaults['unit_factor'] = factor
         return defaults
 
@@ -25,8 +26,9 @@ class StockMove(models.Model):
             qty=qty, restrict_lot_id=restrict_lot_id,
             restrict_partner_id=restrict_partner_id)
         for move in self:
-            if move.raw_material_production_id:
-                production = move.raw_material_production_id
-                move.unit_factor = move.product_uom_qty / (
-                    production.product_qty - production.qty_produced)
+            production = move.raw_material_production_id
+            if production:
+                original_quantity = (
+                    production.product_qty - production.qty_produced) or 1.0
+                move.unit_factor = move.product_uom_qty / original_quantity
         return res
