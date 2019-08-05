@@ -41,7 +41,6 @@
                         <tree editable="top" create="0">
                             <field name="routing_id"/>
                             <field name="name"/>
-                            <field name="priority"/>
                         </tree>
                     </field>
                 </group>
