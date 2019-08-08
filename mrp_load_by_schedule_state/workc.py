@@ -71,12 +71,6 @@ class MrpWorkcenterOrderingField(models.Model):
         default='asc')
 
 
-class MrpRoutingWorkcenter(models.Model):
-    _inherit = 'mrp.routing.workcenter'
-
-    priority = fields.Integer('Priority')
-
-
 class MrpProductionWorkcenterLine(models.Model):
     _inherit = 'mrp.production.workcenter.line'
     _order = 'sequence'
@@ -87,8 +81,13 @@ class MrpProductionWorkcenterLine(models.Model):
             ['routing_line_id', '=', self.ids],
             ])
 
-    priority = fields.Integer(
-        related='routing_line_id.priority',
+    priority = fields.Selection(
+        selection=[
+            ('0', 'Not urgent'),
+            ('1', 'Normal'),
+            ('2', 'Urgent'),
+            ('3', 'Very Urgent')],
+        related='production_id.priority',
         store=True
     )
 
