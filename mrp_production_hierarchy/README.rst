@@ -23,7 +23,7 @@ Production Orders Hierarchy
     :target: https://runbot.odoo-community.org/runbot/129/12.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5| 
+|badge1| |badge2| |badge3| |badge4| |badge5|
 
 This module allows to view the hierarchy of generated production orders
 when several levels of bill of materials are involved.
