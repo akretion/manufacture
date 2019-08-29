@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, api
+from odoo.tools import float_compare, float_round
 
 
 class StockMove(models.Model):
@@ -27,8 +28,14 @@ class StockMove(models.Model):
             restrict_partner_id=restrict_partner_id)
         for move in self:
             production = move.raw_material_production_id
-            if production:
+            for all_raw in production.move_raw_ids.filtered(
+                lambda x: x.state not in ('cancel', 'done') and
+                    x.product_id == move.product_id
+            ):
+                # recalc unit factor because we may have added moves
                 original_quantity = (
                     production.product_qty - production.qty_produced) or 1.0
-                move.unit_factor = move.product_uom_qty / original_quantity
+                all_raw.unit_factor = (
+                    all_raw.product_uom_qty / original_quantity)
+
         return res
