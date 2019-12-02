@@ -56,7 +56,7 @@ class MrpWorkcenter(models.Model):
     def _get_sql_load_where(self):
         return [
             'mp.state IN %(state)s',
-            "wl.state != 'done'",
+            "wl.state in ('draft', 'pause', 'startworking')",
             'wl.workcenter_id IN %(workcenter_ids)s',
             ]
 
