@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+  <data>
+
+    <record id="view_wiz_switch_workcenter" model="ir.ui.view">
+        <field name="model">switch.workcenter</field>
+        <field name="inherit_id" ref="mrp_load.view_wiz_switch_workcenter"/>
+        <field name="arch" type="xml">
+            <field name="workcenter_id" position="after">
+                <field name="automatic_ordering"/>
+            </field>
+        </field>
+    </record>
+
+  </data>
+</openerp>

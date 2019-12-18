@@ -41,6 +41,8 @@ MRP Load by Schedule State
 * Allow to compute Workcenters load according to Schedule State
 * Allow to set criteria for define priorities of the work orders
   (from workcenters form view)
+* Allow to automatically define the priorities when switching workcenter
+  of some work orders
 
 
 Configuration
@@ -93,7 +95,8 @@ To contribute to this module, please visit http://odoo-community.org.
     'data': [
         'workcenter_view.xml',
         'security/ir.model.access.csv',
-        'transient/order_workorders.xml'
+        'transient/order_workorders.xml',
+        'transient/switch_workcenter.xml',
     ],
     'demo': [
     ],
