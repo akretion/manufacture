@@ -27,61 +27,21 @@ from openerp.osv import fields as old_fields
 class MrpProductionWorkcenterLine(models.Model):
     _inherit = 'mrp.production.workcenter.line'
 
-    def _is_pending(self, cr, uid, ids, field, args, context=None):
-        result = {}
-        for line in self.browse(cr, uid, ids, context=context):
-            result[line.id] = False
+    @api.multi
+    def compute_pending(self):
+        pendings = self.browse(False)
+        not_pendings = self.browse(False)
+        for line in self:
             for depend_line in line.dependency_ids:
                 if depend_line.state != 'done':
-                    result[line.id] = True
+                    pendings |= line
                     break
-        for line_id, val in result.items():
-            self.write(cr, uid, line_id, {
-                'pending': val,
-                }, context=context)
-        return result
-
-    def _get_operation_from_dependency(self, cr, uid, ids, context=None):
-        res = []
-        if context is None:
-            context = {}
-        elif context.get('create_line'):
-            res = ids[:]
-        for line in self.read(cr, uid, ids, ['dependency_for_ids'],
-                              context=context):
-            res.extend(line['dependency_for_ids'])
-        return res
-
-    def _get_operation_rom_routing_line(self, cr, uid, ids, context=None):
-        res = self.pool['mrp.production.workcenter.line'].search(cr, uid,
-            [('routing_line_id', 'in', ids),
-             ('state', 'not in', ('cancel', 'done'))])
-        print len(res)
-        return res
-
-    # Keep pending in old api for now else it won't recompute, because
-    # dependency_ids is not stored. I am not sure it is a good idea to
-    # Store it.
-    _columns = {
-        'pending': old_fields.function(
-            _is_pending,
-            type='boolean',
-            string='Pending',
-            select=True,
-            store={
-                'mrp.production.workcenter.line': [
-                    _get_operation_from_dependency,
-                    ['state', 'routing_line_id'],
-                    10,
-                ],
-                'mrp.routing.workcenter': [
-                    _get_operation_rom_routing_line,
-                    ['dependency_ids'],
-                    10,
-                ],
-            },
-        ),
-    }
+            else:
+                not_pendings |= line
+        if pendings:
+            pendings.write({'pending': True})
+        if not_pendings:
+            not_pendings.write({'pending': False})
 
     @api.multi
     def _get_dependency_ids(self):
@@ -117,7 +77,10 @@ class MrpProductionWorkcenterLine(models.Model):
 #                    break
 
 
-#    pending = fields.Boolean(
+    # Avoid compute field because we do not want to recompute it for done/cancel
+    # wos in case of change in routing line...
+    # also, it seems complicated depending on the not stored m2m fields.
+    pending = fields.Boolean()
 #        '_is_pending',
 #        store=True)
 
@@ -134,18 +97,22 @@ class MrpProductionWorkcenterLine(models.Model):
         comodel_name='mrp.production.workcenter.line',
         string='Dependency for')
 
-    def create(self, cr, uid, vals, context=None):
-        if context is None:
-            context = {}
-        ctx = context.copy()
-        ctx['create_line'] = True
-        return super(MrpProductionWorkcenterLine, self).create(
-            cr, uid, vals, context=ctx)
+    @api.model
+    def create(self, vals):
+        wo = super(MrpProductionWorkcenterLine, self).create(vals)
+        (wo + wo.dependency_for_ids).compute_pending()
+        return wo
+
+    @api.multi
+    def write(self, vals, update=True):
+        res = super(MrpProductionWorkcenterLine, self).write(vals, update=update)
+        if vals.get('state', '') in ('done', 'cancel') or 'routing_line_id' in vals:
+            self.mapped('dependency_for_ids').compute_pending()
+        return res
 
 
 class MrpBom(models.Model):
     _inherit = 'mrp.bom'
-
 
     @api.model
     def _prepare_wc_line(self, bom, wc_use, level=0, factor=1):
@@ -159,14 +126,24 @@ class MrpRoutingWorkcenter(models.Model):
     _inherit = 'mrp.routing.workcenter'
 
     dependency_ids = fields.Many2many(
-            'mrp.routing.workcenter',
-            'rel_dependency_routing_worcenter',
-            'routing_id',
-            'routing_dependency_id',
-            'Depend On')
+        'mrp.routing.workcenter',
+        'rel_dependency_routing_worcenter',
+        'routing_id',
+        'routing_dependency_id',
+        'Depend On')
     dependency_for_ids = fields.Many2many(
-            'mrp.routing.workcenter',
-            'rel_dependency_routing_worcenter',
-            'routing_dependency_id',
-            'routing_id',
-            'Dependency For')
+        'mrp.routing.workcenter',
+        'rel_dependency_routing_worcenter',
+        'routing_dependency_id',
+        'routing_id',
+        'Dependency For')
+
+    @api.multi
+    def write(self, vals):
+        res = super(MrpRoutingWorkcenter, self).write(vals)
+        if 'dependency_ids' in vals:
+            wos = self.env['mrp.production.workcenter.line'].search(
+                [('routing_line_id', 'in', self.ids),
+                 ('state', 'not in', ('cancel', 'done'))])
+            wos.compute_pending()
+        return res
