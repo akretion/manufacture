@@ -9,3 +9,4 @@
 ##############################################################################
 
 from . import order_workorders
+from . import switch_workcenter
