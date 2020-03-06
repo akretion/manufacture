@@ -86,7 +86,8 @@ class MrpProductionWorkcenterLine(models.Model):
 
     routing_line_id = fields.Many2one(
         'mrp.routing.workcenter',
-        'Routing Line')
+        'Routing Line',
+        index=True)
 
     dependency_ids = fields.Many2many(
         compute='_get_dependency_ids',
