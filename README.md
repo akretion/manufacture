@@ -1,6 +1,6 @@
-[![Runbot Status](https://runbot.odoo-community.org/runbot/badge/flat/129/11.0.svg)](https://runbot.odoo-community.org/runbot/repo/github-com-oca-manufacture-129)
-[![Build Status](https://travis-ci.org/OCA/manufacture.svg?branch=11.0)](https://travis-ci.org/OCA/manufacture)
-[![codecov](https://codecov.io/gh/OCA/manufacture/branch/11.0/graph/badge.svg)](https://codecov.io/gh/OCA/manufacture)
+[![Runbot Status](https://runbot.odoo-community.org/runbot/badge/flat/129/14.0.svg)](https://runbot.odoo-community.org/runbot/repo/github-com-oca-manufacture-129)
+[![Build Status](https://travis-ci.org/OCA/manufacture.svg?branch=14.0)](https://travis-ci.org/OCA/manufacture)
+[![codecov](https://codecov.io/gh/OCA/manufacture/branch/14.0/graph/badge.svg)](https://codecov.io/gh/OCA/manufacture)
 
 Odoo Manufacturing Modules
 ==========================
