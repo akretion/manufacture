@@ -20,7 +20,7 @@
 #
 ###############################################################################
 
-from openerp import fields, models, api
+from openerp import fields, models, api, exceptions, _
 from openerp.osv import fields as old_fields
 
 
@@ -106,6 +106,12 @@ class MrpProductionWorkcenterLine(models.Model):
 
     @api.multi
     def write(self, vals, update=True):
+        if vals.get('state') in ('done', 'startworking') and (not 'pending' in vals or vals.get('pending')):
+            pending_wos = self.filtered(lambda w: w.pending)
+            if pending_wos:
+                raise exceptions.UserError(
+                    _('Impossible to start or end a pending workorder.'
+                      ' (%s)' % pending_wos.ids))
         res = super(MrpProductionWorkcenterLine, self).write(vals, update=update)
         if vals.get('state', '') in ('done', 'cancel') or 'routing_line_id' in vals:
             self.mapped('dependency_for_ids').compute_pending()
