@@ -45,18 +45,42 @@ class MrpProduction(models.Model):
         form_view = self.env.ref("mrp_production_hierarchy.mrp_production_form_view")
 
         if self.child_ids:
-            return {
-                "domain": [("root_id", "=", self.id)],
+            action = {
                 "name": _("Hierarchy"),
                 "view_mode": "tree",
                 "res_model": "mrp.production",
                 "views": [(tree_view.id, "tree"), (form_view.id, "form")],
                 "target": "current",
                 "type": "ir.actions.act_window",
-                "context": dict(
-                    self.env.context,
-                    search_default_group_by_root_id=True,
-                    search_default_group_by_parent_id=True,
-                ),
             }
+            if self.root_id:
+                # Display all the (grand)children of an intermediary order
+                action.update(
+                    {
+                        # We assume that all the (grand)children will have an id greater
+                        # than the current intermediary order
+                        "domain": [
+                            ("root_id", "=", self.root_id.id),
+                            ("id", ">", self.id),
+                        ],
+                        "context": dict(
+                            self.env.context,
+                            search_default_group_by_root_id=False,
+                            search_default_group_by_parent_id=True,
+                        ),
+                    }
+                )
+            else:
+                action.update(
+                    {
+                        "domain": [("root_id", "=", self.id)],
+                        "context": dict(
+                            self.env.context,
+                            search_default_group_by_root_id=True,
+                            search_default_group_by_parent_id=True,
+                        ),
+                    }
+                )
+
+            return action
         return False
