@@ -32,9 +32,9 @@ class TestMrpProductionHierarchy(TestMrpCommon):
             self.assertEqual(child.parent_id, man_order)
             if child.product_id == self.bom_2.product_id:
                 self.assertTrue(child.child_ids)
-                self.assertTrue(child.open_production_tree())
+                self.assertTrue(child.open_order_children())
             for child2 in child.child_ids:
                 self.assertIn(child2.product_id, [self.product_4])
                 self.assertEqual(child2.root_id, man_order)
                 self.assertEqual(child2.parent_id, child)
-        self.assertTrue(man_order.open_production_tree())
+        self.assertTrue(man_order.open_order_children())

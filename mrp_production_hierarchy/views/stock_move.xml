@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+      <!-- Inherit move form view in mrp.production -->
+    <record id="view_stock_move_lots" model="ir.ui.view">
+      <field name="name">jung.stock.move.lots.form</field>
+      <field name="model">stock.move</field>
+      <field name="inherit_id" ref="mrp.view_stock_move_lots"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='product_id']" position="after">
+            <field name="sub_production_id"/>
+        </xpath>
+      </field>
+    </record>
+</odoo>
