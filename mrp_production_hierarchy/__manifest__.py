@@ -17,5 +17,8 @@
     ],
     "data": [
         "views/mrp_production.xml",
+        "views/mrp_report.xml",
+        "views/stock_move.xml",
+        "report/mrp_report_templates.xml",
     ],
 }

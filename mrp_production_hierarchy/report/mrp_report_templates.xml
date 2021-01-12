@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="assets_common" inherit_id="web.assets_common">
+        <xpath expr="." position="inside">
+           <link rel="stylesheet" href="/mrp_production_hierarchy/static/scss/mrp_production_hierarchy.scss"/>
+        </xpath>
+    </template>
+
+    <template id="report_production_hierarchy">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="mrp_production_hierarchy.report_production_hierarchy_document" />
+            </t>
+        </t>
+    </template>
+
+    <template id="report_production_hierarchy_document">
+        <div class="container o_mrp_bom_report_page">
+            <t t-foreach="docs" t-as="mo">
+              <t t-set="root_id" t-value="mo.root_id or mo"/>
+              <div class="row">
+                    <div class="col-lg-12">
+                        <h1>Manufacturing Order Hierarchy</h1>
+                        <h3>
+                            <a t-att-href="mo.get_obj_url(root_id.id)"  target="new">
+                                <t t-esc="root_id.name"/> - <t t-esc="root_id.product_id.display_name"/>
+                            </a>
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mt16">
+                            <table width="100%" class="o_mrp_bom_expandable mrp_hierarchy_font">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Order</th>
+                                        <th>Quantities</th>
+                                        <th>Delivery picking</th>
+                                        <th>Quantities</th>
+                                        <!-- <th>Level</th> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- First line = Root order -->
+                                    <tr>
+                                        <td>
+                                          <span style="margin-left: 0px;">
+                                            <a t-att-href="mo.get_obj_url(id=root_id.product_id.id, model='product.product')"  target="new" class="mrp_hierarchy">
+                                              <t t-esc="root_id.product_id.display_name[:30]"/>
+                                            </a>
+                                          </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                <a t-att-href="mo.get_obj_url(root_id.id)"  target="new" class="mrp_hierarchy">
+                                                    <t t-esc="root_id.name"/>
+                                                </a>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                <t t-esc="mo.qty_strip(mo.root_id.product_qty)"/>
+                                            </span>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <!-- <td><span><t t-esc="root_id.hierarchy_level"/></span></td> -->
+                                    </tr>
+                                    <!-- Other lines = components of each child order -->
+                                    <t t-foreach="mo.all_move_raw_ids" t-as="m">
+                                        <t t-set="co" t-value="m.raw_material_production_id"/>
+                                        <t t-set="dp" t-value="m.delivery_picking_id"/>
+                                        <t t-set="space_td" t-value="'margin-left: '+ str((co.hierarchy_level + 1) * 15) + 'px;'"/>
+                                        <!-- Sub-manufacturing quantities -->
+                                        <t t-set="qty_consume" t-value="mo.qty_strip(m.product_uom_qty)"/>
+                                        <t t-set="qty_reserved" t-value="mo.qty_strip(m.reserved_availability)"/>
+                                        <t t-set="qty_done" t-value="mo.qty_strip(m.quantity_done)"/>
+                                        <!-- Delivery picking quantities -
+                                        FIXME: we assume that a stock.move to be consumed will always be linked to only one delivery stock.move (called 'dp_move' here)-->
+                                        <t t-set="dp_move" t-value="m.move_orig_ids[0]"/>
+                                        <t t-set="qty_pick_initial" t-value="mo.qty_strip(dp_move.product_uom_qty)"/>
+                                        <t t-set="qty_pick_reserved" t-value="mo.qty_strip(dp_move.reserved_availability)"/>
+                                        <t t-set="qty_pick_done" t-value="mo.qty_strip(dp_move.quantity_done)"/>
+                                        <tr>
+                                            <!-- Product -->
+                                            <td >
+                                              <span t-att-style="space_td">
+                                                  <a t-att-href="co.get_obj_url(id=m.product_id.id, model='product.product')"  target="new" t-att-class="'mrp_hierarchy' if m.sub_production_id else 'mrp_hierarchy_raw'">
+                                                    <t t-esc="m.product_id.display_name[:30]"/>
+                                                  </a>
+                                              </span>
+                                            </td>
+                                            <!-- Sub-manufacturing Order -->
+                                            <td>
+                                                <span>
+                                                    <a t-att-href="co.get_obj_url(id=m.sub_production_id.id)"  target="new" class="mrp_hierarchy">
+                                                        <t t-esc="m.sub_production_id.name"/>
+                                                    </a>
+                                                </span>
+                                            </td>
+                                            <!-- Sub-manufacturing quantities -->
+                                            <td>
+                                                <span>
+                                                    <a t-att-href="co.get_obj_url(id=m.sub_production_id.id)"  target="new" t-att-class="m.css_class">
+                                                        <t t-esc="qty_consume"/><span class="mrp_muted"> / </span>
+                                                        <span t-if="not m.is_done">
+                                                            <span t-att-class="'mrp_muted' if qty_reserved == '0' else None "><t t-esc="qty_reserved"/></span><span class="mrp_muted"> / </span>
+                                                        </span>
+                                                        <span t-att-class="'mrp_muted' if qty_done == '0' else None "><t t-esc="qty_done"/></span>
+                                                    </a>
+                                                </span>
+                                            </td>
+                                            <!-- Delivery picking -->
+                                            <td>
+                                                <span>
+                                                  <a t-att-href="co.get_obj_url(id=dp.id, model='stock.picking')"  target="new" t-att-class="'mrp_hierarchy' if m.sub_production_id else 'mrp_hierarchy_raw'">
+                                                    <t t-esc="dp.name"/>
+                                                  </a>
+                                                </span>
+                                            </td>
+                                            <!-- Delivery picking quantities -->
+                                            <td>
+                                                <span>
+                                                    <a t-att-href="co.get_obj_url(id=dp.id, model='stock.picking')"  target="new" t-att-class="dp_move.css_class">
+                                                        <t t-esc="qty_pick_initial"/><span class="mrp_muted"> / </span>
+                                                        <span t-if="not dp_move.is_done">
+                                                            <span t-att-class="'mrp_muted' if qty_pick_reserved == '0' else None "><t t-esc="qty_pick_reserved"/></span><span class="mrp_muted"> / </span>
+                                                        </span>
+                                                        <span t-att-class="'mrp_muted' if qty_pick_done == '0' else None "><t t-esc="qty_pick_done"/></span>
+                                                    </a>
+                                                </span>
+                                            </td>
+                                            <!-- if the m has no sub_production_id display its level as "+1" -->
+                                            <!-- <td><span><t t-esc="m.sub_production_id and m.sub_production_id.hierarchy_level or (co.hierarchy_level + 1)"/></span></td> -->
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <!-- <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right"><span><strong>Unit Cost</strong></span></td>
+                                        <td groups="uom.group_uom"></td>
+                                        <td t-if="data['report_structure'] != 'bom_cost'" class="o_mrp_prod_cost text-right">
+                                            <span><t t-esc="data['price']/data['bom_qty']" t-options='{"widget": "monetary", "display_currency": currency}'/></span>
+                                        </td>
+                                        <td t-if="data['report_structure'] != 'bom_structure'" class="o_mrp_bom_cost text-right">
+                                            <span><t t-esc="data['total']/data['bom_qty']" t-options='{"widget": "monetary", "display_currency": currency}'/></span>
+                                        </td>
+                                    </tr>
+                                </tfoot> -->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </template>
+
+
+</odoo>

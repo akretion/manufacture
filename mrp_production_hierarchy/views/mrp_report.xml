@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report id="action_report_production_hierarchy"
+            string="Production Order Hierarchy"
+            model="mrp.production"
+            report_type="qweb-html"
+            file="mrp_production_hierarchy.report_production_hierarchy"
+            name="mrp_production_hierarchy.report_production_hierarchy"
+     />
+</odoo>
