@@ -14,6 +14,7 @@ class StockMove(models.Model):
         comodel_name="mrp.production",
         compute="_compute_sub_production_id",
         help="Sub-manufacturing Order making this raw material to be consumed",
+        store=True,
     )
 
     delivery_picking_id = fields.Many2one(
@@ -45,26 +46,38 @@ class StockMove(models.Model):
             else:
                 move.delivery_picking_id = delivery_picking_id
 
-    @api.depends("product_id", "raw_material_production_id")
+    @api.depends(
+        "product_id",
+        "raw_material_production_id",
+        "raw_material_production_id.child_ids",
+    )
     def _compute_sub_production_id(self):
         for move in self:
-            if move.raw_material_production_id:
-                sub_production_id = self.env["mrp.production"].search(
+            main_mo_id = move.raw_material_production_id
+            if main_mo_id:
+                sub_mo_ids = self.env["mrp.production"].search(
                     [
                         ("product_id", "=", move.product_id.id),
-                        ("parent_id", "=", move.raw_material_production_id.id),
+                        ("parent_id", "=", main_mo_id.id),
                     ]
                 )
-                if len(sub_production_id) > 1:
-                    raise UserError(
-                        _(
-                            "You cannot have more than one Sub-Manufacturing"
-                            "Order to produce the raw material '%s'."
-                            % move.product_id.display_name
-                        )
-                    )
+                # Do not choose a sub_production that is already pointing to
+                # another move of the main manufacturing order
+                other_move_ids = main_mo_id.move_raw_ids - move
+                exist_sub_mo_ids = other_move_ids.mapped("sub_production_id")
+                sub_mo_ids = sub_mo_ids.filtered(lambda mo: mo not in exist_sub_mo_ids)
+
+                if len(sub_mo_ids) > 1:
+                    pass
+                    # raise UserError(
+                    #     _(
+                    #         "You cannot have more than one Sub-Manufacturing"
+                    #         "Order to produce the raw material '%s'."
+                    #         % move.product_id.display_name
+                    #     )
+                    # )
                 else:
-                    move.sub_production_id = sub_production_id
+                    move.sub_production_id = sub_mo_ids
 
     @api.depends("is_done", "quantity_done", "product_uom_qty", "reserved_availability")
     def _compute_css_class(self):
@@ -104,6 +117,11 @@ class StockMove(models.Model):
     def _action_cancel(self):
         res = super(StockMove, self)._action_cancel()
         for move in self:
-            if move.sub_production_id and self.env.context.get('cancel_move_origin') != move.id:
-                move.with_context(cancel_move_origin=move.id).sub_production_id.action_cancel()
+            if (
+                move.sub_production_id
+                and self.env.context.get("cancel_move_origin") != move.id
+            ):
+                move.with_context(
+                    cancel_move_origin=move.id
+                ).sub_production_id.action_cancel()
         return res

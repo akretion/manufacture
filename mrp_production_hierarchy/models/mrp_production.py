@@ -9,6 +9,7 @@ class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
     def get_obj_url(self, id=None, model="mrp.production"):
+        """Returns object's url to access a form from report"""
         base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
         obj_id = str(id or self.id)
         return base_url + "/web#id=" + obj_id + "&model=" + model + "&view_type=form"
@@ -35,12 +36,15 @@ class MrpProduction(models.Model):
         domain=[("state", "!=", "cancel")],
     )
 
-    all_move_raw_ids = fields.One2many(
-        string="All the components moves",
+    all_move_raw_ids = fields.Many2many(
+        string="All the active Root Order related moves",
         comodel_name="stock.move",
         compute="_compute_all_move_raw_ids",
-        help="All the move_raw_ids from Root Order and its descendants ordered "
-        "going to the hierachy tree extremity first (before going to the next sibling)",
+        help="All the move_raw_ids from Root Order and its descendants (not cancelled) "
+        "ordered by going to the hierachy tree extremity first (before going to "
+        "the next sibling)",
+    )
+
     )
 
     css_class = fields.Char(
@@ -56,14 +60,17 @@ class MrpProduction(models.Model):
             root_id = mo.root_id or mo
             all_move_raw_ids = self.env["stock.move"]
 
-            to_parse = root_id.move_raw_ids
+            to_parse = root_id.move_raw_ids.filtered(lambda m: m.state != "cancel")
             while to_parse:
                 all_move_raw_ids |= to_parse[0]
 
                 parsed = to_parse[0]
                 to_parse = to_parse[1:]
                 if parsed.sub_production_id:
-                    to_parse = parsed.sub_production_id.move_raw_ids | to_parse
+                    to_add = parsed.sub_production_id.move_raw_ids.filtered(
+                        lambda m: m.state != "cancel"
+                    )
+                    to_parse = to_add | to_parse
 
             mo.all_move_raw_ids = all_move_raw_ids
 
@@ -87,9 +94,9 @@ class MrpProduction(models.Model):
         for mo in self:
             # Set the initial root production order ID
             if not mo.env.context.get("root_mrp_production_id"):
-                mo = mo.with_context(root_mrp_production_id=self.id)
+                mo = mo.with_context(root_mrp_production_id=mo.id)
             # Set the parent production order ID
-            mo = mo.with_context(parent_mrp_production_id=self.id)
+            mo = mo.with_context(parent_mrp_production_id=mo.id)
             super(MrpProduction, mo)._generate_moves()
         return True
 
