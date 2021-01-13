@@ -1,10 +1,10 @@
 # Copyright (C) 2020 - Akretion
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
-from odoo import models, api, _, fields
+from odoo import models, api, fields
 
 
-class StockMove(models.Model):
+class StockPicking(models.Model):
     _inherit = "stock.picking"
 
     css_class = fields.Char(

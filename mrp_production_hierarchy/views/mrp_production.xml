@@ -20,8 +20,9 @@
                 <xpath expr="//field[@name='origin']" position="after">
                   <field name="root_id" attrs="{'invisible': [('root_id', '=', False)]}"/>
                   <field name="parent_id" attrs="{'invisible': [('parent_id', '=', False)]}"/>
-                  <field name="availability" />
+                  <!-- <field name="availability" />
                   <field name="css_class" />
+                  <field name="is_delivery_moves_reserved_or_done" /> -->
                 </xpath>
             </field>
         </record>
@@ -32,10 +33,10 @@
             <field name="mode">extension</field>
             <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
             <field name="arch" type="xml">
-                <field name="name" position="before">
+                <xpath expr="//field[@name='name']" position="before">
                     <field name="root_id"/>
                     <field name="parent_id"/>
-                </field>
+                </xpath>
             </field>
         </record>
 
