@@ -54,14 +54,14 @@
                                         </td>
                                         <td>
                                             <span>
-                                                <a t-att-href="mo.get_obj_url(root_id.id)"  target="new" class="mrp_hierarchy">
+                                                <a t-att-href="mo.get_obj_url(root_id.id)"  target="new" t-att-class="root_id.css_class">
                                                     <t t-esc="root_id.name"/>
                                                 </a>
                                             </span>
                                         </td>
                                         <td>
                                             <span>
-                                                <t t-esc="mo.qty_strip(mo.root_id.product_qty)"/>
+                                                <t t-esc="mo.qty_strip(root_id.product_qty)"/>
                                             </span>
                                         </td>
                                         <td></td>
@@ -95,7 +95,7 @@
                                             <!-- Sub-manufacturing Order -->
                                             <td>
                                                 <span>
-                                                    <a t-att-href="co.get_obj_url(id=m.sub_production_id.id)"  target="new" class="mrp_hierarchy">
+                                                    <a t-att-href="co.get_obj_url(id=m.sub_production_id.id)"  target="new" t-att-class="m.sub_production_id.css_class">
                                                         <t t-esc="m.sub_production_id.name"/>
                                                     </a>
                                                 </span>
@@ -115,7 +115,7 @@
                                             <!-- Delivery picking -->
                                             <td>
                                                 <span>
-                                                  <a t-att-href="co.get_obj_url(id=dp.id, model='stock.picking')"  target="new" t-att-class="'mrp_hierarchy' if m.sub_production_id else 'mrp_hierarchy_raw'">
+                                                  <a t-att-href="co.get_obj_url(id=dp.id, model='stock.picking')"  target="new" t-att-class="dp.css_class">
                                                     <t t-esc="dp.name"/>
                                                   </a>
                                                 </span>

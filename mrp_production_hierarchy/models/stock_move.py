@@ -69,18 +69,12 @@ class StockMove(models.Model):
         """Mimic the decorations flags in move_raw_ids tree in 'mrp.production' """
         dp = self.env["decimal.precision"].precision_get("Product Unit of Measure")
         for move in self:
-            # decoration-muted="is_done"
-            # decoration-warning="quantity_done - product_uom_qty &gt; 0.0001"
-            # decoration-success="not is_done and quantity_done - product_uom_qty &lt; 0.0001"
-            # decoration-danger="not is_done and reserved_availability &lt; product_uom_qty and product_uom_qty - reserved_availability &gt; 0.0001"
             qty_init = move.product_uom_qty
-            qty_done = move.quantity_done
             qty_reserved = move.reserved_availability
+            qty_done = move.quantity_done
 
             if move.is_done:
                 move.css_class = "text-muted"
-            if float_compare(qty_init, qty_done, precision_digits=dp) > 0:
-                move.css_class = "text-warning"
             if (
                 not move.is_done
                 and float_compare(qty_init, qty_reserved, precision_digits=dp) == 0
@@ -90,5 +84,17 @@ class StockMove(models.Model):
                 not move.is_done
                 and float_compare(qty_init, qty_reserved, precision_digits=dp) > 0
                 and float_compare(qty_init, qty_done, precision_digits=dp) > 0
+                and float_is_zero(qty_reserved, precision_digits=dp)
+                and float_is_zero(qty_done, precision_digits=dp)
             ):
                 move.css_class = "text-danger"
+            if (
+                not move.is_done
+                and float_compare(qty_init, qty_reserved, precision_digits=dp) > 0
+                and float_compare(qty_init, qty_done, precision_digits=dp) > 0
+                and (
+                    not float_is_zero(qty_reserved, precision_digits=dp)
+                    or not float_is_zero(qty_done, precision_digits=dp)
+                )
+            ):
+                move.css_class = "text-warning"

@@ -20,6 +20,8 @@
                 <xpath expr="//field[@name='origin']" position="after">
                   <field name="root_id" attrs="{'invisible': [('root_id', '=', False)]}"/>
                   <field name="parent_id" attrs="{'invisible': [('parent_id', '=', False)]}"/>
+                  <field name="availability" />
+                  <field name="css_class" />
                 </xpath>
             </field>
         </record>
