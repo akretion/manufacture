@@ -48,21 +48,23 @@ class StockMove(models.Model):
     @api.depends("product_id", "raw_material_production_id")
     def _compute_sub_production_id(self):
         for move in self:
-            sub_production_id = self.env["mrp.production"].search(
-                [
-                    ("product_id", "=", move.product_id.id),
-                    ("parent_id", "=", move.raw_material_production_id.id),
-                ]
-            )
-            if len(sub_production_id) > 1:
-                raise UserError(
-                    _(
-                        "You cannot have more than one Sub-manfacturing Order to "
-                        "produce the raw material '%s'." % move.product_id.display_name
-                    )
+            if move.raw_material_production_id:
+                sub_production_id = self.env["mrp.production"].search(
+                    [
+                        ("product_id", "=", move.product_id.id),
+                        ("parent_id", "=", move.raw_material_production_id.id),
+                    ]
                 )
-            else:
-                move.sub_production_id = sub_production_id
+                if len(sub_production_id) > 1:
+                    raise UserError(
+                        _(
+                            "You cannot have more than one Sub-Manufacturing"
+                            "Order to produce the raw material '%s'."
+                            % move.product_id.display_name
+                        )
+                    )
+                else:
+                    move.sub_production_id = sub_production_id
 
     @api.depends("is_done", "quantity_done", "product_uom_qty", "reserved_availability")
     def _compute_css_class(self):
