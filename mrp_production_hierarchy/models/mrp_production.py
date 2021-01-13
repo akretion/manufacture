@@ -43,6 +43,13 @@ class MrpProduction(models.Model):
         "going to the hierachy tree extremity first (before going to the next sibling)",
     )
 
+    css_class = fields.Char(
+        string="CSS class",
+        compute="_compute_css_class",
+        help="Bootstrap CSS class used in hierarchy report to inform about the "
+        "Manufacturing Order progress",
+    )
+
     @api.depends("root_id", "child_ids")
     def _compute_all_move_raw_ids(self):
         for mo in self:
@@ -59,6 +66,18 @@ class MrpProduction(models.Model):
                     to_parse = parsed.sub_production_id.move_raw_ids | to_parse
 
             mo.all_move_raw_ids = all_move_raw_ids
+
+    @api.depends("state", "check_to_done", "availability")
+    def _compute_css_class(self):
+        for mo in self:
+            if mo.state == "done":
+                mo.css_class = "text-muted"
+            elif mo.check_to_done or mo.availability == "assigned":
+                mo.css_class = "text-success"
+            elif mo.state == "confirmed" and mo.availability in ("partially_available"):
+                mo.css_class = "text-warning"
+            else:
+                mo.css_class = "text-danger"
 
     def _generate_moves(self):
         """Overloaded to pass the created production order ID in the context.
