@@ -100,3 +100,10 @@ class StockMove(models.Model):
                 )
             ):
                 move.css_class = "text-warning"
+
+    def _action_cancel(self):
+        res = super(StockMove, self)._action_cancel()
+        for move in self:
+            if move.sub_production_id and self.env.context.get('cancel_move_origin') != move.id:
+                move.with_context(cancel_move_origin=move.id).sub_production_id.action_cancel()
+        return res
