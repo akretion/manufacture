@@ -45,8 +45,6 @@ class MrpProduction(models.Model):
         "the next sibling)",
     )
 
-    )
-
     css_class = fields.Char(
         string="CSS class",
         compute="_compute_css_class",
