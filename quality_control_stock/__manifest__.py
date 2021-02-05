@@ -24,6 +24,7 @@
         "views/qc_inspection_view.xml",
         "views/stock_picking_view.xml",
         "views/stock_production_lot_view.xml",
+        "views/qc_trigger_views.xml",
     ],
     "post_init_hook": "post_init_hook",
     "installable": True,
