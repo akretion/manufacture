@@ -84,9 +84,9 @@ class QcInspection(models.Model):
             object_ref, trigger_line)
         # Fill qty when coming from pack operations
         if object_ref and object_ref._name == 'stock.move.line':
-            res['qty'] = object_ref.product_qty
+            res['qty'] = object_ref.qty_done
         if object_ref and object_ref._name == 'stock.move':
-            res['qty'] = object_ref.product_uom_qty
+            res['qty'] = object_ref.quantity_done
         return res
 
 
