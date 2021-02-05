@@ -24,22 +24,24 @@ class MrpProduction(models.Model):
 
     @api.multi
     def post_inventory(self):
-        done_moves = self.mapped('move_finished_ids').filtered(
+        done_ml_ids = self.mapped('finished_move_line_ids').filtered(
             lambda r: r.state == 'done')
         res = super(MrpProduction, self).post_inventory()
         inspection_model = self.env['qc.inspection']
-        new_done_moves = self.mapped('move_finished_ids').filtered(
-            lambda r: r.state == 'done') - done_moves
-        if new_done_moves:
+
+        new_done_ml_ids = self.mapped('finished_move_line_ids').filtered(
+            lambda r: r.state == 'done') - done_ml_ids
+
+        if new_done_ml_ids:
             qc_trigger = self.env.ref('quality_control_mrp.qc_trigger_mrp')
-        for move in new_done_moves:
+        for ml in new_done_ml_ids:
             trigger_lines = set()
             for model in ['qc.trigger.product_category_line',
                           'qc.trigger.product_template_line',
                           'qc.trigger.product_line']:
                 trigger_lines = trigger_lines.union(
                     self.env[model].get_trigger_line_for_product(
-                        qc_trigger, move.product_id))
+                        qc_trigger, ml.product_id))
             for trigger_line in _filter_trigger_lines(trigger_lines):
-                inspection_model._make_inspection(move, trigger_line)
+                inspection_model._make_inspection(ml.move_id, trigger_line)
         return res
