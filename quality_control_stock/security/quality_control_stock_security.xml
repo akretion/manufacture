@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2021 Akretion -->
+<odoo>
+
+    <record id="group_qc_stock" model="res.groups">
+      <field name="name">Quality Control on inventory operations</field>
+      <field name="category_id" ref="base.module_category_hidden"/>
+      <field name="implied_ids" eval="[(4, ref('quality_control.group_quality_control_user'))]"/>
+    </record>
+
+    <record id="rule_trigger_qc_not_for_stock" model="ir.rule">
+      <field name="name">Quality control triggers NOT for inventory operations</field>
+      <field name="model_id" ref="model_qc_trigger"/>
+      <field name="domain_force">[('picking_type_id', '=', False)]</field>
+      <field name="groups" eval="[(4, ref('quality_control.group_quality_control_user'))]"/>
+    </record>
+
+    <record id="rule_trigger_qc_for_stock" model="ir.rule">
+      <field name="name">Quality control triggers FOR inventory operations</field>
+      <field name="model_id" ref="model_qc_trigger"/>
+      <field name="domain_force">[('picking_type_id', '!=', False)]</field>
+      <field name="groups" eval="[(4, ref('group_qc_stock'))]"/>
+    </record>
+
+</odoo>

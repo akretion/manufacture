@@ -21,6 +21,7 @@
     ],
     "data": [
         "security/ir.model.access.csv",
+        "security/quality_control_stock_security.xml",
         "views/qc_inspection_view.xml",
         "views/stock_picking_view.xml",
         "views/stock_production_lot_view.xml",
