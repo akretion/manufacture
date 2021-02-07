@@ -18,10 +18,15 @@
         "product",
     ],
     "data": [
+        # Datas
         "data/quality_control_data.xml",
+        # Security
         "security/quality_control_security.xml",
         "security/ir.model.access.csv",
+        # Wizards
         "wizard/qc_test_wizard_view.xml",
+        "wizard/qc_inspection_wizard_views.xml",
+        # Views
         "views/qc_menus.xml",
         "views/qc_inspection_view.xml",
         "views/qc_test_category_view.xml",

@@ -89,6 +89,17 @@ class QcInspection(models.Model):
     user = fields.Many2one(
         comodel_name='res.users', string='Responsible',
         track_visibility='always', default=lambda self: self.env.user)
+    is_inspected = fields.Boolean(compute="_compute_is_inspected")
+
+    @api.depends(
+        "inspection_lines.qualitative_value", "inspection_lines.quantitative_value"
+    )
+    def _compute_is_inspected(self):
+        for insp in self:
+            inspected_line_ids = insp.inspection_lines.filtered(
+                lambda l: l.qualitative_value or l.quantitative_value
+            )
+            insp.is_inspected = inspected_line_ids and True
 
     @api.model_create_multi
     def create(self, val_list):
@@ -229,6 +240,26 @@ class QcInspection(models.Model):
                                               line.max_value) * 0.5
         return data
 
+    def action_inspection_wizard(self):
+        self.ensure_one()
+        insp_line_view_xmlid = "quality_control.qc_inspection_line_wizard_view_form"
+        qc_insp_line_ids = self.inspection_lines
+
+        return {
+            "name": _("Inspection Question"),
+            "context": {
+                "default_qc_inspection_id": self.id,
+                "default_qc_insp_line_id": qc_insp_line_ids[0].id,
+                "default_line_index": 0,
+                "default_is_last_line": len(qc_insp_line_ids) == 1,
+            },
+            "view_id": self.env.ref(insp_line_view_xmlid).id,
+            "res_model": "qc.inspection.line.wizard",
+            "view_type": "form",
+            "view_mode": "form",
+            "type": "ir.actions.act_window",
+            "target": "new",
+        }
 
 class QcInspectionLine(models.Model):
     _name = 'qc.inspection.line'

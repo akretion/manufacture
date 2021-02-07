@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  
+    <record id="qc_inspection_line_wizard_view_form" model="ir.ui.view">
+      <field name="name">qc.inspection.line.form</field>
+      <field name="model">qc.inspection.line.wizard</field>
+      <field name="arch" type="xml">
+        <form string="">
+          <sheet>
+            <group>
+              <field name="is_last_line" invisible="1"/>
+              <field name="question_type" invisible="1"/>
+              <field name="possible_ql_values" invisible="1"/>
+              <field name="qc_insp_line_id"/>
+              <field name="qualitative_value" attrs="{'invisible': [('question_type', '=', 'quantitative')]}"/>
+              <field name="quantitative_value" attrs="{'invisible': [('question_type', '=', 'qualitative')]}"/>
+              <field name="valid_values" attrs="{'invisible': [('question_type', '=', 'qualitative')]}"/>
+            </group>
+            <footer>
+                <button
+                    name="action_next_line"
+                    string="Next Question"
+                    type="object"
+                    class="oe_highlight"
+                    attrs="{'invisible': [('is_last_line', '=', True)]}"
+                />
+                <button
+                    name="action_end"
+                    string="Close"
+                    type="object"
+                    class="oe_highlight"
+                    attrs="{'invisible': [('is_last_line', '=', False)]}"
+                />
+                or
+                <button string="Cancel" class="oe_link" special="cancel" />
+            </footer>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+</odoo>
