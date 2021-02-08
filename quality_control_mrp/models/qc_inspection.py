@@ -19,12 +19,14 @@ class QcInspection(models.Model):
 
     @api.depends('object_id')
     def get_production(self):
-        for inspection in self:
-            if inspection.object_id:
-                if inspection.object_id._name == 'stock.move':
-                    inspection.production_id = inspection.object_id.production_id
-                elif inspection.object_id._name == 'mrp.production':
-                    inspection.production_id = inspection.object_id
+        for insp_id in self:
+            if insp_id.object_id:
+                if insp_id.object_id._name == 'stock.move':
+                    insp_id.production_id = insp_id.object_id.production_id
+                elif insp_id.object_id._name == 'stock.move.line':
+                    insp_id.production_id = insp_id.object_id.move_id.production_id
+                elif insp_id.object_id._name == 'mrp.production':
+                    insp_id.production_id = insp_id.object_id
 
     @api.depends('object_id')
     def _compute_product_id(self):

@@ -43,5 +43,5 @@ class MrpProduction(models.Model):
                     self.env[model].get_trigger_line_for_product(
                         qc_trigger, ml.product_id))
             for trigger_line in _filter_trigger_lines(trigger_lines):
-                inspection_model._make_inspection(ml.move_id, trigger_line)
+                inspection_model._make_inspection(ml, trigger_line)
         return res
