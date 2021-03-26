@@ -137,13 +137,15 @@ class MrpRoutingWorkcenter(models.Model):
         'rel_dependency_routing_worcenter',
         'routing_id',
         'routing_dependency_id',
-        'Depend On')
+        'Depend On',
+        copy=False)
     dependency_for_ids = fields.Many2many(
         'mrp.routing.workcenter',
         'rel_dependency_routing_worcenter',
         'routing_dependency_id',
         'routing_id',
-        'Dependency For')
+        'Dependency For',
+        copy=False)
 
     @api.multi
     def write(self, vals):
