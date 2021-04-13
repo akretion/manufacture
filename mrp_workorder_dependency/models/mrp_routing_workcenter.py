@@ -1,17 +1,5 @@
-from openerp import _, api, exceptions, fields, models
-from openerp.osv import fields as old_fields
-
-
-class MrpBom(models.Model):
-    _inherit = "mrp.bom"
-
-    @api.model
-    def _prepare_wc_line(self, bom, wc_use, level=0, factor=1):
-        res = super(MrpBom, self)._prepare_wc_line(
-            bom, wc_use, factor=factor, level=level
-        )
-        res["routing_line_id"] = wc_use.id
-        return res
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from odoo import fields, models
 
 
 class MrpRoutingWorkcenter(models.Model):
@@ -34,15 +22,14 @@ class MrpRoutingWorkcenter(models.Model):
         copy=False,
     )
 
-    @api.multi
     def write(self, vals):
-        res = super(MrpRoutingWorkcenter, self).write(vals)
+        res = super().write(vals)
         if "dependency_ids" in vals:
-            wos = self.env["mrp.production.workcenter.line"].search(
+            wos = self.env["mrp.workorder"].search(
                 [
-                    ("routing_line_id", "in", self.ids),
+                    ("operation_id", "in", self.ids),
                     ("state", "not in", ("cancel", "done")),
                 ]
             )
-            wos.compute_pending()
+            wos.check_waiting_state()
         return res

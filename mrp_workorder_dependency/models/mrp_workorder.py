@@ -1,105 +1,102 @@
-from openerp import _, api, exceptions, fields, models
-from openerp.osv import fields as old_fields
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from odoo import _, api, exceptions, fields, models
 
 
-class MrpProductionWorkcenterLine(models.Model):
-    _inherit = "mrp.production.workcenter.line"
+class MrpWorkorder(models.Model):
+    _inherit = "mrp.workorder"
 
-    @api.multi
-    def compute_pending(self):
+    def check_waiting_state(self):
         pendings = self.browse(False)
         not_pendings = self.browse(False)
-        for line in self:
-            for depend_line in line.dependency_ids:
-                if depend_line.state != "done":
-                    pendings |= line
+        to_check = self.filtered(lambda wo: wo.state in ("pending", "ready"))
+        for wo in to_check:
+            for depend_line in wo.dependency_ids:
+                if depend_line.state not in ("done", "cancel"):
+                    if not wo.state == "pending":
+                        pendings |= wo
                     break
             else:
-                not_pendings |= line
+                if wo.state == "pending":
+                    not_pendings |= wo
         if pendings:
-            pendings.write({"pending": True})
+            pendings.write({"state": "pending"})
         if not_pendings:
-            not_pendings.write({"pending": False})
+            not_pendings.write({"state": "ready"})
 
-    @api.multi
-    def _get_dependency_ids(self):
+    @api.depends("operation_id.dependency_ids")
+    def _compute_dependency_ids(self):
         for line in self:
-            if line.routing_line_id.dependency_ids:
-                routing_line_ids = line.routing_line_id.dependency_ids.ids
+            ids = []
+            if line.operation_id.dependency_ids:
+                operation_ids = line.operation_id.dependency_ids.ids
                 depend_lines = self.search(
                     [
                         ["production_id", "=", line.production_id.id],
-                        ["routing_line_id", "in", routing_line_ids],
+                        ["operation_id", "in", operation_ids],
                     ]
                 )
-                line.dependency_ids = [(6, 0, depend_lines.ids)]
+                ids = depend_lines.ids
+            line.dependency_ids = [(6, 0, ids)]
 
-    @api.multi
-    def _get_dependency_for_ids(self):
+    @api.depends("operation_id.dependency_for_ids")
+    def _compute_dependency_for_ids(self):
         for line in self:
-            if line.routing_line_id.dependency_for_ids:
-                routing_line_ids = line.routing_line_id.dependency_for_ids.ids
+            ids = []
+            if line.operation_id.dependency_for_ids:
+                operation_ids = line.operation_id.dependency_for_ids.ids
                 depend_lines = self.search(
                     [
                         ["production_id", "=", line.production_id.id],
-                        ["routing_line_id", "in", routing_line_ids],
+                        ["operation_id", "in", operation_ids],
                     ]
                 )
-                line.dependency_for_ids = [(6, 0, depend_lines.ids)]
+                ids = depend_lines.ids
+            line.dependency_for_ids = [(6, 0, ids)]
 
-    #    @api.multi
-    #    @api.depends('dependency_ids.state', 'dependency_ids.routing_line_id')
-    #    def _is_pending(self):
-    #        print 'll', self
-    #        for line in self:
-    #            result[line.id] = False
-    #            for depend_line in line.dependency_ids:
-    #                if depend_line.state != 'done':
-    #                    line.pending = True
-    #                    break
-
-    # Avoid compute field because we do not want to recompute it for done/cancel
-    # wos in case of change in routing line...
-    # also, it seems complicated depending on the not stored m2m fields.
-    pending = fields.Boolean()
-    #        '_is_pending',
-    #        store=True)
-
-    routing_line_id = fields.Many2one(
-        "mrp.routing.workcenter", "Routing Line", index=True
-    )
-
+    operation_id = fields.Many2one(index=True)
     dependency_ids = fields.Many2many(
-        compute="_get_dependency_ids",
-        comodel_name="mrp.production.workcenter.line",
+        compute="_compute_dependency_ids",
+        comodel_name="mrp.workorder",
         string="Dependency",
     )
     dependency_for_ids = fields.Many2many(
-        compute="_get_dependency_for_ids",
-        comodel_name="mrp.production.workcenter.line",
+        compute="_compute_dependency_for_ids",
+        comodel_name="mrp.workorder",
         string="Dependency for",
     )
 
-    @api.model
-    def create(self, vals):
-        wo = super(MrpProductionWorkcenterLine, self).create(vals)
-        (wo + wo.dependency_for_ids).compute_pending()
-        return wo
+    # totally override this method to manage multi dependencies
+    def _start_nextworkorder(self):
+        if self.state in ("done", "cancel") and self.dependency_for_ids:
+            self.dependency_for_ids.filtered(
+                lambda wo: wo.state == "pending"
+            ).check_waiting_state()
 
-    @api.multi
-    def write(self, vals, update=True):
-        if vals.get("state") in ("done", "startworking") and (
-            not "pending" in vals or vals.get("pending")
-        ):
-            pending_wos = self.filtered(lambda w: w.pending)
+    def write(self, vals):
+        if vals.get("state") in ("done", "progress"):
+            pending_wos = self.filtered(lambda wo: wo.state == "pending")
             if pending_wos:
                 raise exceptions.UserError(
                     _(
-                        "Impossible to start or end a pending workorder."
+                        "Impossible to start or end a workorder waiting for another one"
                         " (%s)" % pending_wos.ids
                     )
                 )
-        res = super(MrpProductionWorkcenterLine, self).write(vals, update=update)
-        if vals.get("state", "") in ("done", "cancel") or "routing_line_id" in vals:
-            self.mapped("dependency_for_ids").compute_pending()
+        res = super().write(vals)
+        if "operation_id" in vals:
+            ops = self | self.mapped("dependency_for_ids")
+            ops.check_waiting_state()
+        return res
+
+    def action_cancel(self):
+        res = super().action_cancel()
+        self._start_nextworkorder()
+        return res
+
+    # Default state is pending in Odoo and in _action_assign, the first (lower sequence)
+    # is set to ready. But with this module multiple operations may not have
+    # dependencies and should change to ready on _action_confirm
+    def _action_confirm(self):
+        res = super()._action_confirm()
+        self.check_waiting_state()
         return res
