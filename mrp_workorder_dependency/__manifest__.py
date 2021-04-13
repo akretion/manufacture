@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ###############################################################################
 #
 #   Module for OpenERP
@@ -21,20 +20,21 @@
 ###############################################################################
 
 
-{'name': 'mrp_operation_dependency',
- 'version': '0.0.1',
- 'author': 'Akretion',
- 'website': 'www.akretion.com',
- 'license': 'AGPL-3',
- 'category': 'Generic Modules',
- 'description': """Add dependency between mrp production workcenter line and
+{
+    "name": "mrp_operation_dependency",
+    "version": "0.0.1",
+    "author": "Akretion",
+    "website": "https://github.com/OCA/manufacture",
+    "license": "AGPL-3",
+    "category": "Generic Modules",
+    "description": """Add dependency between mrp production workcenter line and
 mrp routing workcenter.""",
- 'depends': [
-     'mrp_operations',
- ],
- 'data': [
-     'mrp.xml',
- ],
- 'installable': True,
- 'application': True,
+    "depends": [
+        "mrp_operations",
+    ],
+    "data": [
+        "mrp.xml",
+    ],
+    "installable": True,
+    "application": True,
 }

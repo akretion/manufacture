@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <openerp>
     <data>
 
@@ -7,9 +7,12 @@
             <field name="inherit_id" ref="mrp.mrp_routing_workcenter_form_view" />
             <field name="arch" type="xml">
                 <label for="note" position="before">
-                    <field name="routing_id" invisible="1"/>
-                    <label for="dependency_ids"/>
-                    <field name="dependency_ids" domain="[('routing_id', '=', routing_id)]"/>
+                    <field name="routing_id" invisible="1" />
+                    <label for="dependency_ids" />
+                    <field
+                        name="dependency_ids"
+                        domain="[('routing_id', '=', routing_id)]"
+                    />
                 </label>
             </field>
         </record>
