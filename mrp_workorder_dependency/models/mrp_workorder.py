@@ -1,24 +1,3 @@
-# -*- coding: utf-8 -*-
-###############################################################################
-#
-#   Module for OpenERP
-#   Copyright (C) 2014 Akretion (http://www.akretion.com).
-#   @author Sébastien BEAU <sebastien.beau@akretion.com>
-#
-#   This program is free software: you can redistribute it and/or modify
-#   it under the terms of the GNU Affero General Public License as
-#   published by the Free Software Foundation, either version 3 of the
-#   License, or (at your option) any later version.
-#
-#   This program is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#   GNU Affero General Public License for more details.
-#
-#   You should have received a copy of the GNU Affero General Public License
-#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-###############################################################################
 
 from openerp import fields, models, api, exceptions, _
 from openerp.osv import fields as old_fields
@@ -115,44 +94,4 @@ class MrpProductionWorkcenterLine(models.Model):
         res = super(MrpProductionWorkcenterLine, self).write(vals, update=update)
         if vals.get('state', '') in ('done', 'cancel') or 'routing_line_id' in vals:
             self.mapped('dependency_for_ids').compute_pending()
-        return res
-
-
-class MrpBom(models.Model):
-    _inherit = 'mrp.bom'
-
-    @api.model
-    def _prepare_wc_line(self, bom, wc_use, level=0, factor=1):
-        res = super(MrpBom, self)._prepare_wc_line(
-            bom, wc_use, factor=factor, level=level)
-        res['routing_line_id'] = wc_use.id
-        return res
-
-
-class MrpRoutingWorkcenter(models.Model):
-    _inherit = 'mrp.routing.workcenter'
-
-    dependency_ids = fields.Many2many(
-        'mrp.routing.workcenter',
-        'rel_dependency_routing_worcenter',
-        'routing_id',
-        'routing_dependency_id',
-        'Depend On',
-        copy=False)
-    dependency_for_ids = fields.Many2many(
-        'mrp.routing.workcenter',
-        'rel_dependency_routing_worcenter',
-        'routing_dependency_id',
-        'routing_id',
-        'Dependency For',
-        copy=False)
-
-    @api.multi
-    def write(self, vals):
-        res = super(MrpRoutingWorkcenter, self).write(vals)
-        if 'dependency_ids' in vals:
-            wos = self.env['mrp.production.workcenter.line'].search(
-                [('routing_line_id', 'in', self.ids),
-                 ('state', 'not in', ('cancel', 'done'))])
-            wos.compute_pending()
         return res
