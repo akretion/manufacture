@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="mrp_production_form_view" model="ir.ui.view">
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view" />
+        <field name="arch" type="xml">
+            <field name="date_planned_start" position="after">
+                <field name="available_date" />
+            </field>
+            <xpath
+                expr="//field[@name='move_raw_ids']/tree/field[@name='product_uom_qty']"
+                position="after"
+            >
+                <field name="qty_immediatly_usable" />
+                <field name="qty_immediatly_usable_mrp_zone" />
+            </xpath>
+            <!-- confusing since we do reservation a very different way for mrp. Maybe
+                 replace it along with forecast_expected_date and reserved_availability
+                 if performance is an issue on MO form -->
+            <xpath
+                expr="//field[@name='move_raw_ids']/tree/field[@name='forecast_availability']"
+                position="attributes"
+            >
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- Make visible unreserved (unassigned) moves -->
+            <xpath
+                expr="//field[@name='move_raw_ids']/tree/field[@name='product_id']"
+                position="attributes"
+            >
+                <attribute
+                    name="decoration-danger"
+                >state in ('waiting', 'confirmed')</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

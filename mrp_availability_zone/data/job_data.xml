@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="job_function_mrp_check_availability" model="queue.job.function">
+        <field name="model_id" ref="stock.model_stock_move" />
+        <field name="method">check_mrp_raw_material_availability</field>
+        <!--
+        <field name="channel_id" ref="TODO"/> -->
+    </record>
+
+</odoo>
