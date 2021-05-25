@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+<record id="view_mrp_workcenter_ordering_key_tree" model="ir.ui.view">
+    <field name="model">mrp.workcenter.ordering.key</field>
+    <field name="arch" type="xml">
+        <tree string="Ordering Key">
+            <field name="name" />
+        </tree>
+    </field>
+</record>
+
+<record id="view_mrp_workcenter_ordering_key_form" model="ir.ui.view">
+    <field name="model">mrp.workcenter.ordering.key</field>
+    <field name="arch" type="xml">
+        <form string="Ordering Key" version="7.0">
+            <h1>
+                <label for="name" class="oe_edit_only" />
+                <field name="name" select="1" />
+            </h1>
+            <field name="field_ids">
+                <tree editable="top">
+                    <field name="sequence" />
+                    <field name="field_id" />
+                    <field name="order" />
+                    <field name="ttype" />
+                </tree>
+            </field>
+        </form>
+    </field>
+</record>
+
+<record id="view_mrp_workcenter_ordering_key_search" model="ir.ui.view">
+    <field name="model">mrp.workcenter.ordering.key</field>
+    <field name="arch" type="xml">
+        <search string="Ordering Key">
+            <field name="name" select="True" />
+        </search>
+    </field>
+</record>
+
+<record model="ir.actions.act_window" id="act_open_mrp_workcenter_ordering_key_view">
+    <field name="name">Ordering Key</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">mrp.workcenter.ordering.key</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="view_mrp_workcenter_ordering_key_search" />
+</record>
+
+<menuitem
+        id="menu_mrp_workcenter_ordering_key"
+        parent="mrp.menu_mrp_configuration"
+        sequence="91"
+        action="act_open_mrp_workcenter_ordering_key_view"
+    />
+
+
+</odoo>
