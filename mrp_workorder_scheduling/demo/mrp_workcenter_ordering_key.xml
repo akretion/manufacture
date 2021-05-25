@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="create_date_ordering_key" model="mrp.workcenter.ordering.key">
+        <field name="name">Create Date ordering</field>
+    </record>
+
+    <record id="ordering_field_1" model="mrp.workcenter.ordering.field">
+        <field name="sequence">1</field>
+        <field name="ordering_key_id" ref="create_date_ordering_key" />
+        <field name="field_id" ref="mrp.field_mrp_workorder__create_date" />
+        <field name="order">asc</field>
+    </record>
+
+    <record id="ordering_field_2" model="mrp.workcenter.ordering.field">
+        <field name="sequence">2</field>
+        <field name="ordering_key_id" ref="create_date_ordering_key" />
+        <field name="field_id" ref="mrp.field_mrp_workorder__id" />
+        <field name="order">desc</field>
+    </record>
+
+</odoo>
