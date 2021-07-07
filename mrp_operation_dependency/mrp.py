@@ -44,6 +44,7 @@ class MrpProductionWorkcenterLine(models.Model):
             not_pendings.write({'pending': False})
 
     @api.multi
+    @api.depends("routing_line_id")
     def _get_dependency_ids(self):
         for line in self:
             if line.routing_line_id.dependency_ids:
@@ -55,6 +56,7 @@ class MrpProductionWorkcenterLine(models.Model):
                 line.dependency_ids = [(6 ,0, depend_lines.ids)] 
 
     @api.multi
+    @api.depends("routing_line_id")
     def _get_dependency_for_ids(self):
         for line in self:
             if line.routing_line_id.dependency_for_ids:
@@ -113,8 +115,13 @@ class MrpProductionWorkcenterLine(models.Model):
                     _('Impossible to start or end a pending workorder.'
                       ' (%s)' % pending_wos.ids))
         res = super(MrpProductionWorkcenterLine, self).write(vals, update=update)
-        if vals.get('state', '') in ('done', 'cancel') or 'routing_line_id' in vals:
-            self.mapped('dependency_for_ids').compute_pending()
+        recompute_ops = self.env["mrp.production.workcenter.line"]
+        if vals.get('state', '') in ('done', 'cancel'):
+            recompute_ops = self.mapped('dependency_for_ids')
+        elif 'routing_line_id' in vals:
+            recompute_ops = self | self.mapped('dependency_for_ids')
+        if recompute_ops:
+            recompute_ops.compute_pending()
         return res
 
 
