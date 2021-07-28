@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="mrp_workcenter_tree_view" model="ir.ui.view">
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_workcenter_tree_view" />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="qty_scheduled_load" optional="show" />
+                <field name="qty_todo_load" optional="show" />
+                <field name="qty_waiting_load" optional="show" />
+                <field name="qty_load" optional="show" />
+                <field name="scheduled_load" optional="show" />
+                <field name="todo_load" optional="show" />
+                <field name="waiting_load" optional="show" />
+                <field name="workcenter_load" optional="show" />
+            </field>
+        </field>
+    </record>
+
+</odoo>
