@@ -12,6 +12,14 @@ class MrpWorkcenter(models.Model):
         help="Allow to define Work Orders ordering priority",
     )
 
+    def _get_order_by_spec(self):
+        self.ensure_one()
+        order_by = [
+            "%s %s" % (row.field_id.name, row.order)
+            for row in self.ordering_key_id.field_ids
+        ]
+        return order_by
+
     def button_order_workorder(self):
         workorder_obj = self.env["mrp.workorder"]
         for workcenter in self:
@@ -23,10 +31,7 @@ class MrpWorkcenter(models.Model):
                         ' and fill the field "ordering key"'
                     )
                 )
-            order_by = [
-                "%s %s" % (row.field_id.name, row.order)
-                for row in workcenter.ordering_key_id.field_ids
-            ]
+            order_by = workcenter._get_order_by_spec()
             workorders = workorder_obj.search(
                 [
                     ("state", "in", ("pending", "ready", "progress")),
