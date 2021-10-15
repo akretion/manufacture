@@ -15,6 +15,7 @@
         "security/ir.model.access.csv",
         "views/mrp_workcenter_order_key_views.xml",
         "views/mrp_workcenter_view.xml",
+        "views/mrp_workorder_view.xml",
     ],
     "demo": [
         "demo/mrp_workcenter_ordering_key.xml",
