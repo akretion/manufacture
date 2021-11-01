@@ -90,7 +90,8 @@ class MrpWorkorder(models.Model):
 
     def action_cancel(self):
         res = super().action_cancel()
-        self._start_nextworkorder()
+        for wo in self:
+            wo._start_nextworkorder()
         return res
 
     # Default state is pending in Odoo and in _action_assign, the first (lower sequence)
