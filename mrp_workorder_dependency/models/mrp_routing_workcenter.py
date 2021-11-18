@@ -1,5 +1,5 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from odoo import fields, models
+from odoo import api, exceptions, fields, models
 
 
 class MrpRoutingWorkcenter(models.Model):
@@ -33,3 +33,14 @@ class MrpRoutingWorkcenter(models.Model):
             )
             wos.check_waiting_state()
         return res
+
+    @api.constrains("dependency_ids", "sequence")
+    def check_sequence(self):
+        for routing_wk in self:
+            if routing_wk.dependency_ids:
+                dep_sequence = min(routing_wk.dependency_ids.mapped("sequence"))
+                if routing_wk.sequence <= dep_sequence:
+                    raise exceptions.UserError(
+                        "Operation Sequence has to respect the dependency order "
+                        "The sequence of an operation must be higher than the sequence "
+                        "of its dependency.")
