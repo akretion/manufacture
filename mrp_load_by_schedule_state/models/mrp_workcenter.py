@@ -11,15 +11,15 @@ class MrpWorkcenter(models.Model):
         compute="_compute_load",
         help="Load for this particular workcenter in quantity of pieces",
     )
-    qty_waiting_load = fields.Float("Waiting (qty)", compute="_compute_load")
-    qty_todo_load = fields.Float("Todo (qty)", compute="_compute_load")
-    qty_scheduled_load = fields.Float("Scheduled (qty)", compute="_compute_load")
-    waiting_load = fields.Float("Waiting (minutes)", compute="_compute_load")
-    todo_load = fields.Float("Todo (minutes)", compute="_compute_load")
-    scheduled_load = fields.Float("Scheduled (minutes)", compute="_compute_load")
+    qty_waiting_load = fields.Float("Waiting (qty)", compute="_compute_load", store=True)
+    qty_todo_load = fields.Float("Todo (qty)", compute="_compute_load", store=True)
+    qty_scheduled_load = fields.Float("Scheduled (qty)", compute="_compute_load", store=True)
+    waiting_load = fields.Float("Waiting (minutes)", compute="_compute_load", store=True)
+    todo_load = fields.Float("Todo (minutes)", compute="_compute_load", store=True)
+    scheduled_load = fields.Float("Scheduled (minutes)", compute="_compute_load", store=True)
     # Change its compute method to put the same to avoid calling the other method
     # as well when it already computes it for all other fields (performance)
-    workcenter_load = fields.Float(compute="_compute_load")
+    workcenter_load = fields.Float(compute="_compute_load", store=True)
 
     def _compute_load(self):
         res = self.env["mrp.workorder"].read_group(
@@ -42,17 +42,17 @@ class MrpWorkcenter(models.Model):
         for workcenter in self:
             workcenter.waiting_load = result[workcenter.id]["time"].get("waiting", 0.0)
             workcenter.qty_waiting_load = result[workcenter.id]["qty"].get(
-                "waiting", 1.0
+                "waiting", 0.0
             )
 
             workcenter.todo_load = result[workcenter.id]["time"].get("todo", 0.0)
-            workcenter.qty_todo_load = result[workcenter.id]["qty"].get("todo", 1.0)
+            workcenter.qty_todo_load = result[workcenter.id]["qty"].get("todo", 0.0)
 
             workcenter.scheduled_load = result[workcenter.id]["time"].get(
                 "scheduled", 0.0
             )
             workcenter.qty_scheduled_load = result[workcenter.id]["qty"].get(
-                "scheduled", 1.0
+                "scheduled", 0.0
             )
 
             workcenter.qty_load = sum(
