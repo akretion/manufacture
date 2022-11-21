@@ -1,10 +1,10 @@
 from odoo import http
 from odoo.http import request
 
-from odoo.addons.web.controllers import main
+from odoo.addons.web.controllers import action
 
 
-class Action(main.Action):
+class Action(action.Action):
     @http.route("/web/action/load", type="json", auth="user")
     def load(self, action_id, additional_context=None):
         if "mrp_load_by_schedule_state" in request.env.registry._init_modules:

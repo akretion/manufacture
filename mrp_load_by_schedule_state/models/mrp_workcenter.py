@@ -9,6 +9,7 @@ class MrpWorkcenter(models.Model):
     qty_load = fields.Float(
         string="Total Load (qty)",
         compute="_compute_load",
+        store=True,
         help="Load for this particular workcenter in quantity of pieces",
     )
     qty_waiting_load = fields.Float(

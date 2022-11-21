@@ -2,7 +2,7 @@
 {
     "name": "MRP Load By Schedule State",
     "summary": "Adds load information on workcenter by mo schedule state",
-    "version": "14.0.1.0.0",
+    "version": "16.0.1.0.0",
     "category": "Manufacturing",
     "website": "https://github.com/OCA/manufacture",
     "author": "Akretion,Odoo Community Association (OCA)",
