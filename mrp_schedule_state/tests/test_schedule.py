@@ -15,34 +15,21 @@ class TestSchedule(TestMrpCommon):
         mo, _bom, _build_product, component1, component2 = self.generate_mo()
         self.assertEqual(mo.schedule_state, "waiting")
         location = mo.location_src_id
-        inventory = self.env["stock.inventory"].create(
-            {
-                "name": "Test inventory",
-                "location_ids": [(6, 0, [location.id])],
-                "state": "confirm",
-                "line_ids": [
-                    (
-                        0,
-                        0,
-                        {
-                            "product_id": component1.id,
-                            "location_id": location.id,
-                            "product_qty": 20,
-                        },
-                    ),
-                    (
-                        0,
-                        0,
-                        {
-                            "product_id": component2.id,
-                            "location_id": location.id,
-                            "product_qty": 5,
-                        },
-                    ),
-                ],
-            }
-        )
-        inventory._action_done()
+        self.env["stock.quant"].with_context(inventory_mode=True).create(
+            [
+                {
+                    "product_id": component1.id,
+                    "location_id": location.id,
+                    "inventory_quantity": 20,
+                },
+                {
+                    "product_id": component2.id,
+                    "location_id": location.id,
+                    "inventory_quantity": 5,
+                },
+            ]
+        )._apply_inventory()
+
         mo.action_assign()
         # once raw material is ready, MO is rdy to be scheduled
         self.assertEqual(mo.schedule_state, "todo")
@@ -69,7 +56,7 @@ class TestSchedule(TestMrpCommon):
         self.assertFalse(mo.schedule_date)
         self.assertFalse(mo.schedule_user_id)
 
-        mo.button_unreserve()
+        mo.do_unreserve()
         # raw material not available anymore, back to waiting
         self.assertEqual(mo.schedule_state, "waiting")
 
