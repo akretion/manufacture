@@ -11,12 +11,20 @@ class MrpWorkcenter(models.Model):
         compute="_compute_load",
         help="Load for this particular workcenter in quantity of pieces",
     )
-    qty_waiting_load = fields.Float("Waiting (qty)", compute="_compute_load", store=True)
+    qty_waiting_load = fields.Float(
+        "Waiting (qty)", compute="_compute_load", store=True
+    )
     qty_todo_load = fields.Float("Todo (qty)", compute="_compute_load", store=True)
-    qty_scheduled_load = fields.Float("Scheduled (qty)", compute="_compute_load", store=True)
-    waiting_load = fields.Float("Waiting (minutes)", compute="_compute_load", store=True)
+    qty_scheduled_load = fields.Float(
+        "Scheduled (qty)", compute="_compute_load", store=True
+    )
+    waiting_load = fields.Float(
+        "Waiting (minutes)", compute="_compute_load", store=True
+    )
     todo_load = fields.Float("Todo (minutes)", compute="_compute_load", store=True)
-    scheduled_load = fields.Float("Scheduled (minutes)", compute="_compute_load", store=True)
+    scheduled_load = fields.Float(
+        "Scheduled (minutes)", compute="_compute_load", store=True
+    )
     # Change its compute method to put the same to avoid calling the other method
     # as well when it already computes it for all other fields (performance)
     workcenter_load = fields.Float(compute="_compute_load", store=True)

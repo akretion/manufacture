@@ -6,14 +6,14 @@
         <field name="inherit_id" ref="mrp.mrp_workcenter_tree_view" />
         <field name="arch" type="xml">
             <field name="name" position="after">
-                <field name="qty_scheduled_load" optional="show" sum="qty_scheduled"/>
-                <field name="qty_todo_load" optional="show" sum="qty_todo"/>
-                <field name="qty_waiting_load" optional="show" sum="qty_waiting"/>
-                <field name="qty_load" optional="show" sum="qty_total"/>
-                <field name="scheduled_load" optional="show" sum="time_scheduled"/>
-                <field name="todo_load" optional="show" sum="time_todo"/>
-                <field name="waiting_load" optional="show" sum="time_waiting"/>
-                <field name="workcenter_load" optional="show" sum="time_total"/>
+                <field name="qty_scheduled_load" optional="show" sum="qty_scheduled" />
+                <field name="qty_todo_load" optional="show" sum="qty_todo" />
+                <field name="qty_waiting_load" optional="show" sum="qty_waiting" />
+                <field name="qty_load" optional="show" sum="qty_total" />
+                <field name="scheduled_load" optional="show" sum="time_scheduled" />
+                <field name="todo_load" optional="show" sum="time_todo" />
+                <field name="waiting_load" optional="show" sum="time_waiting" />
+                <field name="workcenter_load" optional="show" sum="time_total" />
             </field>
         </field>
     </record>
