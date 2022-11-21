@@ -2,7 +2,7 @@
 
 {
     "name": "MRP Workorder Scheduling",
-    "version": "14.0.1.0.0",
+    "version": "16.0.1.0.0",
     "author": "Akretion,Odoo Community Association (OCA)",
     "summary": "Order workorders inside a workcenter",
     "category": "Manufacturing",

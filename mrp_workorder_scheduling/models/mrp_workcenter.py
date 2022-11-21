@@ -31,10 +31,11 @@ class MrpWorkcenter(models.Model):
                         ' and fill the field "ordering key"'
                     )
                 )
-            order_by = workcenter._get_order_by_spec()
+            # sudo because we need to read ir.model.fields in order tu build the order
+            order_by = workcenter.sudo()._get_order_by_spec()
             workorders = workorder_obj.search(
                 [
-                    ("state", "in", ("pending", "ready", "progress")),
+                    ("state", "in", ("pending", "waiting", "ready", "progress")),
                     ("workcenter_id", "=", workcenter.id),
                     ("schedule_state", "=", "scheduled"),
                 ],

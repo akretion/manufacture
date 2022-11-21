@@ -32,6 +32,7 @@
                         name="button_order_workorder"
                         type="object"
                         string="Scheduling"
+                        title="Order Workorders"
                     />
                  </header>
              </tree>
