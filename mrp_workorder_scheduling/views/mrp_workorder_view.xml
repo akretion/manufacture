@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="mrp.mrp_production_workorder_tree_view" />
         <field name="arch" type="xml">
             <field name="consumption" position="before">
-                <field name="sequence"/>
+                <field name="sequence" />
             </field>
         </field>
     </record>

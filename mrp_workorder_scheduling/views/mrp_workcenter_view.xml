@@ -15,7 +15,7 @@
             <xpath expr="//notebook" position="inside">
                 <page string="Ordering">
                     <group>
-                        <field name="ordering_key_id"/>
+                        <field name="ordering_key_id" />
                     </group>
                 </page>
             </xpath>
