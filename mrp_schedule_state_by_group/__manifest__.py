@@ -1,6 +1,6 @@
 {
     "name": "MRP Schedule State By Group",
-    "version": "14.0.1.0.0",
+    "version": "16.0.1.0.0",
     "author": "Akretion, Odoo Community Association (OCA)",
     "category": "Manufacturing",
     "depends": ["mrp_sale_info", "mrp_schedule_state"],

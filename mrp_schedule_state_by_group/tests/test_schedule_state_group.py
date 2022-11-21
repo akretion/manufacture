@@ -61,25 +61,13 @@ class TestSchedule(TestMrpCommon):
         self.assertEqual(len(self.delivery_group.group_mo_ids), 2)
         location = mo1.location_src_id
         # put enough stock, product 1 is consu so only product 2
-        inventory = self.env["stock.inventory"].create(
+        self.env["stock.quant"].with_context(inventory_mode=True).create(
             {
-                "name": "Test inventory",
-                "location_ids": [(6, 0, [location.id])],
-                "state": "confirm",
-                "line_ids": [
-                    (
-                        0,
-                        0,
-                        {
-                            "product_id": self.product_2.id,
-                            "location_id": location.id,
-                            "product_qty": 50,
-                        },
-                    ),
-                ],
+                "product_id": self.product_2.id,
+                "location_id": location.id,
+                "inventory_quantity": 50,
             }
-        )
-        inventory._action_done()
+        )._apply_inventory()
         mo1.action_assign()
         # mo1 is assigned but still waiting since mo2, has the same delivery group
         # and its raw materials are not available yet
