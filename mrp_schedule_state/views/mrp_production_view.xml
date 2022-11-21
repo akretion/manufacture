@@ -33,14 +33,14 @@
         <field name="model">mrp.production</field>
         <field name="inherit_id" ref="mrp.mrp_production_form_view" />
         <field name="arch" type="xml">
-            <xpath expr="//button[@name='button_unreserve']" position="after">
+            <button name="do_unreserve" position="after">
                 <button
                     name="%(mrp_schedule_state.action_switch_schedule)d"
                     type="action"
                     string="Schedule"
                     groups="mrp.group_mrp_manager"
                 />
-            </xpath>
+            </button>
             <field name="user_id" position="before">
                 <field name="schedule_state" readonly="1" />
             </field>

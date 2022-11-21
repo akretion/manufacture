@@ -23,7 +23,6 @@ class MrpProduction(models.Model):
     schedule_date = fields.Datetime()
     schedule_state = fields.Selection(
         selection=_get_schedule_states,
-        string="Schedule State",
         readonly=False,
         default="waiting",
         copy=False,
@@ -48,6 +47,8 @@ class MrpProduction(models.Model):
         # but it could be overriden to implement more complexes cases
         plannable_mos = self._get_mo_plannable()
         for mo in self:
+            if mo.schedule_state == "scheduled":
+                continue
             is_plannable = plannable_mos.get(mo.id)
             if mo.state in ("progress", "to_close", "done"):
                 mo.schedule_state = "scheduled"
