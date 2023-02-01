@@ -6,7 +6,7 @@
     "license": "AGPL-3",
     "website": "www.akretion.com",
     "summary": "Change the product of a raw material",
-    "depends": ["mrp", "base_custom"],
+    "depends": ["mrp"],
     "data": ["security/ir.model.access.csv", "wizard/raw_material_swap.xml"],
     "installable": True,
 }
