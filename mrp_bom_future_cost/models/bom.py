@@ -10,22 +10,22 @@ logger = logging.getLogger(__name__)
 class MrpBom(models.Model):
     _inherit = "mrp.bom"
 
-    cost_vendor_price = fields.Float(
-        compute="_compute_cost_vendor_price",
+    future_cost = fields.Float(
+        compute="_compute_future_cost",
         groups="mrp.group_mrp_user",
         help="Same field as in product (if only 1 variant)",
     )
 
-    def _compute_cost_vendor_price(self):
+    def _compute_future_cost(self):
         for rec in self:
             if rec.product_id:
-                rec.cost_vendor_price = rec.product_id.cost_vendor_price
+                rec.future_cost = rec.product_id.future_cost
             elif len(rec.product_tmpl_id.product_variant_ids) == 1:
-                rec.cost_vendor_price = rec.product_tmpl_id.product_variant_ids[
+                rec.future_cost = rec.product_tmpl_id.product_variant_ids[
                     0
-                ].cost_vendor_price
+                ].future_cost
             else:
-                rec.cost_vendor_price = 0
+                rec.future_cost = 0
 
     @api.model
     def _computed_cost_with_vendor_price(self, default_company_id):
@@ -37,7 +37,9 @@ class MrpBom(models.Model):
         product_count = products.set_vendor_price()
         if product_count:
             partner = self._get_warned_partner_about_cost_with_vendor_price()
-            partner.message_post(body=_("%s products price_vendor updated."))
+            partner.message_post(
+                body=_("%s products price_vendor updated.") % product_count
+            )
         product_tmpl = self.env["mrp.bom"].search([]).mapped("product_tmpl_id")
         product_tmpl.action_bom_vendor_price()
 
@@ -85,7 +87,10 @@ class MrpBom(models.Model):
             # Compute recursive if line has `child_line_ids`
             if line.child_bom_id:
                 child_cost = line.child_bom_id._compute_cost_with_vendor_price()
-                line.product_id.cost_vendor_price = child_cost
+                if child_cost != line.product_id.future_cost:
+                    line.product_id.previous_cost = line.product_id.future_cost
+                    line.product_id.future_cost = child_cost
+                    line.product_id.last_cost = fields.Date.today()
                 total += (
                     line.product_id.uom_id._compute_price(
                         child_cost, line.product_uom_id
@@ -94,7 +99,7 @@ class MrpBom(models.Model):
                 )
             else:
                 price = (
-                    line.product_id.cost_vendor_price
+                    line.product_id.future_cost
                     or line.product_id.with_context(force_company=1).standard_price
                 )
                 total += (
@@ -109,8 +114,8 @@ class MrpBom(models.Model):
 class MrpBomLine(models.Model):
     _inherit = "mrp.bom.line"
 
-    cost_vendor_price = fields.Float(
-        related="product_id.cost_vendor_price",
+    future_cost = fields.Float(
+        related="product_id.future_cost",
         groups="mrp.group_mrp_user",
         help="Cost if matching vendor price in product page",
     )

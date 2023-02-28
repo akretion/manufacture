@@ -19,10 +19,22 @@ class ProductTemplate(models.Model):
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
-    cost_vendor_price = fields.Float(
+    future_cost = fields.Float(
         groups="mrp.group_mrp_user",
         readonly=True,
-        help="Cost based on bom and vendor price",
+        help="Cost based on bom and vendor price (cost used in next purchase order "
+        "of raw material)",
+    )
+    previous_cost = fields.Float(
+        groups="mrp.group_mrp_user",
+        readonly=True,
+        string="Old cost",
+        help="Previous vendor price stored for history purpose",
+    )
+    last_cost = fields.Date(
+        string="Last Cost",
+        readonly=True,
+        groups="mrp.group_mrp_user",
     )
     vendor_price_id = fields.Many2one(
         comodel_name="product.supplierinfo",
@@ -37,7 +49,7 @@ class ProductProduct(models.Model):
             if bom:
                 bom.product_tmpl_id.product_variant_ids[
                     0
-                ].cost_vendor_price = bom._compute_cost_with_vendor_price()
+                ].future_cost = bom._compute_cost_with_vendor_price()
 
     def set_vendor_price(self):
         product_count = 0
@@ -55,14 +67,16 @@ class ProductProduct(models.Model):
             )._select_seller(uom_id=product.uom_id, quantity=quantity)
             vals = {}
             if vendor_info:
-                if vendor_info.price != product.cost_vendor_price:
-                    vals["cost_vendor_price"] = vendor_info.price
+                if vendor_info.price != product.future_cost:
+                    vals["previous_cost"] = product.future_cost
+                    vals["future_cost"] = vendor_info.price
+                    vals["last_cost"] = fields.Date.today()
                     product_count += 1
                 if vendor_info != product.vendor_price_id:
                     vals["vendor_price_id"] = vendor_info.id
             elif product.vendor_price_id:
                 vals["vendor_price_id"] = False
-                vals["cost_vendor_price"] = 0
+                vals["future_cost"] = 0
             if vals:
                 product.write(vals)
         return product_count

@@ -5,13 +5,13 @@
     <record id="product_product_form_view_bom_button" model="ir.ui.view">
         <field name="model">product.product</field>
         <field name="inherit_id" ref="mrp.product_product_form_view_bom_button"/>
-        <field name="groups_id" eval="[(4, ref('mrp.group_mrp_user'))]"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='purchase']//group[@name='purchase']" position="inside">
-                <group name="future_cost" string="Cost based on vendor prices">
-                    <field name="cost_vendor_price"/>
+                <group name="future_cost" string="Cost based on vendor prices" groups="mrp.group_mrp_user">
+                    <field name="future_cost"/>
+                    <field name="last_cost"/>
+                    <field name="previous_cost"/>
                     <field name="vendor_price_id"/>
-                    <button name="set_vendor_price" string="Compute" type="object"/>
                 </group>
             </xpath>
         </field>
@@ -20,10 +20,11 @@
     <record id="product_product_tree_view" model="ir.ui.view">
         <field name="model">product.product</field>
         <field name="inherit_id" ref="product.product_product_tree_view"/>
-        <field name="groups_id" eval="[(4, ref('mrp.group_mrp_user'))]"/>
         <field name="arch" type="xml">
             <field name="standard_price" position="after">
-                <field name="cost_vendor_price"/>
+                <field name="future_cost" string="FC"/>
+                <field name="last_cost" string="Last FC"/>
+                <field name="previous_cost"/>
             </field>
         </field>
     </record>
