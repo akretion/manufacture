@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    "name": "MRP BOM Vendor Price",
+    "name": "MRP BOM Future Cost",
     "version": "12.0.1.0.0",
     "category": "Manufacturing",
     "website": "https://github.com/OCA/manufacture",

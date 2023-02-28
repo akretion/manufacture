@@ -1,21 +1,19 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* mrp_bom_future_cost
+#	* mrp_bom_future_cost
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-28 16:56+0000\n"
-"PO-Revision-Date: 2023-02-28 17:59+0100\n"
+"PO-Revision-Date: 2023-02-28 16:56+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-"X-Generator: Poedit 3.0.1\n"
 
 #. module: mrp_bom_future_cost
 #: code:addons/mrp_bom_future_cost/models/bom.py:42
@@ -33,12 +31,12 @@ msgstr ""
 #. module: mrp_bom_future_cost
 #: model:ir.model,name:mrp_bom_future_cost.model_mrp_bom
 msgid "Bill of Material"
-msgstr "Nomenclature"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.model,name:mrp_bom_future_cost.model_mrp_bom_line
 msgid "Bill of Material Line"
-msgstr "Ligne de nomenclature"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.actions.server,name:mrp_bom_future_cost.action_bom_vendor_price_product
@@ -48,12 +46,8 @@ msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.model.fields,help:mrp_bom_future_cost.field_product_product__future_cost
-msgid ""
-"Cost based on bom and vendor price (cost used in next purchase order of raw "
-"material)"
+msgid "Cost based on bom and vendor price (cost used in next purchase order of raw material)"
 msgstr ""
-"Couts basés sur la nomenclature et le prix fournisseur (coût utilisé dans le "
-"prochain achat de matière première)"
 
 #. module: mrp_bom_future_cost
 #: model:ir.model.fields,help:mrp_bom_future_cost.field_mrp_bom_line__future_cost
@@ -63,86 +57,82 @@ msgstr ""
 #. module: mrp_bom_future_cost
 #: model_terms:ir.ui.view,arch_db:mrp_bom_future_cost.product_product_tree_view
 msgid "FC"
-msgstr "CF"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model_terms:ir.ui.view,arch_db:mrp_bom_future_cost.product_product_form_view_bom_button
-#, fuzzy
-#| msgid "Future Cost"
 msgid "Future"
-msgstr "Coût Futur"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.model.fields,field_description:mrp_bom_future_cost.field_mrp_bom_line__future_cost
 #: model:ir.model.fields,field_description:mrp_bom_future_cost.field_product_product__future_cost
 #: model_terms:ir.ui.view,arch_db:mrp_bom_future_cost.product_product_form_view_bom_button
 msgid "Future Cost"
-msgstr "Coût Futur"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.model.fields,field_description:mrp_bom_future_cost.field_product_product__last_cost
 msgid "Last Cost"
-msgstr "Dernier coût"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model_terms:ir.ui.view,arch_db:mrp_bom_future_cost.product_product_tree_view
 msgid "Last FC"
-msgstr "Dernier CF"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.model.fields,help:mrp_bom_future_cost.field_product_product__vendor_price_id
 msgid "Main vendor price used to compute"
-msgstr "Prix fournisseur principal utilisé pour le calcul"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.model.fields,field_description:mrp_bom_future_cost.field_product_product__previous_cost
 msgid "Old cost"
-msgstr "Ancien coût"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.model.fields,help:mrp_bom_future_cost.field_product_product__previous_cost
 msgid "Previous vendor price stored for history purpose"
-msgstr "Prix fournisseur précédant stocké pour des motifs d'historisation"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.model,name:mrp_bom_future_cost.model_product_product
 msgid "Product"
-msgstr "Article"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.model,name:mrp_bom_future_cost.model_product_template
 msgid "Product Template"
-msgstr "Modèle d'article"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.model.fields,help:mrp_bom_future_cost.field_mrp_bom__future_cost
 msgid "Same field as in product (if only 1 variant) with quantity set to 1"
 msgstr ""
-"Même champ que dans les produits (si seulement 1 variante) avec quantité 1"
 
 #. module: mrp_bom_future_cost
 #: model:ir.model.fields,field_description:mrp_bom_future_cost.field_mrp_bom_line__standard_price
 msgid "Standard Price"
-msgstr "Prix Standard"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.model.fields,help:mrp_bom_future_cost.field_mrp_bom_line__standard_price
 msgid "The same as cost in product page"
-msgstr "The même coût que celui dans la page produit"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.model.fields,field_description:mrp_bom_future_cost.field_mrp_bom__future_cost
-#, fuzzy
-#| msgid "Future Cost"
 msgid "Unit Future Cost"
-msgstr "Coût Futur"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.model.fields,field_description:mrp_bom_future_cost.field_product_product__vendor_price_info
 msgid "Vendor Price Info"
-msgstr "Infos prix fournisseur"
+msgstr ""
 
 #. module: mrp_bom_future_cost
 #: model:ir.model.fields,field_description:mrp_bom_future_cost.field_product_product__vendor_price_id
 msgid "Vendor price line"
-msgstr "Ligne de prix du fournisseur"
+msgstr ""
+

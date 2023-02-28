@@ -6,13 +6,16 @@
         <field name="model">product.product</field>
         <field name="inherit_id" ref="mrp.product_product_form_view_bom_button"/>
         <field name="arch" type="xml">
-            <xpath expr="//page[@name='purchase']//group[@name='purchase']" position="inside">
-                <group name="future_cost" string="Cost based on vendor prices" groups="mrp.group_mrp_user">
-                    <field name="future_cost"/>
-                    <field name="last_cost"/>
-                    <field name="previous_cost"/>
-                    <field name="vendor_price_id"/>
-                </group>
+            <xpath expr="//page[last()]" position="after">
+                <page name="future" string="Future" groups="mrp.group_mrp_user">
+                     <group name="future_cost" string="Future Cost">
+                        <field name="future_cost"/>
+                        <field name="last_cost"/>
+                        <field name="previous_cost"/>
+                        <field name="vendor_price_id"/>
+                        <field name="vendor_price_info"/>
+                    </group>
+                </page>
             </xpath>
         </field>
     </record>

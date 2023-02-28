@@ -11,9 +11,10 @@ class MrpBom(models.Model):
     _inherit = "mrp.bom"
 
     future_cost = fields.Float(
+        string="Unit Future Cost",
         compute="_compute_future_cost",
         groups="mrp.group_mrp_user",
-        help="Same field as in product (if only 1 variant)",
+        help="Same field as in product (if only 1 variant) with quantity set to 1",
     )
 
     def _compute_future_cost(self):
@@ -73,6 +74,7 @@ class MrpBom(models.Model):
         # duplicate from Product._compute_bom_price()
         self.ensure_one()
         total = 0
+        import pdb; pdb.set_trace()
         for opt in self.routing_id.operation_ids:
             duration_expected = (
                 opt.workcenter_id.time_start

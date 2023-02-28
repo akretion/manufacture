@@ -42,6 +42,21 @@ class ProductProduct(models.Model):
         groups="mrp.group_mrp_user",
         help="Main vendor price used to compute",
     )
+    vendor_price_info = fields.Text(compute="_compute_price_info")
+
+    def _compute_price_info(self):
+        for rec in self:
+            info = ""
+            if rec.vendor_price_id:
+                vals = {
+                    "vendor": rec.vendor_price_id.name.name,
+                    "price": rec.vendor_price_id.price,
+                    "min_qty": rec.vendor_price_id.price,
+                }
+                info = (
+                    "%(vendor)s\nPrice: %(price)s\nMin. qty: %(min_qty)s" % vals
+                )
+            rec.vendor_price_info = info
 
     def action_bom_vendor_price(self):
         for product in self:
