@@ -21,7 +21,12 @@ class MrpProduction(models.Model):
         mo_without_group = self - mo_with_group
         for group in mo_with_group.mapped("source_procurement_group_id"):
             plannable_group = all(
-                [x.reservation_state == "assigned" for x in group.group_mo_ids]
+                [
+                    x.reservation_state == "assigned"
+                    for x in group.group_mo_ids.filtered(
+                        lambda mo: mo.state not in ("done", "cancel", "draft")
+                    )
+                ]
             )
             for mo in group.group_mo_ids:
                 res[mo.id] = plannable_group
