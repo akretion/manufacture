@@ -22,6 +22,7 @@ class ProductProduct(models.Model):
     future_cost = fields.Float(
         groups="mrp.group_mrp_user",
         readonly=True,
+        tracking=True,
         help="Cost based on bom and vendor price (cost used in next purchase order "
         "of raw material)",
     )
@@ -74,7 +75,7 @@ class ProductProduct(models.Model):
                 # if quantity is not provided seller_ids with quantities
                 # can't be selected : fixed in v15 (testing if qty is none)
                 # here is a minimal behavior
-                quantity = product.seller_ids[0].min_qty
+                quantity = product.seller_ids[0].min_qty or 1
             # You may change vendor_info selection
             # overiding _select_seller() according to the context
             vendor_info = product.with_context(

@@ -41,8 +41,7 @@ class MrpBom(models.Model):
             partner.message_post(
                 body=_("%s products price_vendor updated.") % product_count
             )
-        product_tmpl = self.env["mrp.bom"].search([]).mapped("product_tmpl_id")
-        product_tmpl.action_bom_vendor_price()
+        # product_tmpl.action_bom_vendor_price()
 
     @api.model
     def _get_warned_partner_about_cost_with_vendor_price(self):
@@ -74,7 +73,6 @@ class MrpBom(models.Model):
         # duplicate from Product._compute_bom_price()
         self.ensure_one()
         total = 0
-        import pdb; pdb.set_trace()
         for opt in self.routing_id.operation_ids:
             duration_expected = (
                 opt.workcenter_id.time_start
