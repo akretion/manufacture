@@ -28,6 +28,7 @@ class MrpProduction(models.Model):
         copy=False,
         compute="_compute_schedule_state",
         store=True,
+        tracking=1,
         help="Schedule State used for ordering production",
     )
     schedule_user_id = fields.Many2one(comodel_name="res.users", string="Scheduled by")
