@@ -7,13 +7,15 @@
         <field name="inherit_id" ref="mrp.product_product_form_view_bom_button"/>
         <field name="arch" type="xml">
             <xpath expr="//page[last()]" position="after">
-                <page name="future" string="Future" groups="mrp.group_mrp_user">
-                     <group name="future_cost" string="Future Cost">
-                        <field name="future_cost"/>
+                <page name="current" string="Current" groups="mrp.group_mrp_user">
+                    <div attrs="{'invisible': [('price_warn_conf', '!=', '⚠')]}">Vendor price is not configured correctly on this purchased product</div>
+                     <group name="current_cost" string="Current Cost">
+                        <field name="current_cost"/>
                         <field name="last_cost"/>
                         <field name="previous_cost"/>
                         <field name="vendor_price_id"/>
                         <field name="vendor_price_info"/>
+                        <field name="price_warn_conf" invisible="1"/>
                     </group>
                 </page>
             </xpath>
@@ -25,7 +27,8 @@
         <field name="inherit_id" ref="product.product_product_tree_view"/>
         <field name="arch" type="xml">
             <field name="standard_price" position="after">
-                <field name="future_cost" string="FC"/>
+                <field name="current_cost" string="FC"/>
+                <field name="price_warn_conf"/>
                 <field name="last_cost" string="Last FC"/>
                 <field name="previous_cost"/>
             </field>
@@ -37,7 +40,7 @@
         <field name="inherit_id" ref="product.product_search_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='pricelist_id']" position="before">
-                <filter name="future_cost" string="Future Costs" domain="[('future_cost','&gt;',0)]"/>
+                <filter name="current_cost" string="Current Costs" domain="[('current_cost','&gt;',0)]"/>
             </xpath>
         </field>
     </record>

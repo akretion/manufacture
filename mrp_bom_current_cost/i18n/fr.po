@@ -1,0 +1,148 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mrp_bom_current_cost
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-28 16:56+0000\n"
+"PO-Revision-Date: 2023-02-28 17:59+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. module: mrp_bom_current_cost
+#: code:addons/mrp_bom_current_cost/models/bom.py:42
+#, python-format
+msgid "%s products price_vendor updated."
+msgstr ""
+
+#. module: mrp_bom_current_cost
+#: model:ir.actions.server,name:mrp_bom_current_cost.act_serv_cost_with_vendor_price
+#: model:ir.cron,cron_name:mrp_bom_current_cost.compute_bom
+#: model:ir.cron,name:mrp_bom_current_cost.compute_bom
+msgid "BOM: auto compute price with vendor data"
+msgstr ""
+
+#. module: mrp_bom_current_cost
+#: model:ir.model,name:mrp_bom_current_cost.model_mrp_bom
+msgid "Bill of Material"
+msgstr "Nomenclature"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model,name:mrp_bom_current_cost.model_mrp_bom_line
+msgid "Bill of Material Line"
+msgstr "Ligne de nomenclature"
+
+#. module: mrp_bom_current_cost
+#: model:ir.actions.server,name:mrp_bom_current_cost._set_current_costs_on_bom_product
+#: model:ir.actions.server,name:mrp_bom_current_cost._set_current_costs_on_bom_template
+msgid "Compute Price with vendor prices"
+msgstr ""
+
+#. module: mrp_bom_current_cost
+#: model:ir.model.fields,help:mrp_bom_current_cost.field_product_product__current_cost
+msgid ""
+"Cost based on bom and vendor price (cost used in next purchase order of raw "
+"material)"
+msgstr ""
+"Couts basés sur la nomenclature et le prix fournisseur (coût utilisé dans le "
+"prochain achat de matière première)"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model.fields,help:mrp_bom_current_cost.field_mrp_bom_line__current_cost
+msgid "Cost if matching vendor price in product page"
+msgstr ""
+
+#. module: mrp_bom_current_cost
+#: model_terms:ir.ui.view,arch_db:mrp_bom_current_cost.product_product_tree_view
+msgid "FC"
+msgstr "CF"
+
+#. module: mrp_bom_current_cost
+#: model_terms:ir.ui.view,arch_db:mrp_bom_current_cost.product_product_form_view_bom_button
+#, fuzzy
+#| msgid "Current Cost"
+msgid "Current"
+msgstr "Coût Futur"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model.fields,field_description:mrp_bom_current_cost.field_mrp_bom_line__current_cost
+#: model:ir.model.fields,field_description:mrp_bom_current_cost.field_product_product__current_cost
+#: model_terms:ir.ui.view,arch_db:mrp_bom_current_cost.product_product_form_view_bom_button
+msgid "Current Cost"
+msgstr "Coût Futur"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model.fields,field_description:mrp_bom_current_cost.field_product_product__last_cost
+msgid "Last Cost"
+msgstr "Dernier coût"
+
+#. module: mrp_bom_current_cost
+#: model_terms:ir.ui.view,arch_db:mrp_bom_current_cost.product_product_tree_view
+msgid "Last FC"
+msgstr "Dernier CF"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model.fields,help:mrp_bom_current_cost.field_product_product__vendor_price_id
+msgid "Main vendor price used to compute"
+msgstr "Prix fournisseur principal utilisé pour le calcul"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model.fields,field_description:mrp_bom_current_cost.field_product_product__previous_cost
+msgid "Old cost"
+msgstr "Ancien coût"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model.fields,help:mrp_bom_current_cost.field_product_product__previous_cost
+msgid "Previous vendor price stored for history purpose"
+msgstr "Prix fournisseur précédant stocké pour des motifs d'historisation"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model,name:mrp_bom_current_cost.model_product_product
+msgid "Product"
+msgstr "Article"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model,name:mrp_bom_current_cost.model_product_template
+msgid "Product Template"
+msgstr "Modèle d'article"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model.fields,help:mrp_bom_current_cost.field_mrp_bom__current_cost
+msgid "Same field as in product (if only 1 variant) with quantity set to 1"
+msgstr ""
+"Même champ que dans les produits (si seulement 1 variante) avec quantité 1"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model.fields,field_description:mrp_bom_current_cost.field_mrp_bom_line__standard_price
+msgid "Standard Price"
+msgstr "Prix Standard"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model.fields,help:mrp_bom_current_cost.field_mrp_bom_line__standard_price
+msgid "The same as cost in product page"
+msgstr "The même coût que celui dans la page produit"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model.fields,field_description:mrp_bom_current_cost.field_mrp_bom__current_cost
+#, fuzzy
+#| msgid "Current Cost"
+msgid "Unit Current Cost"
+msgstr "Coût Futur"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model.fields,field_description:mrp_bom_current_cost.field_product_product__vendor_price_info
+msgid "Vendor Price Info"
+msgstr "Infos prix fournisseur"
+
+#. module: mrp_bom_current_cost
+#: model:ir.model.fields,field_description:mrp_bom_current_cost.field_product_product__vendor_price_id
+msgid "Vendor price line"
+msgstr "Ligne de prix du fournisseur"

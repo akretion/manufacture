@@ -1,0 +1,1 @@
+Use Product Supplier Info to simulate current price on raw material products and final products

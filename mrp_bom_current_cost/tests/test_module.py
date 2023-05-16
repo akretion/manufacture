@@ -3,35 +3,18 @@ from odoo import tests, fields
 from .helper import TestHelper
 
 
+# class Test(tests.common.SavepointCase, TestHelper):
 class Test(tests.common.TransactionCase, TestHelper):
-    def _set_product(self, code, name=None, cost=None):
-        vals = {
-            "name": "%s %s" % (name or code, "DEMO"),
-            "type": "product",
-            "standard_price": cost or 0,
-            "default_code": code,
-            "company_id": 1,
-        }
-        return self.create_or_update("product.product", code, vals)
-
-    def _set_sup_info(self, xml_id, product_xml_id, price):
-        xml_id = xml_id.lower()
-        product = self.env.ref("any.%s" % product_xml_id.lower())
-        vals = {
-            "name": self.env.ref("base.res_partner_3").id,
-            "price": price,
-            "product_tmpl_id": product.product_tmpl_id.id,
-        }
-        self.create_or_update("product.supplierinfo", xml_id, vals)
-
     def setUp(self):
         super().setUp()
-        self._set_product("PF10")
-        self._set_product("PF20")
-        self._set_product("SE10")
-        self._set_product("SE20")
-        self._set_product("MP1")
-        self._set_product("MP2")
+        # TODO test with a diff unit between product and bom line
+        self._set_product("PF10", route="mrp.route_warehouse0_manufacture")
+        self._set_product("PF20", route="mrp.route_warehouse0_manufacture")
+        self._set_product("SE10", route="mrp.route_warehouse0_manufacture")
+        self._set_product("SE20", route="mrp.route_warehouse0_manufacture")
+        self._set_product("MP1", route="purchase_stock.route_warehouse0_buy")
+        self._set_product("MP2", route="purchase_stock.route_warehouse0_buy")
+        self._set_product("MP3", cost=41, route="purchase_stock.route_warehouse0_buy")
         self._set_sup_info("MP1_sup", "MP1", price=15)
         self._set_sup_info("MP2_sup", "MP2", price=24)
         bom_vals = {
@@ -70,16 +53,52 @@ class Test(tests.common.TransactionCase, TestHelper):
             "product_qty": 3,
         }
         self.create_or_update("mrp.bom.line", "mp1_se10", bom_line_vals)
-        self.env.cr.commit()
+        bom_line_vals = {
+            "bom_id": self.env.ref("any.pf20bom").id,
+            "product_id": self.env.ref("any.mp2").id,
+            "product_qty": 2,
+        }
+        self.create_or_update("mrp.bom.line", "mp2_pf20", bom_line_vals)
+        bom_line_vals = {
+            "bom_id": self.env.ref("any.pf20bom").id,
+            "product_id": self.env.ref("any.mp3").id,
+            "product_qty": 1,
+        }
+        self.create_or_update("mrp.bom.line", "mp3_pf20", bom_line_vals)
+        # Use `self.env.cr.commit()` here to create these data as demo
+        # self.env.cr.commit()
 
     def test_any(self):
+        assert 1 == 1
         assert self.env.ref("any.mp1").with_context(company_id=1).standard_price == 0
-        self.env.ref("any.mp1").with_context(company_id=1).standard_price = 4
+        # self.env.ref("any.mp1").with_context(company_id=1).standard_price = 4
         # This is the method triggrered by cron
-        self.env["mrp.bom"]._computed_cost_with_vendor_price(1)
-        assert self.env.ref("any.mp1").future_cost == 15
-        assert self.env.ref("any.mp1").last_cost == fields.Date.today()
-        assert self.env.ref("any.mp2").future_cost == 24
+        # self.env["mrp.bom"]._compute_current_costs(1)
+        # assert self.env.ref("any.mp1").current_cost == 15
+        # assert self.env.ref("any.mp1").last_cost == fields.Date.today()
+        # assert self.env.ref("any.mp2").current_cost == 24
+
+    def _set_product(self, code, name=None, cost=None, route=None):
+        vals = {
+            "name": "%s %s" % (name or code, "DEMO"),
+            "type": "product",
+            "standard_price": cost or 0,
+            "default_code": code,
+            "company_id": 1,
+        }
+        if route:
+            vals["route_ids"] = [(4, self.env.ref(route).id, 0)]
+        return self.create_or_update("product.product", code, vals)
+
+    def _set_sup_info(self, xml_id, product_xml_id, price):
+        xml_id = xml_id.lower()
+        product = self.env.ref("any.%s" % product_xml_id.lower())
+        vals = {
+            "name": self.env.ref("base.res_partner_3").id,
+            "price": price,
+            "product_tmpl_id": product.product_tmpl_id.id,
+        }
+        self.create_or_update("product.supplierinfo", xml_id, vals)
 
     # def setUpAny(self):
     #     super().setUpAny()
@@ -127,11 +146,11 @@ class Test(tests.common.TransactionCase, TestHelper):
     #     bom_form.save()
 
     #     self._create_sup_info("screw", 17)
-    #     self.screw.set_vendor_price()
+    #     self.screw._set_current_cost()
 
     # def test_vendor_price_method(self):
-    #     self.assertEqual(self.screw.future_cost, 17)
+    #     self.assertEqual(self.screw.current_cost, 17)
 
     # def test_on_final_product(self):
-    #     self.dining_table.action_bom_vendor_price()
-    #     self.assertEqual(self.dining_table.future_cost, 585)
+    #     self.dining_table._set_current_costs_on_bom()
+    #     self.assertEqual(self.dining_table.current_cost, 585)

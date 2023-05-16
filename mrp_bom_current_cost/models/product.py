@@ -8,18 +8,18 @@ logger = logging.getLogger(__name__)
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    def action_bom_vendor_price(self):
+    def _set_current_costs_on_bom(self):
         templates = self.filtered(
             lambda t: t.product_variant_count == 1 and t.bom_count > 0
         )
         if templates:
-            return templates.mapped("product_variant_id").action_bom_vendor_price()
+            return templates.mapped("product_variant_id")._set_current_costs_on_bom()
 
 
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
-    future_cost = fields.Float(
+    current_cost = fields.Float(
         groups="mrp.group_mrp_user",
         readonly=True,
         tracking=True,
@@ -44,6 +44,23 @@ class ProductProduct(models.Model):
         help="Main vendor price used to compute",
     )
     vendor_price_info = fields.Text(compute="_compute_price_info")
+    price_warn_conf = fields.Char(
+        string="W",
+        groups="mrp.group_mrp_user",
+        help="Wrong configuration for current cost, see current tab",
+    )
+
+    def _check_current_price(self):
+        """Check misconfigured bought products"""
+        # TODO : make configurable by company
+        # TODO optimize perf
+        self.env["product.product"].search([]).write({"price_warn_conf": ""})
+        for rec in self:
+            sellers = rec.seller_ids.filtered(
+                lambda s: not s.company_id or s.company_id.id == 1
+            )
+            if not sellers:
+                rec.price_warn_conf = "⚠"
 
     def _compute_price_info(self):
         for rec in self:
@@ -54,20 +71,18 @@ class ProductProduct(models.Model):
                     "price": rec.vendor_price_id.price,
                     "min_qty": rec.vendor_price_id.price,
                 }
-                info = (
-                    "%(vendor)s\nPrice: %(price)s\nMin. qty: %(min_qty)s" % vals
-                )
+                info = "%(vendor)s\nPrice: %(price)s\nMin. qty: %(min_qty)s" % vals
             rec.vendor_price_info = info
 
-    def action_bom_vendor_price(self):
+    def _set_current_costs_on_bom(self):
         for product in self:
             bom = self.env["mrp.bom"]._bom_find(product=product)
             if bom:
                 bom.product_tmpl_id.product_variant_ids[
                     0
-                ].future_cost = bom._compute_cost_with_vendor_price()
+                ].current_cost = bom._set_bom_lines_current_cost()
 
-    def set_vendor_price(self):
+    def _set_current_cost(self):
         product_count = 0
         for product in self:
             quantity = 0
@@ -83,16 +98,16 @@ class ProductProduct(models.Model):
             )._select_seller(uom_id=product.uom_id, quantity=quantity)
             vals = {}
             if vendor_info:
-                if vendor_info.price != product.future_cost:
-                    vals["previous_cost"] = product.future_cost
-                    vals["future_cost"] = vendor_info.price
+                if vendor_info.price != product.current_cost:
+                    vals["previous_cost"] = product.current_cost
+                    vals["current_cost"] = vendor_info.price
                     vals["last_cost"] = fields.Date.today()
                     product_count += 1
                 if vendor_info != product.vendor_price_id:
                     vals["vendor_price_id"] = vendor_info.id
             elif product.vendor_price_id:
                 vals["vendor_price_id"] = False
-                vals["future_cost"] = 0
+                vals["current_cost"] = 0
             if vals:
                 product.write(vals)
         return product_count

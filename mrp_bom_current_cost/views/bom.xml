@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="mrp_bom_form_view" model="ir.ui.view">
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <field name="type" position="after">
+                <field name="current_cost"/>
+            </field>
+            <xpath expr="//notebook/page[1]/field[@name='bom_line_ids']/tree" position="inside">
+                <field name="current_cost" group="mrp.group_mrp_manager"/>
+                <field name="line_current_cost" group="mrp.group_mrp_manager"/>
+                <field name="standard_price" group="mrp.group_mrp_manager"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mrp_bom_tree_view" model="ir.ui.view">
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="product_uom_id" position="after">
+                <field name="current_cost"/>
+            </field>
+        </field>
+    </record>
+
+    <template id="report_mrp_bom" inherit_id="mrp.report_mrp_bom">
+        <xpath expr="//thead//tr/th[2]" position="after">
+            <th>Current cost</th>
+        </xpath>
+        <xpath expr="//tbody/tr/td[2]" position="after">
+            <td>_</td>
+        </xpath>
+        <xpath expr="//tfoot//td[2]" position="after">
+            <td></td>
+        </xpath>
+    </template>
+
+    <template id="report_mrp_bom_line" inherit_id="mrp.report_mrp_bom_line">
+        <xpath expr="//tr/td[2]" position="after">
+            <td><span t-esc="l['current_cost']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+        </xpath>
+    </template>
+
+</odoo>
