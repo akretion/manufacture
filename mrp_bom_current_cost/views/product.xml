@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="mrp.product_product_form_view_bom_button"/>
         <field name="arch" type="xml">
             <xpath expr="//page[last()]" position="after">
-                <page name="current" string="Current" groups="mrp.group_mrp_user">
+                <page name="current" string="Cost" groups="mrp.group_mrp_user">
                     <div attrs="{'invisible': [('price_warn_conf', '!=', '⚠')]}">Vendor price is not configured correctly on this purchased product</div>
                      <group name="current_cost" string="Current Cost">
                         <field name="current_cost"/>
@@ -27,9 +27,9 @@
         <field name="inherit_id" ref="product.product_product_tree_view"/>
         <field name="arch" type="xml">
             <field name="standard_price" position="after">
-                <field name="current_cost" string="FC"/>
+                <field name="current_cost" string="CC"/>
                 <field name="price_warn_conf"/>
-                <field name="last_cost" string="Last FC"/>
+                <field name="last_cost" string="Last Cost"/>
                 <field name="previous_cost"/>
             </field>
         </field>
