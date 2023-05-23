@@ -19,32 +19,43 @@ logger = logging.getLogger(__name__)
 class MrpBom(models.Model):
     _inherit = "mrp.bom"
 
-    current_cost = fields.Float(
+    unit_current_cost = fields.Float(
         string="Unit Current Cost",
-        compute="_compute_current_cost",
+        compute="_compute_unit_current_cost",
         groups="mrp.group_mrp_user",
         tracking=True,
         help="Same field as in product (if only 1 variant) with quantity set to 1",
     )
+    current_cost = fields.Float(
+        string="Global Current Cost",
+        compute="_compute_global_current_cost",
+        groups="mrp.group_mrp_user",
+        tracking=True,
+        help="Same field as in product (if only 1 variant) with quantity set to 1",
+    )
+    currency_id = fields.Many2one(related="company_id.currency_id")
 
-    def _compute_current_cost(self):
+    def _compute_unit_current_cost(self):
         for rec in self:
             if rec.product_id:
-                rec.current_cost = rec.product_id.current_cost
+                rec.unit_current_cost = rec.product_id.current_cost
             elif len(rec.product_tmpl_id.product_variant_ids) == 1:
-                rec.current_cost = rec.product_tmpl_id.product_variant_ids[
+                rec.unit_current_cost = rec.product_tmpl_id.product_variant_ids[
                     0
                 ].current_cost
             else:
-                rec.current_cost = 0
+                rec.unit_current_cost = 0
+
+    def _compute_global_current_cost(self):
+        for rec in self:
+            rec.current_cost = rec.unit_current_cost * rec.product_qty
 
     @api.model
     def _compute_current_costs(self, default_company_id):
         """This method is periodically with a cron
         You may inherit to change the default company"""
-        products = self.env["product.product"].search(
-            self._get_domain_to_guess_products_to_purchase(default_company_id)
-        )
+        self.env["product.product"].search([]).write({"price_warn_conf": ""})
+        products = self._get_purchasable_products(default_company_id)
         product_count = products._set_current_cost()
         products._check_current_price()
         if product_count:
@@ -60,25 +71,37 @@ class MrpBom(models.Model):
         return self.env.ref("base.user_admin").partner_id
 
     @api.model
-    def _get_domain_to_guess_products_to_purchase(self, company_id):
-        buy_rte = self.env.ref(
-            "purchase_stock.route_warehouse0_buy", raise_if_not_found=False
-        )
-        if buy_rte:
-            # need to have purchase module installed
-            return [
-                ("route_ids", "=", buy_rte.id),
+    def _get_purchasable_products(self, company_id):
+        "Search products which are not in mrp.bom"
+        all_visible_products = self.env["product.product"].search(
+            [
+                ("escape_price_warn", "=", False),
+                ("purchase_ok", "=", True),
                 "|",
                 ("company_id", "=", company_id),
                 ("company_id", "=", False),
             ]
-        else:
-            logger.info(
-                "Impossible to guess if the product can be purchased. "
-                "Please install purchase module or override "
-                "_get_domain_to_guess_products_to_purchase() method."
-            )
-            return []
+        )
+        products_map = {x.product_tmpl_id: x for x in all_visible_products}
+        boms = self.env["mrp.bom"].search(
+            [
+                (
+                    "product_tmpl_id",
+                    "in",
+                    all_visible_products.mapped("product_tmpl_id").ids,
+                )
+            ]
+        )
+        not_raw_mat_ids = [
+            x.product_id.id or products_map.get(x.product_tmpl_id)["id"] or 0
+            for x in boms
+        ]
+        not_raw_mat_ids = list(set(not_raw_mat_ids))
+        not_raw_mat_ids.sort()
+        purchasable = all_visible_products - self.env["product.product"].browse(
+            not_raw_mat_ids
+        )
+        return purchasable
 
     def _set_bom_lines_current_cost(self):
         """ """
@@ -132,7 +155,7 @@ class MrpBomLine(models.Model):
         groups="mrp.group_mrp_user",
         help="Cost if matching vendor price in product page",
     )
-    line_current_cost = fields.Float(
+    subtotal_current_cost = fields.Float(
         groups="mrp.group_mrp_user",
         compute="_compute_current_cost",
         help="Cost if matching vendor price in product page",
@@ -143,10 +166,11 @@ class MrpBomLine(models.Model):
         groups="mrp.group_mrp_user",
         help="The same as cost in product page",
     )
+    currency_id = fields.Many2one(related="bom_id.company_id.currency_id")
 
     def _compute_current_cost(self):
         for rec in self:
-            rec.line_current_cost = rec.current_cost * rec.product_qty
+            rec.subtotal_current_cost = rec.current_cost * rec.product_qty
 
     def _compute_std_price(self):
         for rec in self:

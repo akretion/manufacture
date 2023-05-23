@@ -7,12 +7,15 @@
         <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
         <field name="arch" type="xml">
             <field name="type" position="after">
-                <field name="current_cost"/>
+                <field name="unit_current_cost" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="current_cost" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="currency_id" invisible="1"/>
             </field>
             <xpath expr="//notebook/page[1]/field[@name='bom_line_ids']/tree" position="inside">
-                <field name="current_cost" group="mrp.group_mrp_manager"/>
-                <field name="line_current_cost" group="mrp.group_mrp_manager"/>
-                <field name="standard_price" group="mrp.group_mrp_manager"/>
+                <field name="current_cost" group="mrp.group_mrp_manager" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="subtotal_current_cost" group="mrp.group_mrp_manager" widget="monetary" options="{'currency_field': 'currency_id'}" string="Subtotal Cost"/>
+                <field name="standard_price" group="mrp.group_mrp_manager" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="currency_id" invisible="1"/>
             </xpath>
         </field>
     </record>
@@ -22,14 +25,14 @@
         <field name="inherit_id" ref="mrp.mrp_bom_tree_view"/>
         <field name="arch" type="xml">
             <field name="product_uom_id" position="after">
-                <field name="current_cost"/>
+                <field name="unit_current_cost"/>
             </field>
         </field>
     </record>
 
     <template id="report_mrp_bom" inherit_id="mrp.report_mrp_bom">
         <xpath expr="//thead//tr/th[2]" position="after">
-            <th>Current cost</th>
+            <th>Subtotal cost</th>
         </xpath>
         <xpath expr="//tbody/tr/td[2]" position="after">
             <td>_</td>

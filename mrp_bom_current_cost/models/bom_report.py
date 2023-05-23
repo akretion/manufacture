@@ -20,13 +20,4 @@ class ReportBomStructure(models.AbstractModel):
                 products.filtered(lambda s: s.id == compo["prod_id"]).current_cost
                 * compo["prod_qty"]
             )
-
         return components, total
-
-
-# {'prod_id': 52, 'prod_name': '[MP2] MP2 DEMO', 'code': '', 'prod_qty': 2.0, 'prod_uom': 'Unit(s)',
-#     'prod_cost': 0.0, 'parent_id': 10, 'line_id': 22, 'level': 1, 'total': 0.0, 'child_bom': False, 'phantom_bom': False, 'attachments': mrp.document()},
-# {'prod_id': 54, 'prod_name': '[MP3] MP3 DEMO', 'code': '', 'prod_qty': 1.0, 'prod_uom': 'Unit(s)',
-#     'prod_cost': 41.0, 'parent_id': 10, 'line_id': 24, 'level': 1, 'total': 41.0, 'child_bom': False, 'phantom_bom': False, 'attachments': mrp.document()}]
-
-# - exception sur produit

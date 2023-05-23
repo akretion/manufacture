@@ -47,14 +47,17 @@ class ProductProduct(models.Model):
     price_warn_conf = fields.Char(
         string="W",
         groups="mrp.group_mrp_user",
-        help="Wrong configuration for current cost, see current tab",
+        help="Wrong configuration for current cost, see Cost tab",
+    )
+    escape_price_warn = fields.Boolean(
+        groups="mrp.group_mrp_user",
+        help="If checked, product is not taken account for current cost",
     )
 
     def _check_current_price(self):
         """Check misconfigured bought products"""
         # TODO : make configurable by company
         # TODO optimize perf
-        self.env["product.product"].search([]).write({"price_warn_conf": ""})
         for rec in self:
             sellers = rec.seller_ids.filtered(
                 lambda s: not s.company_id or s.company_id.id == 1

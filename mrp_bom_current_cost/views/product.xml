@@ -15,6 +15,7 @@
                         <field name="previous_cost"/>
                         <field name="vendor_price_id"/>
                         <field name="vendor_price_info"/>
+                        <field name="escape_price_warn"/>
                         <field name="price_warn_conf" invisible="1"/>
                     </group>
                 </page>

@@ -3,7 +3,7 @@
 <odoo noupdate="0">
 
     <record id="_set_current_costs_on_bom_product" model="ir.actions.server">
-        <field name="name">Compute Price with vendor prices</field>
+        <field name="name">Compute current cost with vendor prices</field>
         <field name="model_id" ref="product.model_product_product"/>
         <field name="binding_model_id" ref="product.model_product_product"/>
         <field name="state">code</field>
@@ -33,7 +33,7 @@ env["mrp.bom"]._compute_current_costs(1)
         <field name="model_id" ref="model_mrp_bom"/>
     </record>
     <record model="ir.cron" id="compute_bom">
-        <field name="name">BOM: auto compute price with vendor data</field>
+        <field name="name">BOM: Compute current cost with vendor data</field>
         <field name="ir_actions_server_id" ref="act_serv_cost_with_vendor_price"/>
         <field name="active">1</field>
         <field name="nextcall" eval="time.strftime('%Y-%m-%d 01:00:00')"/>
