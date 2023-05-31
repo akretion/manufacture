@@ -1,6 +1,6 @@
 import logging
 
-from odoo import api, models
+from odoo import models
 
 logger = logging.getLogger(__name__)
 
@@ -16,8 +16,8 @@ class ReportBomStructure(models.AbstractModel):
             [component.get("prod_id", 0) for component in components]
         )
         for compo in components:
-            compo["current_cost"] = (
-                products.filtered(lambda s: s.id == compo["prod_id"]).current_cost
-                * compo["prod_qty"]
-            )
+            product = products.filtered(lambda s: s.id == compo["prod_id"])
+            compo["current_cost"] = 0
+            if product:
+                compo["current_cost"] = product[0].current_cost * compo["prod_qty"]
         return components, total
