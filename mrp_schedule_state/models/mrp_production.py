@@ -62,6 +62,16 @@ class MrpProduction(models.Model):
                 mo.schedule_state = "waiting"
 
     def write(self, vals):
+        for mo in self:
+            if (
+                vals.get("schedule_state") == "todo"
+                and mo.schedule_state == "scheduled"
+                and mo.state in ("progress", "to_close", "done", "cancel")
+            ):
+                raise exceptions.UserError(
+                    _("The MO %s can't be unscheduled since it has already started.")
+                    % mo.name
+                )
         # it mean the schedule state is changed manually, not computed
         if vals.get("schedule_state"):
             # scheduling
