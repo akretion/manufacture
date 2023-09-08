@@ -41,10 +41,8 @@
                 </group>
                 <group name="config">
                     <group name="left">
-                        <field
-                                name="bom_id"
-                                domain="[('configuration_type', '=', 'variable')]"
-                            />
+                        <field name="bom_domain" invisible="1" />
+                        <field name="bom_id" domain="bom_domain" />
                     </group>
                     <!-- Set custom config fields in these groups -->
                     <group name="right" />
