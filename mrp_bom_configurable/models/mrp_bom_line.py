@@ -1,5 +1,9 @@
+import logging
+
 from odoo import fields, models
 from odoo.tools.safe_eval import safe_eval
+
+logger = logging.getLogger(__name__)
 
 
 class MrpBomLine(models.Model):
@@ -24,6 +28,8 @@ class MrpBomLine(models.Model):
         }
 
     def execute_domain_element(self, element, values):
+        if len(element) != 3:
+            logger.warning("Domain element %s" % element)
         param, operator, value = element
         code = f"{repr(values[param])} {operator} {repr(value)}"
 
