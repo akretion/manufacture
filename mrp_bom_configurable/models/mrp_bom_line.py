@@ -1,6 +1,6 @@
 import logging
 
-from odoo import fields, models
+from odoo import _, fields, models
 from odoo.tools.safe_eval import safe_eval
 
 logger = logging.getLogger(__name__)
@@ -50,6 +50,18 @@ class MrpBomLine(models.Model):
         if not self.domain:
             return True
         else:
-            domain = safe_eval(self.domain)
+            # TODO need to work with only one '=' here
+            domain = safe_eval(self.domain.replace("=", "=="))
 
             return self.execute_domain(domain, values)
+
+    def ui_update_domain(self):
+        self.ensure_one()
+        return {
+            "name": _(f"Domain for {self.product_id}"),
+            "type": "ir.actions.act_window",
+            "res_model": "mrp.bom.line",
+            "res_id": self.id,
+            "view_mode": "form",
+            "target": "current",
+        }
