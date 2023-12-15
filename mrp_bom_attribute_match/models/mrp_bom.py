@@ -248,7 +248,9 @@ class MrpBom(models.Model):
             )
             if component_template_product:
                 # need to set product_id temporary
-                current_line.product_id = component_template_product
+                # use sudo as the user that do the action may not have the access
+                # right to edit the bom
+                current_line.sudo().product_id = component_template_product
             else:
                 # component_template_id is set, but no attribute value match.
                 continue
