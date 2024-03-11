@@ -41,7 +41,7 @@ class MrpWorkcenter(models.Model):
         res = self.env["mrp.workorder"].read_group(
             [
                 ("workcenter_id", "in", self.ids),
-                ("state", "in", ("pending", "ready", "progress")),
+                ("state", "in", ("pending", "waiting", "ready", "progress")),
             ],
             ["workcenter_id", "schedule_state", "duration_expected", "qty_production"],
             ["workcenter_id", "schedule_state"],
