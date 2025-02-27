@@ -27,6 +27,7 @@ class MrpProduction(models.Model):
         related="sale_id.partner_id",
         string="Customer",
         store=True,
+        index=True,
     )
     commitment_date = fields.Datetime(
         related="sale_id.commitment_date", string="Commitment Date", store=True
