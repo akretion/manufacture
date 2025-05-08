@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="hardware_plan_form_view">
+        <field name="name">hardware.plan.form</field>
+        <field name="model">hardware.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h1>
+                        <field name="name" />
+                    </h1>
+                    <separator string="Products" />
+                    <field name="product_ids" />
+                    <separator string="Additional Products" />
+                    <field name="additional_product_ids" />
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hardware_plan_list_view">
+        <field name="model">hardware.plan</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+            </list>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_hardware_plan">
+        <field name="name">Hardware Plan</field>
+        <field name="res_model">hardware.plan</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        name="Hardware Plan"
+        parent="hardware_revision_menu"
+        id="hardware_plan_menu"
+        action="action_hardware_plan"
+        sequence="5"
+    />
+</odoo>

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hardware_plan_all,access.hardware.plan.all,mrp_hardware_revision.model_hardware_plan,mrp.group_mrp_manager,1,1,1,1
+access_product_hardware_revision_all,access.product.hardware.revision.all,mrp_hardware_revision.model_product_hardware_revision,mrp.group_mrp_manager,1,1,1,1
+access_engineering_change_order_all,access.engineering.change.order.all,mrp_hardware_revision.model_engineering_change_order,mrp.group_mrp_manager,1,1,1,1
+access_generate_revision_order_all,access.generate.revision.order.all,mrp_hardware_revision.model_generate_revision_order,mrp.group_mrp_manager,1,1,1,1
