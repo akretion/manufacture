@@ -4,6 +4,15 @@
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form" />
         <field name="arch" type="xml">
+            <xpath expr="/form/sheet" position="before">
+                <div
+                    class="alert alert-warning"
+                    role="alert"
+                    invisible="not ongoing_eco_message"
+                >
+                    <field name="ongoing_eco_message" />
+                </div>
+            </xpath>
             <xpath
                 expr="//field[@name='order_line']//list/field[@name='date_planned']"
                 position="before"

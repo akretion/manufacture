@@ -13,3 +13,4 @@ from . import product_product
 from . import mrp_production
 from . import stock_picking
 from . import mrp_bom
+from . import purchase_order
