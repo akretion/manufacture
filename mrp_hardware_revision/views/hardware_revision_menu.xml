@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-
     <menuitem
         name="Hardware Revision"
         parent="mrp.menu_mrp_root"
         id="hardware_revision_menu"
-        groups="mrp.group_mrp_manager"
+        groups="mrp_hardware_revision.hardware_revision_manager_group"
         sequence="23"
     />
-
 </odoo>

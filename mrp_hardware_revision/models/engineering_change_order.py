@@ -1,6 +1,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import Command, exceptions, fields, models
+from odoo import Command, _, api, exceptions, fields, models
 
 
 class EngineeringChangeOrder(models.Model):
@@ -8,11 +8,13 @@ class EngineeringChangeOrder(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _description = "Engineering Change Order"
 
-    name = fields.Char(required=True)
-    plan_ids = fields.Many2many("hardware.plan")
+    description = fields.Char(required=True)
+    name = fields.Char(
+        string="Reference", readonly=True, copy=False, default=lambda self: _("New")
+    )
+    plan_ids = fields.Many2many("hardware.plan", string="Plans")
     new_bom_ids = fields.Many2many("mrp.bom")
     new_bom_count = fields.Integer(compute="_compute_new_bom_count")
-    #    hardware_revision_id = fields.Many2one("product.hardware.revision", required=True)
     new_hardware_revision_ids = fields.One2many(
         "product.hardware.revision", "generated_by_eco_id"
     )
@@ -31,6 +33,21 @@ class EngineeringChangeOrder(models.Model):
     start_date = fields.Date()
     end_date = fields.Date()
     note = fields.Text()
+    company_id = fields.Many2one(
+        "res.company",
+        ondelete="cascade",
+        index=True,
+        default=lambda self: self.env.company,
+    )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("name", _("New")) == _("New"):
+                vals["name"] = self.env["ir.sequence"].next_by_code(
+                    "engineering.change.order"
+                ) or _("New")
+        return super().create(vals_list)
 
     def _generate_boms(self):
         self.ensure_one()
@@ -63,7 +80,7 @@ class EngineeringChangeOrder(models.Model):
             vals = {
                 "start_date": False,
                 "prototype": True,
-                "name": "/",
+                "name": "prototype",
                 "generated_by_eco_id": self.id,
             }
             if plan.current_revision_id:
@@ -94,7 +111,8 @@ class EngineeringChangeOrder(models.Model):
             elif active_boms - boms_to_archive:
                 raise exceptions.UserError(
                     self.env._(
-                        "Some active BOMs were not taken into account by current eco:  %(boms)s",
+                        "Some active BOMs were not taken into account by current eco:"
+                        " %(boms)s",
                         boms=(active_boms - boms_to_archive).ids,
                     )
                 )
@@ -102,10 +120,11 @@ class EngineeringChangeOrder(models.Model):
             boms_to_active.write({"active": True})
         self.state = "4-done"
         self.end_date = fields.Date.today()
-        if any([rev.name == "/" for rev in self.new_hardware_revision_ids]):
+        if any([rev.name == "prototype" for rev in self.new_hardware_revision_ids]):
             raise exceptions.UserError(
                 self.env._(
-                    "You can't validate this ECO yet because not all revisions have a number"
+                    "You can't validate this ECO yet because not all revisions have a "
+                    "number"
                 )
             )
         self.new_hardware_revision_ids.write(

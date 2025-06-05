@@ -1,6 +1,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
+from odoo import api, exceptions, fields, models
 
 
 class PurchaseOrder(models.Model):
@@ -16,7 +16,7 @@ class PurchaseOrder(models.Model):
                 [
                     "|",
                     ("product_ids", "in", product_ids),
-                    ("additional_product_ids", "in", product_ids),
+                    ("linked_product_ids", "in", product_ids),
                 ]
             )
             ongoing_ecos = self.env["engineering.change.order"].search(
@@ -31,3 +31,16 @@ class PurchaseOrder(models.Model):
                     eco_names=ongoing_ecos.mapped("name"),
                 )
             rec.ongoing_eco_message = message
+
+    def button_approve(self, force=False):
+        missing_hr_products = self.order_line.filtered(
+            lambda line: not line.hardware_revision_id and line.product_id.plan_id
+        ).product_id
+        if missing_hr_products:
+            raise exceptions.UserError(
+                self.env._(
+                    "The hardware revision is missing for products %(codes)s",
+                    codes=missing_hr_products.mapped("default_code"),
+                )
+            )
+        return super().button_approve(force=force)

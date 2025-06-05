@@ -55,15 +55,12 @@
                     </button>
                     </div>
                     <h1>
-                        <label string="Reference" for="name" />
-                        <field
-                            name="name"
-                            class="oe_inline"
-                            readonly="state != '1-draft'"
-                        />
+                        <!--                        <label string="Reference" for="name" />-->
+                        <field name="name" class="oe_inline" readonly="1" />
                     </h1>
                     <group>
                         <group>
+                            <field name="description" />
                             <field
                                 name="plan_ids"
                                 widget="many2many_tags"

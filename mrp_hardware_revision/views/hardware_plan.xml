@@ -11,8 +11,13 @@
                     </h1>
                     <separator string="Products" />
                     <field name="product_ids" />
-                    <separator string="Additional Products" />
-                    <field name="additional_product_ids" />
+                    <separator string="Linked Products" />
+                    <button
+                        name="update_linked_products"
+                        type="object"
+                        string="Compute linked products"
+                    />
+                    <field name="linked_product_ids" />
                 </sheet>
             </form>
         </field>

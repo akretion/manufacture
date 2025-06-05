@@ -1,6 +1,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import models
+from odoo import api, fields, models
 
 
 class ProductProduct(models.Model):
@@ -12,13 +12,47 @@ class ProductProduct(models.Model):
             [
                 "|",
                 ("product_ids", "in", self.ids),
-                ("additional_product_ids", "in", self.ids),
+                ("linked_product_ids", "in", self.ids),
             ]
         )
         if prototype:
             return plan.prototype_revision_id
         else:
             return plan.current_revision_id
+
+    # for now technical field
+    plan_ids = fields.Many2many(
+        "hardware.plan",
+        relation="plan_product_rel",
+        column1="product_id",
+        column2="plan_id",
+        string="direct plan",
+        help="Direct plan of this product",
+    )
+    linked_plan_ids = fields.Many2many(
+        "hardware.plan",
+        relation="plan_link_product_rel",
+        column1="product_id",
+        column2="plan_id",
+        help="Herited plan (from component)",
+    )
+    plan_id = fields.Many2one("hardware.plan", compute="_compute_plan_id", store=True)
+
+    @api.depends("plan_ids", "linked_plan_ids")
+    def _compute_plan_id(self):
+        for product in self:
+            plan = product.plan_ids or product.linked_plan_ids
+            product.plan_id = plan and plan[0].id or False
+
+    def _get_derivative_product(self):
+        derivated_products = self.env["product.product"]
+        for product in self:
+            used_in_bom = product.bom_line_ids.bom_id
+            for bom in used_in_bom:
+                products = bom.product_id or bom.product_tmpl_id.product_variant_ids
+                to_link = products.filtered(lambda p: not p.plan_ids)
+                derivated_products |= to_link
+        return derivated_products
 
 
 #    def _get_default_hardware_revision(self, prototype=False):

@@ -11,6 +11,7 @@
     # first shot make one main module / split later
     "depends": ["mrp", "purchase", "mrp_subcontracting"],
     "data": [
+        "security/res_groups.xml",
         "security/ir.model.access.csv",
         "views/hardware_revision_menu.xml",
         "views/engineering_change_order.xml",
@@ -20,6 +21,7 @@
         "views/stock_quant.xml",
         "views/stock_lot.xml",
         "views/mrp_production.xml",
+        "data/ir_sequence.xml",
         #        "wizards/generate_revision_order.xml",
     ],
     "demo": [],
