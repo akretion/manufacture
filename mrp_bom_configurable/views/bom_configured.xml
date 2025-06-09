@@ -8,10 +8,10 @@
                 <sheet>
                     <field name="product_id" readonly="true" />
                     <field name="line_ids">
-                        <tree>
+                        <list>
                             <field name="product_id" />
                             <field name="product_qty" />
-                        </tree>
+                        </list>
                     </field>
                 </sheet>
                 <footer>

@@ -26,9 +26,9 @@
 <record id="input_constraint_tree" model="ir.ui.view">
     <field name="model">input.constraint</field>
     <field name="arch" type="xml">
-        <tree multi_edit="1">
+        <list multi_edit="1">
             <field name="bom_id" />
-        </tree>
+        </list>
     </field>
 </record>
 
@@ -47,7 +47,7 @@
 <record id="input_constraint_action" model="ir.actions.act_window">
     <field name="name">Input Constraints</field>
     <field name="res_model">input.constraint</field>
-    <field name="view_mode">tree,form,pivot</field>
+    <field name="view_mode">list,form,pivot</field>
 </record>
 
 <menuitem

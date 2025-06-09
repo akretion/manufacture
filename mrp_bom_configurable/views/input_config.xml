@@ -61,10 +61,10 @@
 <record id='input_config_tree' model='ir.ui.view'>
     <field name='model'>input.config</field>
     <field name='arch' type='xml'>
-        <tree>
+        <list>
             <field name="name" />
             <field name="date" />
-        </tree>
+        </list>
     </field>
 
 </record>
@@ -93,7 +93,7 @@
 <record id="input_config_action" model="ir.actions.act_window">
     <field name="name">Configured Products</field>
     <field name="res_model">input.config</field>
-    <field name="view_mode">tree,form</field>
+    <field name="view_mode">list,form</field>
 </record>
 
 <menuitem id="configurator_menu" name="Configurateur" parent="mrp.menu_mrp_root" />

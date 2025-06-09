@@ -159,9 +159,9 @@ class MrpBomLine(models.Model):
     def _should_not_be_included_in_bom(self, input_line):
         return not self.check_domain(input_line._get_input_line_values())
 
-    def _skip_bom_line(self, product):
+    def _skip_bom_line(self, product, never_attribute_values=False):
         self.ensure_one()
-        res = super()._skip_bom_line(product)
+        res = super()._skip_bom_line(product, never_attribute_values)
 
         input_line_id = self.env.context.get("input_line_id", False)
         if input_line_id:

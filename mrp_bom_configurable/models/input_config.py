@@ -55,7 +55,7 @@ class InputConfig(models.Model):
         return {
             "type": "ir.actions.act_window",
             "name": "Lines",
-            "view_mode": "tree",
+            "view_mode": "list",
             "res_model": "input.line",
             "domain": [("config_id", "=", self.id)],
         }

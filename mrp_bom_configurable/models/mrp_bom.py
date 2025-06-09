@@ -87,8 +87,8 @@ class MrpBom(models.Model):
         for bom_line, line_data in lines_done:
             self._recompute_line_data_quantity(input_line, boms_done, bom_line, line_data)
 
-    def explode(self, product, quantity, picking_type=False):
-        boms_done, lines_done = super().explode(product, quantity, picking_type)
+    def explode(self, product, quantity, picking_type=False, never_attribute_values=False):
+        boms_done, lines_done = super().explode(product, quantity, picking_type, never_attribute_values)
         input_line_id = self.env.context.get("input_line_id", False)
         if input_line_id:
             input_line = self.env["input.line"].browse(input_line_id)
