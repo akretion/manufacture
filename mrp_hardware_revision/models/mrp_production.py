@@ -26,8 +26,7 @@ class MrpProduction(models.Model):
             mo._check_hardware_revision_consistency()
         return res
 
-    def _check_hardware_revision_consistency(self):
-        self.ensure_one()
+    def action_confirm(self):
         if self.product_id.plan_id:
             if not self.hardware_revision_id:
                 raise exceptions.UserError(
@@ -37,22 +36,26 @@ class MrpProduction(models.Model):
                         mo=self.name,
                     )
                 )
-            else:
-                same_plan_component_moves = self.move_raw_ids.filtered(
-                    lambda x: x.state == "done"
-                    and x.product_id.plan_id == self.product_id.plan_id
-                )
-                components_hardware_revision = (
-                    same_plan_component_moves.move_line_ids.lot_id.hardware_revision_id
-                )
-                if self.hardware_revision_id != components_hardware_revision:
-                    raise exceptions.UserError(
-                        self.env._(
-                            "The hardware revison of some components are not consistent"
-                            " with the one of the manufacturing order %(mo)s",
-                            mo=self.name,
-                        )
+        return super().action_confirm()
+
+    def _check_hardware_revision_consistency(self):
+        self.ensure_one()
+        if self.product_id.plan_id:
+            same_plan_component_moves = self.move_raw_ids.filtered(
+                lambda x: x.state == "done"
+                and x.product_id.plan_id == self.product_id.plan_id
+            )
+            components_hardware_revision = (
+                same_plan_component_moves.move_line_ids.lot_id.hardware_revision_id
+            )
+            if self.hardware_revision_id != components_hardware_revision:
+                raise exceptions.UserError(
+                    self.env._(
+                        "The hardware revison of some components are not consistent"
+                        " with the one of the manufacturing order %(mo)s",
+                        mo=self.name,
                     )
+                )
 
     def _set_lot_producing(self):
         self.ensure_one()
