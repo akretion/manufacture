@@ -22,6 +22,8 @@ class HardwarePlan(models.Model):
         column2="product_id",
         help="Product sharing the plan because they are derived from these "
         "semi-finished product.",
+        compute="_compute_linked_product_ids",
+        store=True,
     )
     current_revision_id = fields.Many2one(
         "product.hardware.revision", compute="_compute_current_revision_id"
@@ -31,17 +33,41 @@ class HardwarePlan(models.Model):
     )
     revision_ids = fields.One2many("product.hardware.revision", "plan_id")
 
-    # seems hard to make it compute because of recursivity
-    def update_linked_products(self):
+    @api.depends("product_ids")
+    def _compute_linked_product_ids(self):
+        """
+        Compute the linked products by recursively exploring the BoM structure.
+        This method is triggered automatically when `product_ids` changes, and
+        manually from overrides on `mrp.bom` and `mrp.bom.line`.
+        """
         for plan in self:
             linked_products = self.env["product.product"]
-            products = plan.product_ids
-            while products:
-                derivated_products = products._get_derivative_product()
-                if derivated_products:
-                    linked_products |= derivated_products
-                products = derivated_products
-            plan.write({"linked_product_ids": [(6, 0, linked_products.ids)]})
+            products_to_process = plan.product_ids
+            # Keep track of all products processed (direct, linked, and intermediate)
+            # to avoid infinite loops in case of recursive BoMs.
+            processed_products = products_to_process
+            while products_to_process:
+                derivated_products = products_to_process._get_derivative_product()
+                if not derivated_products:
+                    break
+                # We only continue with derivatives that have not been processed yet.
+                new_derivatives = derivated_products - processed_products
+                if not new_derivatives:
+                    break
+                linked_products |= new_derivatives
+                processed_products |= new_derivatives
+                products_to_process = new_derivatives
+            plan.linked_product_ids = [(6, 0, linked_products.ids)]
+
+    def recompute_linked_products(self):
+        """
+        Mark `linked_product_ids` to be recomputed.
+        This method is called from `mrp.bom` and `mrp.bom.line` overrides
+        when the BoM structure changes.
+        """
+        if not self:
+            return
+        self.env.add_to_compute(self._fields["linked_product_ids"], self)
 
     @api.constrains("product_ids")
     def _check_no_product_multiple_plan(self):

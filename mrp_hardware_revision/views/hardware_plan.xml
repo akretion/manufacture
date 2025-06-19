@@ -12,11 +12,6 @@
                     <separator string="Products" />
                     <field name="product_ids" />
                     <separator string="Linked Products" />
-                    <button
-                        name="update_linked_products"
-                        type="object"
-                        string="Compute linked products"
-                    />
                     <field name="linked_product_ids" />
                 </sheet>
             </form>

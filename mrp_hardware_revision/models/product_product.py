@@ -47,8 +47,13 @@ class ProductProduct(models.Model):
     def _get_derivative_product(self):
         derivated_products = self.env["product.product"]
         for product in self:
-            used_in_bom = product.bom_line_ids.bom_id
-            for bom in used_in_bom:
+            # used_in_bom = product.bom_line_ids.bom_id
+            # It seems we had cache issue on archiving bom...
+            used_in_bom_lines = self.env["mrp.bom.line"].search(
+                [("product_id", "=", product.id)]
+            )
+            used_in_boms = used_in_bom_lines.bom_id.with_context(active_test=False)
+            for bom in used_in_boms.filtered("active"):
                 products = bom.product_id or bom.product_tmpl_id.product_variant_ids
                 to_link = products.filtered(lambda p: not p.plan_ids)
                 derivated_products |= to_link
