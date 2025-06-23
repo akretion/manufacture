@@ -72,7 +72,8 @@ class MrpProduction(models.Model):
             initial_qty_by_production[production] = production.product_qty
             if production.backorder_sequence == 0:  # Activate backorder naming
                 production.backorder_sequence = 1
-            production.name = self._get_name_backorder(production.name, production.backorder_sequence)
+            # production.name = self._get_name_backorder(production.name, production.backorder_sequence)
+            # don't change prod name
             production.product_qty = amounts[production][0]
             backorder_vals = production.copy_data(default=production._get_backorder_mo_vals())[0]
             backorder_qtys = amounts[production][1:]
@@ -84,7 +85,9 @@ class MrpProduction(models.Model):
                 backorder_vals_list.append(dict(
                     backorder_vals,
                     product_qty=qty_to_backorder,
-                    name=production._get_name_backorder(production.name, next_seq),
+                    # name=production._get_name_backorder(production.name, next_seq),
+                    # get a new name for each backorder
+                    name=_('New'),
                     backorder_sequence=next_seq,
                     state='confirmed'
                 ))
