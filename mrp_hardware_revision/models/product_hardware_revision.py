@@ -32,6 +32,9 @@ class ProductHardwareRevision(models.Model):
     is_current_revision = fields.Boolean(
         compute="_compute_is_current_revision", store=True
     )
+    current_revision_id = fields.Many2one(
+        "product.hardware.revision", related="plan_id.current_revision_id"
+    )
 
     @api.depends("plan_id", "name")
     def _compute_display_name(self):
