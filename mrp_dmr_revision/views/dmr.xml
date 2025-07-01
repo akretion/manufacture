@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <record model="ir.ui.view" id="manufacturing_routing_form_view">
-        <field name="name">manufacturing.routing.form</field>
-        <field name="model">manufacturing.routing</field>
+    <record model="ir.ui.view" id="dmr_form_view">
+        <field name="name">dmr.form</field>
+        <field name="model">dmr</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
@@ -11,13 +11,15 @@
                     </h1>
                     <separator string="Products" />
                     <field name="product_ids" />
+                    <separator string="Linked Products" />
+                    <field name="linked_product_ids" />
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record model="ir.ui.view" id="manufacturing_routing_list_view">
-        <field name="model">manufacturing.routing</field>
+    <record model="ir.ui.view" id="dmr_list_view">
+        <field name="model">dmr</field>
         <field name="arch" type="xml">
             <list>
                 <field name="name" />
@@ -25,17 +27,17 @@
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="action_manufacturing_routing">
-        <field name="name">Manufacturing Routing</field>
-        <field name="res_model">manufacturing.routing</field>
+    <record model="ir.actions.act_window" id="action_dmr">
+        <field name="name">DMR</field>
+        <field name="res_model">dmr</field>
         <field name="view_mode">list,form</field>
     </record>
 
     <menuitem
-        name="Manufacturing Routing"
+        name="DMR"
         parent="mrp_hardware_revision.hardware_revision_menu"
-        id="manufacturing_routing_menu"
-        action="action_manufacturing_routing"
+        id="dmr_menu"
+        action="action_dmr"
         sequence="5"
     />
 </odoo>

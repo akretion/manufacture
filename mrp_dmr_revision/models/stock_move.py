@@ -6,6 +6,6 @@ from odoo import models
 class StockMove(models.Model):
     _inherit = "stock.move"
 
-    def _get_manufacturing_routing_revision(self):
+    def _get_dmr_revision(self):
         self.ensure_one()
-        return self.purchase_line_id.manufacturing_routing_revision_id
+        return self.purchase_line_id.dmr_revision_id

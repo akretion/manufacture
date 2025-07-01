@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dmr_all,access.dmr.all,mrp_dmr_revision.model_dmr,base.group_user,1,0,0,0
+access_dmr_admin,access.dmr.admin,mrp_dmr_revision.model_dmr,mrp_hardware_revision.hardware_revision_manager_group,1,1,1,1
+access_dmr_revision_admin,access.dmr.revision.admin,mrp_dmr_revision.model_dmr_revision,mrp_hardware_revision.hardware_revision_manager_group,1,1,1,1
+access_dmr_revision_all,access.dmr.revision.all,mrp_dmr_revision.model_dmr_revision,base.group_user,1,0,0,0

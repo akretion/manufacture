@@ -8,8 +8,6 @@ class StockPicking(models.Model):
 
     def _prepare_subcontract_mo_vals(self, move, bom):
         vals = super()._prepare_subcontract_mo_vals(move, bom)
-        if move.purchase_line_id.manufacturing_routing_revision_id:
-            vals["manufacturing_routing_revision_id"] = (
-                move.purchase_line_id.manufacturing_routing_revision_id.id
-            )
+        if move.purchase_line_id.dmr_revision_id:
+            vals["dmr_revision_id"] = move.purchase_line_id.dmr_revision_id.id
         return vals

@@ -7,7 +7,9 @@ from . import stock_lot
 from . import product_product
 from . import mrp_production
 from . import stock_picking
-from . import manufacturing_routing
-from . import manufacturing_routing_revision
+from . import dmr
+from . import dmr_revision
+from . import mrp_bom
+from . import mrp_bom_line
 from . import stock_move_line
 from . import stock_move

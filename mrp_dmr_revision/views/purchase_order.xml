@@ -9,8 +9,10 @@
                 position="before"
             >
                 <field
-                    name="manufacturing_routing_revision_id"
+                    name="dmr_revision_id"
+                    domain="dmr_revision_domain"
                     options="{'no_create': True}"
+                    context="{'product_id': product_id}"
                 />
             </xpath>
         </field>

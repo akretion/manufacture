@@ -10,14 +10,22 @@
             <xpath expr="//div[@name='button_box']" position="inside">
                 <button
                     type="object"
-                    name="action_view_new_manufacturing_routing_revision"
+                    name="action_view_new_dmr_revision"
                     class="oe_stat_button"
                     icon="fa-cogs"
-                    invisible="not new_manufacturing_routing_revision_ids"
-                >Manufacturing Routing Revision</button>
+                    invisible="not new_dmr_revision_ids"
+                >DMR Revisions</button>
             </xpath>
             <field name="description" position="after">
-                <field name="manufacturing_routing_id" />
+                <field
+                    name="dmr_ids"
+                    widget="many2many_tags"
+                    required="1"
+                    readonly="state != '1-draft'"
+                />
+            </field>
+            <field name="plan_ids" position="attributes">
+                <attribute name="required">0</attribute>
             </field>
         </field>
     </record>

@@ -8,6 +8,6 @@ class StockMoveLine(models.Model):
 
     def _prepare_new_lot_vals(self):
         vals = super()._prepare_new_lot_vals()
-        routing_revision = self.move_id._get_manufacturing_routing_revision()
-        vals["manufacturing_routing_revision_id"] = routing_revision.id
+        dmr_revision = self.move_id._get_dmr_revision()
+        vals["dmr_revision_id"] = dmr_revision.id
         return vals

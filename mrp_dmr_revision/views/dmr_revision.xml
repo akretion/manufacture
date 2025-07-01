@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <record model="ir.ui.view" id="manufacturing_routing_revision_form_view">
-        <field name="name">manufacturing.routing.revision.form</field>
-        <field name="model">manufacturing.routing.revision</field>
+    <record model="ir.ui.view" id="dmr_revision_form_view">
+        <field name="name">dmr.revision.form</field>
+        <field name="model">dmr.revision</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -15,11 +15,8 @@
                     />-->
                 </header>
                 <sheet>
-                    <label
-                        string="Manufacturing Routing"
-                        for="manufacturing_routing_id"
-                    />
-                    <field name="manufacturing_routing_id" class="oe_inline" />
+                    <label string="DMR" for="dmr_id" />
+                    <field name="dmr_id" class="oe_inline" />
                     <h1>
                         <label string="Revision " for="name" />
                         <field name="name" class="oe_inline" />
@@ -30,8 +27,14 @@
                             <field name="product_id" />
                             <field name="bom_ids" invisible="1" />
                             -->
+                            <field
+                                name="current_revision_id"
+                                invisible="is_current_revision"
+                            />
                             <field name="start_date" />
                             <field name="prototype" />
+                            <separator string="Concerned Hardware Revisions" />
+                            <field name="hardware_revision_ids" nolabel="1" />
                         </group>
                         <group />
                     </group>
@@ -40,13 +43,13 @@
             </form>
         </field>
     </record>
-    <record model="ir.ui.view" id="manufacturing_routing_revision_list_view">
-        <field name="name">manufacturing.routing.revision.list</field>
-        <field name="model">manufacturing.routing.revision</field>
+    <record model="ir.ui.view" id="dmr_revision_list_view">
+        <field name="name">dmr.revision.list</field>
+        <field name="model">dmr.revision</field>
         <field name="arch" type="xml">
             <list>
                 <header />
-                <field name="manufacturing_routing_id" />
+                <field name="dmr_id" />
                 <field name="name" />
                 <!--
                 <field name="product_id" />
@@ -57,13 +60,13 @@
             </list>
         </field>
     </record>
-    <record model="ir.ui.view" id="manufacturing_routing_revision_search_view">
-        <field name="name">manufacturing.routing.revision.search</field>
-        <field name="model">manufacturing.routing.revision</field>
+    <record model="ir.ui.view" id="dmr_revision_search_view">
+        <field name="name">dmr.revision.search</field>
+        <field name="model">dmr.revision</field>
         <field name="arch" type="xml">
             <search string="Search Revision">
                 <group>
-                    <field name="manufacturing_routing_id" />
+                    <field name="dmr_id" />
                     <field name="name" />
                     <!--
                     <field name="product_id" />
@@ -94,16 +97,16 @@
             </search>
         </field>
     </record>
-    <record model="ir.actions.act_window" id="action_manufacturing_routing_revision">
-        <field name="name">Manufacturing Routing Revision</field>
-        <field name="res_model">manufacturing.routing.revision</field>
+    <record model="ir.actions.act_window" id="action_dmr_revision">
+        <field name="name">DMR Revision</field>
+        <field name="res_model">dmr.revision</field>
         <field name="view_mode">list,form</field>
     </record>
     <menuitem
-        name="Manufacturing Routing Revision"
+        name="DMR Revision"
         parent="mrp_hardware_revision.hardware_revision_menu"
-        id="manufacturing_routing_revision_menu"
-        action="action_manufacturing_routing_revision"
+        id="dmr_revision_menu"
+        action="action_dmr_revision"
         sequence="10"
     />
 </odoo>
