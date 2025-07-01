@@ -17,8 +17,16 @@
                 expr="//field[@name='order_line']//list/field[@name='date_planned']"
                 position="before"
             >
-                <field name="hardware_revision_id" options="{'no_create': True}" />
-                <field name="prototype" optional="hide" />
+                <field
+                    name="hardware_revision_id"
+                    options="{'no_create': True}"
+                    domain="hardware_revision_domain"
+                />
+                <field
+                    name="force_revision"
+                    optional="hide"
+                    groups="mrp_hardware_revision.group_hardware_revision_force_version"
+                />
             </xpath>
         </field>
     </record>

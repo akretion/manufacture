@@ -2,6 +2,6 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_hardware_plan_all,access.hardware.plan.all,mrp_hardware_revision.model_hardware_plan,base.group_user,1,0,0,0
 access_hardware_plan_admin,access.hardware.plan.admin,mrp_hardware_revision.model_hardware_plan,mrp_hardware_revision.hardware_revision_manager_group,1,1,1,1
 access_product_hardware_revision_admin,access.product.hardware.revision.admin,mrp_hardware_revision.model_product_hardware_revision,mrp_hardware_revision.hardware_revision_manager_group,1,1,1,1
-access_product_hardware_revision_all,access.product.hardware.revision.all,mrp_hardware_revision.model_product_hardware_revision,base.group_user,,1,0,0,0
+access_product_hardware_revision_all,access.product.hardware.revision.all,mrp_hardware_revision.model_product_hardware_revision,base.group_user,1,0,0,0
 access_engineering_change_order_admin,access.engineering.change.order.admin,mrp_hardware_revision.model_engineering_change_order,mrp_hardware_revision.hardware_revision_manager_group,1,1,1,1
 access_engineering_change_order_all,access.engineering.change.order.all,mrp_hardware_revision.model_engineering_change_order,base.group_user,1,0,0,0

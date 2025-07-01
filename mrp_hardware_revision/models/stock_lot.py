@@ -10,6 +10,15 @@ class StockLot(models.Model):
         "product.hardware.revision",
         domain="[('allowed_product_ids', 'in', product_id)]",
     )
+    prototype = fields.Boolean(compute="_compute_prototype", store=True)
+
+    # We do not recompute from hardware_revision_id.prototype on purpose because
+    # if we bought/produce a prototype, it will always stays this way, even if
+    # the plan revision is adopted later.
+    @api.depends("hardware_revision_id")
+    def _compute_prototype(self):
+        for lot in self:
+            lot.prototype = lot.hardware_revision_id.prototype
 
     @api.constrains("product_id")
     def _check_existing_hardware_revision(self):

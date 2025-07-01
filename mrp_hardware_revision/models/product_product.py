@@ -44,7 +44,7 @@ class ProductProduct(models.Model):
             plan = product.plan_ids or product.linked_plan_ids
             product.plan_id = plan and plan[0].id or False
 
-    def _get_derivative_product(self):
+    def _get_derivative_plan_product(self):
         derivated_products = self.env["product.product"]
         for product in self:
             # used_in_bom = product.bom_line_ids.bom_id

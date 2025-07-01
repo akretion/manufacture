@@ -5,7 +5,16 @@
         <field name="inherit_id" ref="mrp.mrp_production_form_view" />
         <field name="arch" type="xml">
             <xpath expr="//div[@name='bom_div']" position="after">
-                <field name="hardware_revision_id" readonly="state != 'draft'" />
+                <field
+                    name="hardware_revision_id"
+                    readonly="state != 'draft'"
+                    domain="hardware_revision_domain"
+                />
+                <field
+                    name="force_revision"
+                    readonly="state != 'draft'"
+                    groups="mrp_hardware_revision.group_hardware_revision_force_version"
+                />
             </xpath>
             <field name="lot_producing_id" position="attributes">
                 <attribute

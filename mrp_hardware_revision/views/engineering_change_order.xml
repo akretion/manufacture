@@ -13,15 +13,21 @@
                         string="Confirm"
                     />
                     <button
+                        name="action_draft"
+                        type="object"
+                        invisible="state in ('1-draft', '4-done')"
+                        string="Back to draft"
+                    />
+                    <!--<button
                         name="validate_prototype"
                         type="object"
                         invisible="state != '2-ongoing'"
                         string="Validate Prototype"
-                    />
+                    />-->
                     <button
                         name="action_done"
                         type="object"
-                        invisible="state != '3-prototype'"
+                        invisible="state != '2-ongoing'"
                         string="Validate"
                     />
                     <field
@@ -65,6 +71,7 @@
                                 name="plan_ids"
                                 widget="many2many_tags"
                                 required="1"
+                                readonly="state != '1-draft'"
                             />
                             <field name="bom_update" />
                         </group>

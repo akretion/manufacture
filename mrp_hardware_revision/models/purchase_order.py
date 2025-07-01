@@ -8,28 +8,33 @@ class PurchaseOrder(models.Model):
 
     ongoing_eco_message = fields.Text(compute="_compute_ongoing_eco_message")
 
+    def _get_eco_warning(self):
+        self.ensure_one()
+        product_ids = self.order_line.product_id.ids
+        plans = self.env["hardware.plan"].search(
+            [
+                "|",
+                ("product_ids", "in", product_ids),
+                ("linked_product_ids", "in", product_ids),
+            ]
+        )
+        ongoing_ecos = self.env["engineering.change.order"].search(
+            [("state", "not in", ("4-done",)), ("plan_ids", "in", plans.ids)]
+        )
+        message = ""
+        if ongoing_ecos:
+            message = self.env._(
+                "The plans %(plan_names)s are under change. The change orders are "
+                "the following : %(eco_names)s",
+                plan_names=plans.mapped("name"),
+                eco_names=ongoing_ecos.mapped("name"),
+            )
+        return message
+
     @api.depends("order_line.product_id")
     def _compute_ongoing_eco_message(self):
         for rec in self:
-            product_ids = self.order_line.product_id.ids
-            plans = self.env["hardware.plan"].search(
-                [
-                    "|",
-                    ("product_ids", "in", product_ids),
-                    ("linked_product_ids", "in", product_ids),
-                ]
-            )
-            ongoing_ecos = self.env["engineering.change.order"].search(
-                [("state", "not in", ("4-done",)), ("plan_ids", "in", plans.ids)]
-            )
-            message = ""
-            if ongoing_ecos:
-                message = self.env._(
-                    "The plans %(plan_names)s are under change. The change orders are "
-                    "the following : %(eco_names)s",
-                    plan_names=plans.mapped("name"),
-                    eco_names=ongoing_ecos.mapped("name"),
-                )
+            message = rec._get_eco_warning()
             rec.ongoing_eco_message = message
 
     def button_approve(self, force=False):

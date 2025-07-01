@@ -22,7 +22,7 @@ class EngineeringChangeOrder(models.Model):
         [
             ("1-draft", "New"),
             ("2-ongoing", "Ongoing"),
-            ("3-prototype", "Prototype"),
+            #            ("3-prototype", "Prototype"),
             ("4-done", "Done"),
         ],
         default="1-draft",
@@ -40,6 +40,21 @@ class EngineeringChangeOrder(models.Model):
         default=lambda self: self.env.company,
     )
 
+    def action_draft(self):
+        self.ensure_one()
+        if self.state == "4-done":
+            raise exceptions.UserError(
+                self.env._(
+                    "ECO has been fully processed and can't go back to draft state"
+                )
+            )
+        unactive_boms = self.with_context(active_test=False).new_bom_ids.filtered(
+            lambda bom: not bom.active
+        )
+        unactive_boms.unlink()
+        self.new_hardware_revision_ids.unlink()
+        self.state = "1-draft"
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -49,6 +64,11 @@ class EngineeringChangeOrder(models.Model):
                 ) or _("New")
         return super().create(vals_list)
 
+    def _get_boms_to_update(self):
+        self.ensure_one()
+        domain = self.env["mrp.bom"]._bom_find_domain(self.plan_ids.product_ids)
+        return self.env["mrp.bom"].search(domain)
+
     def _generate_boms(self):
         self.ensure_one()
         if self.state == "done":
@@ -56,8 +76,7 @@ class EngineeringChangeOrder(models.Model):
         self.new_bom_ids.unlink()
         if not self.bom_update:
             return
-        domain = self.env["mrp.bom"]._bom_find_domain(self.plan_ids.product_ids)
-        boms = self.env["mrp.bom"].search(domain)
+        boms = self._get_boms_to_update()
         new_boms = self.env["mrp.bom"]
         for bom in boms:
             new_boms |= bom.copy(
@@ -89,9 +108,9 @@ class EngineeringChangeOrder(models.Model):
                 vals["plan_id"] = plan.id
                 new_revisions |= self.env["product.hardware.revision"].create(vals)
 
-    def validate_prototype(self):
-        self.ensure_one()
-        self.write({"state": "3-prototype"})
+    #    def validate_prototype(self):
+    #        self.ensure_one()
+    #        self.write({"state": "3-prototype"})
 
     def action_done(self):
         self.ensure_one()
@@ -181,3 +200,11 @@ class EngineeringChangeOrder(models.Model):
             else:
                 action["views"] = form_view
         return action
+
+    def unlink(self):
+        for rec in self:
+            if rec.state != "1-draft":
+                raise exceptions.UserError(
+                    self.env._("It is not possible to delete an ongoing or done ECO")
+                )
+        return super().unlink()

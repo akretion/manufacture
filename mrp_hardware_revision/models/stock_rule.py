@@ -13,7 +13,7 @@ class StockRule(models.Model):
 
     def _push_prepare_move_copy_values(self, move_to_copy, new_date):
         values = super()._push_prepare_move_copy_values(move_to_copy, new_date)
-        values["restrict_restrict_hardware_revision_id"] = (
+        values["restrict_hardware_revision_id"] = (
             move_to_copy.restrict_hardware_revision_id.id
         )
         return values

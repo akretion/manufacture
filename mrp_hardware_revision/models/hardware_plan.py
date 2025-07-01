@@ -47,7 +47,7 @@ class HardwarePlan(models.Model):
             # to avoid infinite loops in case of recursive BoMs.
             processed_products = products_to_process
             while products_to_process:
-                derivated_products = products_to_process._get_derivative_product()
+                derivated_products = products_to_process._get_derivative_plan_product()
                 if not derivated_products:
                     break
                 # We only continue with derivatives that have not been processed yet.
