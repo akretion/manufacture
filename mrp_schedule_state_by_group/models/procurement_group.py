@@ -12,3 +12,15 @@ class ProcurementGroup(models.Model):
         help="Technical field to gather all MOs belonging to the same source group."
         "Usually a same sale order or RMA for instance",
     )
+
+    def _is_mo_plannable(self):
+        self.ensure_one()
+        plannable_group = all(
+            [
+                x.reservation_state == "assigned"
+                for x in self.group_mo_ids.filtered(
+                    lambda mo: mo.state not in ("done", "cancel", "draft")
+                )
+            ]
+        )
+        return plannable_group
