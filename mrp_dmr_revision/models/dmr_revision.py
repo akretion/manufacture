@@ -31,6 +31,7 @@ class DMRRevision(models.Model):
         column1="dmr_revision_id",
         column2="hardware_revision_id",
     )
+    company_id = fields.Many2one("res.company", related="dmr_id.company_id", store=True)
 
     @api.constrains("hardware_revision_ids")
     def _check_hardware_revision(self):

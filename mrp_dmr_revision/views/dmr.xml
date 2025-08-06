@@ -8,6 +8,7 @@
                 <sheet>
                     <h1>
                         <field name="name" />
+                        <field name="company_id" />
                     </h1>
                     <separator string="Products" />
                     <field name="product_ids" />

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.rule" id="dmr_comp_rule">
+        <field name="name">DMR multi-company</field>
+        <field name="model_id" ref="model_dmr" />
+        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+    </record>
+
+    <record model="ir.rule" id="dmr_revision_comp_rule">
+        <field name="name">DMR Revision multi-company</field>
+        <field name="model_id" ref="model_dmr_revision" />
+        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+    </record>
+</odoo>

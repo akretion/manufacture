@@ -11,6 +11,7 @@
     "depends": ["mrp", "purchase", "mrp_subcontracting", "mrp_hardware_revision"],
     "data": [
         "security/ir.model.access.csv",
+        "security/ir_rule.xml",
         "views/engineering_change_order.xml",
         "views/dmr_revision.xml",
         "views/dmr.xml",

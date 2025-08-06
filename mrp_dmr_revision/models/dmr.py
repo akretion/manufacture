@@ -32,6 +32,7 @@ class DMR(models.Model):
         "dmr.revision", compute="_compute_prototype_revision_id"
     )
     revision_ids = fields.One2many("dmr.revision", "dmr_id")
+    company_id = fields.Many2one("res.company", default=lambda self: self.env.company)
 
     @api.depends("product_ids")
     def _compute_linked_product_ids(self):
@@ -111,5 +112,5 @@ class DMR(models.Model):
             )
 
     _sql_constraints = [
-        ("unique_name", "UNIQUE(name)", "The name must be unique"),
+        ("unique_name", "UNIQUE(name, company_id)", "The name must be unique"),
     ]
