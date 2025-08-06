@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.rule" id="hardware_plan_comp_rule">
+        <field name="name">Hardware Plan multi-company</field>
+        <field name="model_id" ref="model_hardware_plan" />
+        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+    </record>
+
+    <record model="ir.rule" id="hardware_revision_comp_rule">
+        <field name="name">Hardware Revision multi-company</field>
+        <field name="model_id" ref="model_product_hardware_revision" />
+        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+    </record>
+
+    <record model="ir.rule" id="eco_comp_rule">
+        <field name="name">ECO multi-company</field>
+        <field name="model_id" ref="model_engineering_change_order" />
+        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+    </record>
+</odoo>

@@ -13,6 +13,7 @@
     "data": [
         "security/res_groups.xml",
         "security/ir.model.access.csv",
+        "security/ir_rule.xml",
         "views/hardware_revision_menu.xml",
         "views/engineering_change_order.xml",
         "views/product_hardware_revision.xml",

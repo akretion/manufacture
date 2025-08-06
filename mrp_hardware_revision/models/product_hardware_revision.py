@@ -35,6 +35,9 @@ class ProductHardwareRevision(models.Model):
     current_revision_id = fields.Many2one(
         "product.hardware.revision", related="plan_id.current_revision_id"
     )
+    company_id = fields.Many2one(
+        "res.company", related="plan_id.company_id", store=True
+    )
 
     @api.depends("plan_id", "name")
     def _compute_display_name(self):
