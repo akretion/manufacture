@@ -112,7 +112,10 @@ class MrpBomLine(models.Model):
         for param in params:
             if not input_line._fields[param].relational:
                 context[param] = input_line[param]
-
+            elif hasattr(input_line[param], "value") or hasattr(
+                input_line[param], "name"
+            ):
+                context[param] = input_line[param]
         math_module = __import__("math")
         math = wrap_module(
             math_module, [f for f in math_module.__dict__ if "__" not in f]
