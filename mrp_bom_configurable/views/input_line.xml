@@ -1,68 +1,62 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-<record id="input_line_form_window" model="ir.ui.view">
-    <field name="name">input.line.form.window</field>
-    <field name="model">input.line</field>
-    <field name="mode">primary</field>
-    <field name="arch" type="xml">
-        <form>
-            <sheet>
-                <h1>
-                    <field name="name" class="oe_inline" placeholder="Name" />
-                </h1>
-                <group name="main">
-                </group>
-            </sheet>
-        </form>
-    </field>
-</record>
+    <record id="input_line_form_window" model="ir.ui.view">
+        <field name="name">input.line.form.window</field>
+        <field name="model">input.line</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h1>
+                        <field name="name" class="oe_inline" placeholder="Name" />
+                    </h1>
+                    <group name="main">
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
-<record id='input_line_tree' model='ir.ui.view'>
-    <field name='model'>input.line</field>
-    <field name='arch' type='xml'>
-        <list multi_edit="1" class="input_line_tree">
-            <field name="sequence" widget="handle" />
-            <button
+    <record id='input_line_tree' model='ir.ui.view'>
+        <field name='model'>input.line</field>
+        <field name='arch' type='xml'>
+            <list multi_edit="1" class="input_line_tree">
+                <field name="sequence" widget="handle" />
+                <button
                     name="open_form_pop_up"
                     class="fa fa-eye"
                     type="object"
                     title="Info"
                 />
-            <button
-                    name="action_show_configured_bom"
-                    class="fa fa-cog"
-                    type="object"
-                    title="Info"
-                />
-            <field name="name" />
-            <field name="alert" optional="show" />
-            <field name="constraint_suggestions" optional="show" />
-            <field name="satisfies_constraint" optional="hide" />
-            <field name="config_id" invisible="1" />
-        </list>
-    </field>
-</record>
+                <field name="name" />
+                <field name="alert" optional="show" />
+                <field name="constraint_suggestions" optional="show" />
+                <field name="satisfies_constraint" optional="hide" />
+                <field name="config_id" invisible="1" />
+            </list>
+        </field>
+    </record>
 
-<record id="input_line_search" model="ir.ui.view">
-    <field name="model">input.line</field>
-    <field name="arch" type="xml">
-        <search>
-            <filter name="name" />
-            <filter
+    <record id="input_line_search" model="ir.ui.view">
+        <field name="model">input.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="name" />
+                <filter
                     name="config_id"
                     string="Config"
                     domain="[]"
                     context="{'group_by' : 'config_id'}"
                 />
-            <filter
+                <filter
                     name="bom_id"
                     string="Bom"
                     domain="[]"
                     context="{'group_by' : 'bom_id'}"
                 />
-        </search>
-    </field>
-</record>
+            </search>
+        </field>
+    </record>
 
 </odoo>

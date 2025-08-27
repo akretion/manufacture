@@ -7,10 +7,16 @@ class Inputline(models.Model):
 
     name = fields.Char()
     sequence = fields.Integer()
-    bom_id = fields.Many2one(comodel_name="mrp.bom", required=True, related="config_id.bom_id")
-    config_id = fields.Many2one(comodel_name="input.config", required=True, ondelete="cascade")
+    bom_id = fields.Many2one(
+        comodel_name="mrp.bom", required=True, related="config_id.bom_id"
+    )
+    config_id = fields.Many2one(
+        comodel_name="input.config", required=True, ondelete="cascade"
+    )
     alert = fields.Html(
-        help="Outside limit configuration is reported here", compute="_compute_alert", store=True
+        help="Outside limit configuration is reported here",
+        compute="_compute_alert",
+        store=True,
     )
     satisfies_constraint = fields.Boolean(
         store=True,
@@ -20,10 +26,8 @@ class Inputline(models.Model):
     bom_data_preview = fields.Json()
 
     def _get_config_elements(self):
-        raise NotImplementedError(
-            "_get_config_elements must be overriden and"
-            + " return the specific fields in the input line"
-        )
+        """_get_config_elements must be overriden and return
+        the specific fields in the input line"""
 
     def _get_input_line_values(self):
         elements = dict()
@@ -47,25 +51,6 @@ class Inputline(models.Model):
             "view_mode": "form",
             "target": "new",
             "res_id": self.id,
-        }
-
-    def _get_valid_components(self):
-        return self.bom_id.get_bom_configured_data(self)
-
-    def create_bom_line_data(self):
-        self.ensure_one()
-        components = self._get_valid_components()
-        return components
-
-    def action_show_configured_bom(self):
-        self.ensure_one()
-        return {
-            "type": "ir.actions.act_window",
-            "res_model": "mrp.bom.configured",
-            "view_mode": "form",
-            "view_id": self.env.ref("mrp_bom_configurable.mrp_bom_configured_form_view").id,
-            "target": "new",
-            "context": f"{{'active_id': {self.id}}}",
         }
 
     def _check_constraint(self):

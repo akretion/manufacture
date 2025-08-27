@@ -103,7 +103,7 @@ class MrpBomLine(models.Model):
     )
     condition = fields.Text(help="Comment explaining domain if needed")
 
-    def _create_context(self, input_line):
+    def _create_formula_eval_context(self, input_line):
         context = {
             "qty": self.product_qty,
         }
@@ -126,29 +126,10 @@ class MrpBomLine(models.Model):
     def _run_formula(self, eval_context):
         safe_eval(self.qty_formula.strip(), eval_context, mode="exec", nocopy=True)
 
-    @api.constrains(qty_formula)
-    def _check_formula(self):
-        pass
-
     def compute_qty_from_formula(self, input_line):
-        eval_context = self._create_context(input_line)
+        eval_context = self._create_formula_eval_context(input_line)
         self._run_formula(eval_context)
         return eval_context.get("result", self.product_qty)
-
-    def goto_configurable_bom_report(self):
-        self.ensure_one()
-        # TODO add button
-        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
-        url = "%s/report/html/mrp_bom_configurable.report_bom_configurable/%s" % (
-            base_url,
-            self.id,
-        )
-        return {
-            "model": "ir.actions._act_url",
-            "name": self.name,
-            "url": url,
-            "target": "new",
-        }
 
     def check_domain(self, values):
         self.ensure_one()

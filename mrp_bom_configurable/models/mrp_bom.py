@@ -22,25 +22,6 @@ class MrpBom(models.Model):
             "product_uom_id": line.product_uom_id,
         }
 
-    def get_bom_configured_data(self, input_line, quantity=1.0):
-        result = []
-        for line in self.bom_line_ids.filtered(
-            lambda s: not s._should_not_be_included_in_bom(input_line)
-        ):
-            line_quantity = (
-                line.compute_qty_from_formula(input_line)
-                if line.use_formula_compute_qty
-                else line.product_qty
-            ) * quantity
-            if line.child_bom_id:
-                result = result + line.child_bom_id.get_bom_configured_data(
-                    input_line, line_quantity
-                )
-            else:
-                result.append(self._compute_data_from_line_and_quantity(line, line_quantity))
-
-        return result
-
     @classmethod
     def _get_bom_domain_for_config(cls):
         "You may override me"
@@ -62,6 +43,7 @@ class MrpBom(models.Model):
         return qty
 
     def _recompute_line_data_quantity(self, input_line, boms_done, bom_line, line_data):
+        """This recompute the line data quantity during explode after"""
         parent_line = line_data["parent_line"]
 
         line_data["qty"] = self._compute_line_qty(line_data, bom_line, input_line)
@@ -78,19 +60,31 @@ class MrpBom(models.Model):
                 break
 
     def _recompute_variable_quantity(self, quantity, input_line, boms_done, lines_done):
+        """This compute the quantity for components which have a parent that is computed from formula"""
         for _, bom_data in boms_done:
-            if bom_data["parent_line"] and bom_data["parent_line"].use_formula_compute_qty:
+            if (
+                bom_data["parent_line"]
+                and bom_data["parent_line"].use_formula_compute_qty
+            ):
                 bom_data["qty"] = bom_data["original_qty"] * bom_data[
                     "parent_line"
                 ].compute_qty_from_formula(input_line)
 
         for bom_line, line_data in lines_done:
-            self._recompute_line_data_quantity(input_line, boms_done, bom_line, line_data)
+            self._recompute_line_data_quantity(
+                input_line, boms_done, bom_line, line_data
+            )
 
-    def explode(self, product, quantity, picking_type=False, never_attribute_values=False):
-        boms_done, lines_done = super().explode(product, quantity, picking_type, never_attribute_values)
+    def explode(
+        self, product, quantity, picking_type=False, never_attribute_values=False
+    ):
+        boms_done, lines_done = super().explode(
+            product, quantity, picking_type, never_attribute_values
+        )
         input_line_id = self.env.context.get("input_line_id", False)
         if input_line_id:
             input_line = self.env["input.line"].browse(input_line_id)
-            self._recompute_variable_quantity(quantity, input_line, boms_done, lines_done)
+            self._recompute_variable_quantity(
+                quantity, input_line, boms_done, lines_done
+            )
         return boms_done, lines_done

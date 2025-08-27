@@ -44,12 +44,6 @@ class InputConfig(models.Model):
             "active_id": self.id,
         }
 
-    def open_input_line_wizard(self):
-        self.ensure_one()
-        view = self.env.ref("mrp_bom_configurable.input_line_form_wizard_action")
-        view.context = json.dumps(self._get_wizard_context())
-        return view.read()[0]
-
     def show_lines(self):
         self.ensure_one()
         return {

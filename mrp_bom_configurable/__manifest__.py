@@ -14,12 +14,10 @@
     "data": [
         "security/ir.model.access.csv",
         "views/bom.xml",
-        "views/bom_configured.xml",
         "views/bom_line.xml",
         "views/input_config.xml",
         "views/input_constraint.xml",
         "views/input_line.xml",
-        "views/input_line_wizard.xml",
     ],
     "demo": [],
     "installable": True,
