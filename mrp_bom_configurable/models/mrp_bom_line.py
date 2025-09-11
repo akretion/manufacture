@@ -1,3 +1,4 @@
+from ast import operator
 import logging
 
 from odoo import _, api, fields, models
@@ -21,18 +22,30 @@ def check_domain(domain, values, current_name, parent_name):
     if len(domain) == 1:
         domain.append(True)
 
-    # make domain a proper PN input
-    # a = [o, d, d, d, d, o, d, d]
-    # a = [o, d, d, d, o, d, o, d, d]
-    # a = [o, d, d, o, d, o, d, o, d, d]
-    # a = [o, d, d, o, d, o, d, o, d, d]
-    # a = [o, d, o, d, o, d, o, d, o, d, d]
-    current_index = len(domain) - 2
-    while current_index > 0:
-        if domain[current_index - 1] not in ["&", "|"]:
-            domain.insert(current_index, "&")
-            current_index += 1
-        current_index -= 2
+    # check that there is the proper amount of operator
+    # and operand
+    operator_count = 0
+    operand_count = 0
+    for el in domain:
+        if el in ["&", "|"]:
+            operator_count += 1
+        else:
+            operand_count += 1
+
+    if operand_count != operator_count + 1:
+        # there is an imbalance between operator and operand
+        # fix it and make domain a proper PN input
+        # a = [o, d, d, d, d, o, d, d]
+        # a = [o, d, d, d, o, d, o, d, d]
+        # a = [o, d, d, o, d, o, d, o, d, d]
+        # a = [o, d, d, o, d, o, d, o, d, d]
+        # a = [o, d, o, d, o, d, o, d, o, d, d]
+        current_index = len(domain) - 2
+        while current_index > 0:
+            if domain[current_index - 1] not in ["&", "|"]:
+                domain.insert(current_index, "&")
+                current_index += 1
+            current_index -= 2
 
     # This check the front of the domain which should always be a operator
     if domain[0] not in ["&", "|"]:
