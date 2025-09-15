@@ -20,9 +20,9 @@
                 <field
                     name="dmr_ids"
                     widget="many2many_tags"
-                    required="1"
                     readonly="state != '1-draft'"
                 />
+                <!-- DMR not used yet, don't put mandatory yet                    required="1"/>-->
             </field>
             <field name="plan_ids" position="attributes">
                 <attribute name="required">0</attribute>
