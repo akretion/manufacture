@@ -8,8 +8,10 @@
                 <sheet>
                     <h1>
                         <field name="name" />
-                        <field name="company_id" />
                     </h1>
+                    <group>
+                        <field name="company_id" />
+                    </group>
                     <separator string="Products" />
                     <field name="product_ids" />
                     <separator string="Linked Products" />

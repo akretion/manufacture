@@ -22,6 +22,7 @@
         "views/stock_quant.xml",
         "views/stock_lot.xml",
         "views/mrp_production.xml",
+        "views/product_template_view.xml",
         "data/ir_sequence.xml",
         #        "wizards/generate_revision_order.xml",
     ],

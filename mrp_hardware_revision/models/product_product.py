@@ -52,7 +52,9 @@ class ProductProduct(models.Model):
             used_in_bom_lines = self.env["mrp.bom.line"].search(
                 [("product_id", "=", product.id)]
             )
-            used_in_boms = used_in_bom_lines.bom_id.with_context(active_test=False)
+            used_in_boms = used_in_bom_lines.bom_id.filtered(
+                lambda bom: bom.type != "phantom"
+            ).with_context(active_test=False)
             for bom in used_in_boms.filtered("active"):
                 products = bom.product_id or bom.product_tmpl_id.product_variant_ids
                 to_link = products.filtered(lambda p: not p.plan_ids)
