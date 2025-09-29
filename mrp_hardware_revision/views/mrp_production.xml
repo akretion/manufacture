@@ -21,6 +21,11 @@
                     name="context"
                 >{'default_product_id': product_id, 'default_hardware_revision_id': hardware_revision_id}</attribute>
             </field>
+            <button name="action_generate_serial" position="attributes">
+                <attribute
+                    name="context"
+                >{'default_hardware_revision_id': hardware_revision_id}</attribute>
+            </button>
         </field>
     </record>
 </odoo>
