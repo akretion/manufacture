@@ -33,6 +33,10 @@ class DMRRevision(models.Model):
     )
     company_id = fields.Many2one("res.company", related="dmr_id.company_id", store=True)
 
+    _sql_constraints = [
+        ("unique_dmr_revision", "unique (dmr_id, name)", "This revision already exists")
+    ]
+
     @api.constrains("hardware_revision_ids")
     def _check_hardware_revision(self):
         for rec in self:
