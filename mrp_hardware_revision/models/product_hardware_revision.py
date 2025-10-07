@@ -39,6 +39,10 @@ class ProductHardwareRevision(models.Model):
         "res.company", related="plan_id.company_id", store=True
     )
 
+    _sql_constraints = [
+        ("unique_plan_indice", "unique (plan_id, name)", "This revision already exists")
+    ]
+
     @api.depends("plan_id", "name")
     def _compute_display_name(self):
         for rec in self:
