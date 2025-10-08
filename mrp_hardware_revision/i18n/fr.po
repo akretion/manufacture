@@ -155,7 +155,8 @@ msgstr "Terminé"
 #. odoo-python
 #: code:addons/mrp_hardware_revision/models/engineering_change_order.py:0
 msgid "ECO has been fully processed and can't go back to draft state"
-msgstr "l'ECO a été traitée complètement et ne peut pas retourner à l'état brouillon"
+msgstr ""
+"l'ECO a été traitée complètement et ne peut pas retourner à l'état brouillon"
 
 #. module: mrp_hardware_revision
 #: model:ir.model.fields,field_description:mrp_hardware_revision.field_mrp_bom__eco_id
@@ -230,22 +231,15 @@ msgid "Hardware Plan"
 msgstr "Plan"
 
 #. module: mrp_hardware_revision
-#: model:ir.actions.act_window,name:mrp_hardware_revision.action_product_hardware_revision
 #: model:ir.model.fields,field_description:mrp_hardware_revision.field_mrp_production__hardware_revision_id
 #: model:ir.model.fields,field_description:mrp_hardware_revision.field_purchase_order_line__hardware_revision_id
 #: model:ir.model.fields,field_description:mrp_hardware_revision.field_stock_lot__hardware_revision_id
 #: model:ir.model.fields,field_description:mrp_hardware_revision.field_stock_quant__hardware_revision_id
 #: model:ir.module.category,name:mrp_hardware_revision.module_category_hardware_revision_management
-#: model:ir.ui.menu,name:mrp_hardware_revision.hardware_revision_menu
+#: model:ir.actions.act_window,name:mrp_hardware_revision.action_product_hardware_revision
 #: model:ir.ui.menu,name:mrp_hardware_revision.product_hardware_revision_menu
 msgid "Hardware Revision"
 msgstr "Indice de plan"
-
-#. module: mrp_hardware_revision
-#: model:ir.model.fields,field_description:mrp_hardware_revision.field_mrp_production__hardware_revision_domain
-#: model:ir.model.fields,field_description:mrp_hardware_revision.field_purchase_order_line__hardware_revision_domain
-msgid "Hardware Revision Domain"
-msgstr "Domain de l'indice de plan"
 
 #. module: mrp_hardware_revision
 #: model:ir.model.fields,field_description:mrp_hardware_revision.field_engineering_change_order__has_message
@@ -261,7 +255,7 @@ msgstr ""
 #. module: mrp_hardware_revision
 #: model:ir.model.fields,help:mrp_hardware_revision.field_product_product__linked_plan_ids
 msgid "Herited plan (from component)"
-msgstr "Plan hérité (du composant brut)"
+msgstr "Plan dépendant (du composant brut)"
 
 #. module: mrp_hardware_revision
 #: model:ir.model.fields,field_description:mrp_hardware_revision.field_engineering_change_order__id
@@ -303,7 +297,9 @@ msgstr ""
 msgid ""
 "Inconsistencies between reserved quant and hardware revision restriction on "
 "stock move"
-msgstr "Incohérences entre le produit réservé et l'indice restreint sur ce mouvement de stock"
+msgstr ""
+"Incohérences entre le produit réservé et l'indice restreint sur ce mouvement "
+"de stock"
 
 #. module: mrp_hardware_revision
 #: model:ir.model.fields,field_description:mrp_hardware_revision.field_product_hardware_revision__is_current_revision
@@ -346,12 +342,12 @@ msgstr ""
 #. module: mrp_hardware_revision
 #: model:ir.model.fields,field_description:mrp_hardware_revision.field_hardware_plan__linked_product_ids
 msgid "Linked Product"
-msgstr "Produits hérités"
+msgstr "Produits dépendants"
 
 #. module: mrp_hardware_revision
 #: model_terms:ir.ui.view,arch_db:mrp_hardware_revision.hardware_plan_form_view
 msgid "Linked Products"
-msgstr "Produits Hérités"
+msgstr "Produits Dépendants"
 
 #. module: mrp_hardware_revision
 #: model:ir.model,name:mrp_hardware_revision.model_stock_lot
@@ -520,10 +516,14 @@ msgstr "Nomenclature précédente"
 msgid ""
 "Problem of configuration with %(product_code)s, it is linked to multiple "
 "plan and this is not possible"
-msgstr "Problème de  configuraton avec %(product_code)s, il est lié à plusieurs plans et cela n'est pas autorisé."
+msgstr ""
+"Problème de  configuraton avec %(product_code)s, il est lié à plusieurs "
+"plans et cela n'est pas autorisé."
 
 #. module: mrp_hardware_revision
 #: model:ir.model,name:mrp_hardware_revision.model_product_template
+#: model:ir.model.fields,field_description:mrp_hardware_revision.field_engineering_change_order__product_id
+#: model:ir.model.fields,field_description:mrp_hardware_revision.field_engineering_change_order__product_ids
 #: model:ir.model.fields,field_description:mrp_hardware_revision.field_hardware_plan__product_ids
 msgid "Product"
 msgstr "Produit"
@@ -553,9 +553,11 @@ msgstr "Variante de produit"
 msgid ""
 "Product sharing the plan because they are derived from these semi-finished "
 "product."
-msgstr "Produits héritant du plan car ils sont dérvé de ces produits semi-finis"
+msgstr ""
+"Produits dépendants du plan car ils sont dérvé de ces produits semi-finis"
 
 #. module: mrp_hardware_revision
+#: model_terms:ir.ui.view,arch_db:mrp_hardware_revision.engineering_change_order_form_view
 #: model_terms:ir.ui.view,arch_db:mrp_hardware_revision.hardware_plan_form_view
 msgid "Products"
 msgstr "Produits"
@@ -652,7 +654,7 @@ msgstr "Date de début"
 #. module: mrp_hardware_revision
 #: model:ir.model.fields,field_description:mrp_hardware_revision.field_engineering_change_order__state
 msgid "State"
-msgstr ""
+msgstr "Etat"
 
 #. module: mrp_hardware_revision
 #: model:ir.model.fields,help:mrp_hardware_revision.field_engineering_change_order__activity_state
@@ -692,7 +694,9 @@ msgstr ""
 #: code:addons/mrp_hardware_revision/models/stock_lot.py:0
 msgid ""
 "The hardware revision is mandatory on lot %(lot)s for product %(product)s"
-msgstr "L'indice de plan est obligatoire sur le lot %(lot)s pour le produit %(product)s"
+msgstr ""
+"L'indice de plan est obligatoire sur le lot %(lot)s pour le produit "
+"%(product)s"
 
 #. module: mrp_hardware_revision
 #. odoo-python
@@ -712,7 +716,9 @@ msgstr "L'indice de plan est obligatoire pour l'ordre de fabrication %(mo)s"
 msgid ""
 "The hardware revison of some components are not consistent with the one of "
 "the manufacturing order %(mo)s"
-msgstr "L'indice de plan de certains composants ne sont pas cohérents avec celui de l'ordre de fabrication %(mo)s"
+msgstr ""
+"L'indice de plan de certains composants ne sont pas cohérents avec celui de "
+"l'ordre de fabrication %(mo)s"
 
 #. module: mrp_hardware_revision
 #. odoo-python
@@ -720,7 +726,9 @@ msgstr "L'indice de plan de certains composants ne sont pas cohérents avec celu
 msgid ""
 "The lot %(lot)s for product %(ref)s is a prototype and you can't move it to "
 "the sellable stock"
-msgstr "Le lot %(lot)s pour le produit %(ref)s est un prototype et ne peut pas être libéré."
+msgstr ""
+"Le lot %(lot)s pour le produit %(ref)s est un prototype et ne peut pas être "
+"libéré."
 
 #. module: mrp_hardware_revision
 #. odoo-python
@@ -729,7 +737,9 @@ msgid ""
 "The lot(s) %(move_line_hw_revision)s being moved is inconsistent with the "
 "restriction on hardware_revision %(move_restrict_hw_revision)s set on the "
 "move"
-msgstr "Le(s) lot(s) %(move_line_hw_revision)s bougés ne sont pas cohérents avec la restriction de l'indice de plan %(move_restrict_hw_revision)s des mouvements"
+msgstr ""
+"Le(s) lot(s) %(move_line_hw_revision)s bougés ne sont pas cohérents avec la "
+"restriction de l'indice de plan %(move_restrict_hw_revision)s des mouvements"
 
 #. module: mrp_hardware_revision
 #: model:ir.model.constraint,message:mrp_hardware_revision.constraint_hardware_plan_unique_name
@@ -742,7 +752,9 @@ msgstr "Le nom doit être unique"
 msgid ""
 "The plans %(plan_names)s are under change. The change orders are the "
 "following : %(eco_names)s"
-msgstr "Les plans %(plan_names)s sont sujets à des changements. Les ECO sont les suivants : %(eco_names)s"
+msgstr ""
+"Les plans %(plan_names)s sont sujets à des changements. Les ECO sont les "
+"suivants : %(eco_names)s"
 
 #. module: mrp_hardware_revision
 #: model:ir.model,name:mrp_hardware_revision.model_stock_picking
@@ -786,9 +798,10 @@ msgstr "Vous ne pouvez pas créer un ECO sur un prototype : %s(revisions)"
 #. module: mrp_hardware_revision
 #. odoo-python
 #: code:addons/mrp_hardware_revision/models/engineering_change_order.py:0
-msgid ""
-"You can't validate this ECO yet because not all revisions have a number"
-msgstr "Vous ne pouvezp as valider cet ECO parce que tous les nouveaux indices associés n'ont pas de numéro."
+msgid "You can't validate this ECO yet because not all revisions have a number"
+msgstr ""
+"Vous ne pouvez pas valider cet ECO parce que tous les nouveaux indices "
+"associés n'ont pas de numéro."
 
 #. module: mrp_hardware_revision
 #: model:ir.model.fields,field_description:mrp_hardware_revision.field_product_product__plan_ids
@@ -798,4 +811,48 @@ msgstr "Plan direct"
 #. module: mrp_hardware_revision
 #: model_terms:ir.ui.view,arch_db:mrp_hardware_revision.engineering_change_order_kanban
 msgid "text-danger"
+msgstr ""
+
+#. module: mrp_hardware_revision
+#: model:ir.model.fields,help:mrp_hardware_revision.field_engineering_change_order__product_id
+msgid "Auto-complete the plans from a product"
+msgstr "Auto-complétion des plans depuis un produit"
+
+#. module: mrp_hardware_revision
+#: model:ir.model.fields,field_description:mrp_hardware_revision.field_engineering_change_order__declaration_number
+msgid "Declaration Number"
+msgstr "N°DUC"
+
+#. module: mrp_hardware_revision
+#: model_terms:ir.ui.view,arch_db:mrp_hardware_revision.engineering_change_order_form_view
+msgid ""
+"The ongoing changes will be deleted, you will have to do it again in case of "
+"re-validation of the ECO later."
+msgstr ""
+"Les changements en cours vont être supprimés, vous allez devoir les refaire "
+"en cas de re-validation de l'ECO plus tard."
+
+#. module: mrp_hardware_revision
+#: model:ir.model.constraint,message:mrp_hardware_revision.constraint_product_hardware_revision_unique_plan_indice
+msgid "This revision already exists"
+msgstr "La révision exite déjà"
+
+#. module: mrp_hardware_revision
+#: model_terms:ir.ui.view,arch_db:mrp_hardware_revision.engineering_change_order_form_view
+msgid ""
+"This validation is definitive. The changes on hardware revisions or BOMs "
+"will be pusblished."
+msgstr ""
+"La validation est définitive. Les changements d'indices de plan ou de "
+"nomenclatures vont être publiés."
+
+#. module: mrp_hardware_revision
+#: model:ir.ui.menu,name:mrp_hardware_revision.hardware_revision_menu
+msgid "Hardware"
+msgstr "Spécifications Produits"
+
+#. module: mrp_hardware_revision
+#: model:ir.model.fields,field_description:mrp_hardware_revision.field_mrp_production__hardware_revision_domain
+#: model:ir.model.fields,field_description:mrp_hardware_revision.field_purchase_order_line__hardware_revision_domain
+msgid "Hardware Revision Domain"
 msgstr ""

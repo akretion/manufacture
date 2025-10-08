@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <menuitem
-        name="Hardware Revision"
+        name="Hardware"
         parent="mrp.menu_mrp_root"
         id="hardware_revision_menu"
         groups="mrp_hardware_revision.hardware_revision_user_group"

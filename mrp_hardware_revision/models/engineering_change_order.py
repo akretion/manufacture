@@ -28,8 +28,8 @@ class EngineeringChangeOrder(models.Model):
         default="1-draft",
     )
     bom_update = fields.Boolean()
-    planned_start_date = fields.Date()
-    planned_end_date = fields.Date()
+    #    planned_start_date = fields.Date()
+    #    planned_end_date = fields.Date()
     start_date = fields.Date()
     end_date = fields.Date()
     note = fields.Text()
@@ -39,6 +39,33 @@ class EngineeringChangeOrder(models.Model):
         index=True,
         default=lambda self: self.env.company,
     )
+    declaration_number = fields.Char()
+    product_id = fields.Many2one(
+        "product.product",
+        store=False,
+        readonly=False,
+        string="Product",
+        help="Auto-complete the plans from a product",
+    )
+    product_ids = fields.Many2many("product.product", compute="_compute_product_ids")
+
+    @api.onchange("product_id")
+    def _onchange_product_auto_complete(self):
+        current_plans = self.plan_ids
+        if self.product_id.plan_id and self.product_id.plan_id not in current_plans:
+            current_plans |= self.product_id.plan_id
+            self.plan_ids = current_plans
+        self.product_id = False
+
+    def _get_concerned_products(self):
+        self.ensure_one()
+        return self.plan_ids.product_ids
+
+    @api.depends("plan_ids")
+    def _compute_product_ids(self):
+        for eco in self:
+            products = eco._get_concerned_products()
+            eco.product_ids = products.ids
 
     def action_draft(self):
         self.ensure_one()

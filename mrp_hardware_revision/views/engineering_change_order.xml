@@ -17,6 +17,7 @@
                         type="object"
                         invisible="state in ('1-draft', '4-done')"
                         string="Back to draft"
+                        confirm="The ongoing changes will be deleted, you will have to do it again in case of re-validation of the ECO later."
                     />
                     <!--<button
                         name="validate_prototype"
@@ -29,6 +30,7 @@
                         type="object"
                         invisible="state != '2-ongoing'"
                         string="Validate"
+                        confirm="This validation is definitive. The changes on hardware revisions or BOMs will be pusblished."
                     />
                     <field
                         name="state"
@@ -68,6 +70,13 @@
                         <group>
                             <field name="description" />
                             <field
+                                name="product_id"
+                                invisible="state != '1-draft'"
+                                readonly="state != '1-draft'"
+                                domain="[('plan_id', '!=', False)]"
+                                options="{'no_create': True, 'no_open': True}"
+                            />
+                            <field
                                 name="plan_ids"
                                 widget="many2many_tags"
                                 required="1"
@@ -76,12 +85,25 @@
                             <field name="bom_update" />
                         </group>
                         <group>
-                            <field name="planned_start_date" />
-                            <field name="planned_end_date" />
                             <field name="start_date" readonly="state != '1-draft'" />
                             <field name="end_date" readonly="state != '1-draft'" />
+                            <field
+                                name="declaration_number"
+                                readonly="state not in ('1-draft', '2-ongoing')"
+                            />
                         </group>
                     </group>
+                    <notebook>
+                        <page string="Products">
+                            <field name="product_ids">
+                                <list>
+                                    <field name="default_code" />
+                                    <field name="name" />
+                                    <field name="plan_id" />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
                 <chatter />
             </form>
@@ -103,7 +125,7 @@
                     <t t-name="card">
                         <field name="name" class="fs-5 fw-bolder" />
                         <field name="plan_ids" widget="many2many_tags" />
-                        <div class="text-muted">
+                        <!--                        <div class="text-muted">
                             <t
                                 t-if="record.planned_end_date.raw_value and record.planned_end_date.raw_value lt (new Date())"
                                 t-set="red"
@@ -111,7 +133,7 @@
                             <span t-attf-class="#{red || ''}">
                                 <field name="planned_end_date" class="fst-italic" />
                             </span>
-                        </div>
+                        </div>-->
                         <footer class="pt-0">
                             <div class="d-flex align-items-center ms-auto">
                                 <field
