@@ -1,5 +1,4 @@
 from . import (
-    input_config,
     input_constraint,
     input_line,
     mrp_bom,

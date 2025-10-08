@@ -11,7 +11,6 @@ class TestBomConfigurable(TransactionCase):
         cls.bom_obj = cls.env["mrp.bom"]
         cls.bom_line_obj = cls.env["mrp.bom.line"]
 
-        cls.input_config_obj = cls.env["input.config"]
         cls.input_config_line_obj = cls.env["input.line"]
 
         # Create product
@@ -72,17 +71,10 @@ class TestBomConfigurable(TransactionCase):
         )
 
         # Create config
-        cls.input_config = cls.input_config_obj.create(
-            {
-                "name": "Test config",
-                "bom_id": cls.bom.id,
-            }
-        )
         cls.input_line = cls.input_config_line_obj.create(
             {
                 "name": "test_1",
                 "bom_id": cls.bom.id,
-                "config_id": cls.input_config.id,
                 "test_config": True,
             }
         )
@@ -90,7 +82,6 @@ class TestBomConfigurable(TransactionCase):
             {
                 "name": "test_1",
                 "bom_id": cls.bom.id,
-                "config_id": cls.input_config.id,
                 "test_config": False,
             }
         )

@@ -8,10 +8,8 @@ class Inputline(models.Model):
     name = fields.Char()
     sequence = fields.Integer()
     bom_id = fields.Many2one(
-        comodel_name="mrp.bom", required=True, related="config_id.bom_id"
-    )
-    config_id = fields.Many2one(
-        comodel_name="input.config", required=True, ondelete="cascade"
+        comodel_name="mrp.bom",
+        required=True,
     )
     alert = fields.Html(
         help="Outside limit configuration is reported here",
@@ -37,10 +35,6 @@ class Inputline(models.Model):
 
     def check_one_data(self):
         pass
-
-    def open_wizard(self):
-        config_id = self.env["input.config"].browse(self.env.context.get("config_id"))
-        return config_id.open_input_line_wizard()
 
     def open_form_pop_up(self):
         self.ensure_one()

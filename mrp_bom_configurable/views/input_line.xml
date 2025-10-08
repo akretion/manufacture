@@ -33,7 +33,6 @@
                 <field name="alert" optional="show" />
                 <field name="constraint_suggestions" optional="show" />
                 <field name="satisfies_constraint" optional="hide" />
-                <field name="config_id" invisible="1" />
             </list>
         </field>
     </record>
@@ -44,12 +43,6 @@
             <search>
                 <filter name="name" />
                 <filter
-                    name="config_id"
-                    string="Config"
-                    domain="[]"
-                    context="{'group_by' : 'config_id'}"
-                />
-                <filter
                     name="bom_id"
                     string="Bom"
                     domain="[]"
@@ -58,5 +51,14 @@
             </search>
         </field>
     </record>
+
+    <menuitem id="configurator_menu" name="Configurateur" parent="mrp.menu_mrp_root" />
+
+    <menuitem
+        id="input_config_menu_configurations"
+        parent="configurator_menu"
+        name="Configurations"
+        sequence="10"
+    />
 
 </odoo>
