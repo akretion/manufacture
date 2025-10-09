@@ -14,6 +14,7 @@ def check_domain(domain, values, current_name, parent_name):
 
     domain = domain.replace("'", '"')
     domain = domain.replace('"="', '"=="')
+    domain = domain.replace('"ilike"', '"in"')
     domain = safe_eval(domain.replace("!==", "!="))
 
     if len(domain) == 0:
@@ -83,7 +84,10 @@ def evaluate_domain_operand(domain, values, current_name, parent_name):
         #         f"Wrong param name ({param}) for domain {current_name}"
         #         + f"in {parent_name}"
         #     )
-        code = f"{param} {operator} {repr(value)}"
+        if operator == "in":
+            code = f"{repr(value)} {operator} {param}"
+        else:
+            code = f"{param} {operator} {repr(value)}"
 
         try:
             return safe_eval(code, values)
