@@ -166,13 +166,25 @@ class EngineeringChangeOrder(models.Model):
             boms_to_active.write({"active": True})
         self.state = "4-done"
         self.end_date = fields.Date.today()
-        if any([rev.name == "prototype" for rev in self.new_hardware_revision_ids]):
-            raise exceptions.UserError(
-                self.env._(
-                    "You can't validate this ECO yet because not all revisions have a "
-                    "number"
+        for new_rev in self.new_hardware_revision_ids:
+            if new_rev.name == "prototype":
+                raise exceptions.UserError(
+                    self.env._(
+                        "You can't validate this ECO yet because not all revisions have"
+                        " a number"
+                    )
                 )
+            attach = self.env["ir.attachment"].search(
+                [("res_id", "=", new_rev.id), ("res_model", "=", new_rev._name)],
+                limit="1",
             )
+            if not attach:
+                raise exceptions.UserError(
+                    self.env._(
+                        "You can't validate this ECO yet because not all revisions have"
+                        " the PDF plan linked."
+                    )
+                )
         self.new_hardware_revision_ids.write(
             {"prototype": False, "start_date": fields.Date.today()}
         )
