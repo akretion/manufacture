@@ -15,11 +15,17 @@
                     />-->
                 </header>
                 <sheet>
+                    <field name="is_readonly" invisible="1" />
+                    <field name="eco_state" invisible="1" />
                     <label string="Plan" for="plan_id" />
-                    <field name="plan_id" class="oe_inline" />
+                    <field name="plan_id" class="oe_inline" readonly="is_readonly" />
                     <h1>
                         <label string="Revision " for="name" />
-                        <field name="name" class="oe_inline" />
+                        <field
+                            name="name"
+                            class="oe_inline"
+                            readonly="(is_readonly and not eco_state) or eco_state == '4-done'"
+                        />
                     </h1>
                     <group>
                         <group>
@@ -31,8 +37,11 @@
                                 name="current_revision_id"
                                 invisible="is_current_revision"
                             />
-                            <field name="start_date" />
-                            <field name="prototype" />
+                            <field
+                                name="start_date"
+                                readonly="eco_state or start_date >= '2026-01-01'"
+                            />
+                            <field name="prototype" readonly="is_readonly" />
                         </group>
                         <group />
                     </group>

@@ -28,6 +28,7 @@ class ProductHardwareRevision(models.Model):
     # of 2, etc...)
     prototype = fields.Boolean()
     generated_by_eco_id = fields.Many2one("engineering.change.order")
+    eco_state = fields.Selection(related="generated_by_eco_id.state")
     start_date = fields.Date(copy=False)
     is_current_revision = fields.Boolean(
         compute="_compute_is_current_revision", store=True
@@ -38,10 +39,20 @@ class ProductHardwareRevision(models.Model):
     company_id = fields.Many2one(
         "res.company", related="plan_id.company_id", store=True
     )
+    is_readonly = fields.Boolean(compute="_compute_is_readonly")
 
     _sql_constraints = [
         ("unique_plan_indice", "unique (plan_id, name)", "This revision already exists")
     ]
+
+    # Full custom..
+    @api.depends("start_date")
+    def _compute_is_readonly(self):
+        for rec in self:
+            readonly = True
+            if rec.start_date and rec.start_date < fields.Date.to_date("2026-01-01"):
+                readonly = False
+            rec.is_readonly = readonly
 
     @api.depends("plan_id", "name")
     def _compute_display_name(self):
