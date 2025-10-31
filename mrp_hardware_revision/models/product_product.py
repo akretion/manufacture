@@ -37,12 +37,19 @@ class ProductProduct(models.Model):
         help="Herited plan (from component)",
     )
     plan_id = fields.Many2one("hardware.plan", compute="_compute_plan_id", store=True)
+    # only to solve bug in eco form view due to onchange with m2o in one2many view...
+    # It is a related to plan_id because computed in _compute_plan_id
+    # we do not set it to related because then it won't work in the form view
+    # of ecos. On ecos, product_ids make a read on Newid recordset somehow and it
+    # does not get the computed fields...
+    plan_id_name = fields.Char()
 
     @api.depends("plan_ids", "linked_plan_ids")
     def _compute_plan_id(self):
         for product in self:
             plan = product.plan_ids or product.linked_plan_ids
             product.plan_id = plan and plan[0].id or False
+            product.plan_id_name = plan.name
 
     def _get_derivative_plan_product(self):
         derivated_products = self.env["product.product"]

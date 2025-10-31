@@ -99,7 +99,7 @@
                                 <list>
                                     <field name="default_code" />
                                     <field name="name" />
-                                    <field name="plan_id" />
+                                    <field name="plan_id_name" string="Plan" />
                                 </list>
                             </field>
                         </page>
