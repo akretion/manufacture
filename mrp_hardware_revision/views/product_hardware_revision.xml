@@ -20,7 +20,16 @@
                     <label string="Plan" for="plan_id" />
                     <field name="plan_id" class="oe_inline" readonly="is_readonly" />
                     <h1>
-                        <label string="Revision " for="name" />
+                        <label
+                            string="Indice"
+                            for="name"
+                            invisible="eco_state and eco_state != '4-done'"
+                        />
+                        <label
+                            string="Indice après changement"
+                            for="name"
+                            invisible="not eco_state or eco_state == '4-done'"
+                        />
                         <field
                             name="name"
                             class="oe_inline"
