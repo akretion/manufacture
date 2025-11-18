@@ -1,6 +1,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
+from odoo import api, exceptions, fields, models
 from odoo.fields import first
 
 
@@ -75,19 +75,23 @@ class ProductHardwareRevision(models.Model):
             else:
                 rec.is_current_revision = False
 
-
-#    @api.depends("product_tmpl_id.hardware_revision_ids.start_date")
-#    def _compute_is_current_revision(self):
-#        for rec in self:
-#            if (
-#                rec.start_date
-#                and max(
-#                    rec.product_tmpl_id.hardware_revision_ids.filtered(
-#                        lambda rec: rec.start_date
-#                    ).mapped("start_date")
-#                )
-#                == rec.start_date
-#            ):
-#                rec.is_current_revision = True
-#            else:
-#                rec.is_current_revision = False
+    def unlink(self):
+        po_lines = self.env["purchase.order.line"].search(
+            [
+                ("hardware_revision_id", "in", self.ids),
+                ("order_id.state", "!=", "cancel"),
+            ]
+        )
+        if po_lines:
+            used_revision_names = po_lines.hardware_revision_id.mapped("display_name")
+            po_names = po_lines.order_id.mapped("name")
+            raise exceptions.UserError(
+                self.env._(
+                    "Some revision you try to delete are already used in Purchase "
+                    "orders. \nUsed Indices : %(used_revision_names)s. \n Purchase "
+                    "orders concerned: %(po_names)s",
+                    used_revision_names=used_revision_names,
+                    po_names=po_names,
+                )
+            )
+        return super().unlink()
