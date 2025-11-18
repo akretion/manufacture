@@ -39,7 +39,7 @@ class EngineeringChangeOrder(models.Model):
         index=True,
         default=lambda self: self.env.company,
     )
-    declaration_number = fields.Char()
+    change_origin = fields.Char()
     product_id = fields.Many2one(
         "product.product",
         store=False,
@@ -79,7 +79,7 @@ class EngineeringChangeOrder(models.Model):
             lambda bom: not bom.active
         )
         unactive_boms.unlink()
-        self.new_hardware_revision_ids.unlink()
+        self.new_hardware_revision_ids.sudo().unlink()
         self.state = "1-draft"
 
     @api.model_create_multi

@@ -88,7 +88,7 @@
                             <field name="start_date" readonly="state != '1-draft'" />
                             <field name="end_date" readonly="state != '1-draft'" />
                             <field
-                                name="declaration_number"
+                                name="change_origin"
                                 readonly="state not in ('1-draft', '2-ongoing')"
                             />
                         </group>
@@ -124,6 +124,7 @@
                 <templates>
                     <t t-name="card">
                         <field name="name" class="fs-5 fw-bolder" />
+                        <field name="description" />
                         <field name="plan_ids" widget="many2many_tags" />
                         <!--                        <div class="text-muted">
                             <t
@@ -154,6 +155,8 @@
         <field name="arch" type="xml">
             <list>
                 <field name="name" />
+                <field name="description" optional="show" />
+                <field name="change_origin" optional="show" />
                 <field name="start_date" />
                 <field name="end_date" />
                 <field name="state" />

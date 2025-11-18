@@ -819,9 +819,9 @@ msgid "Auto-complete the plans from a product"
 msgstr "Auto-complétion des plans depuis un produit"
 
 #. module: mrp_hardware_revision
-#: model:ir.model.fields,field_description:mrp_hardware_revision.field_engineering_change_order__declaration_number
-msgid "Declaration Number"
-msgstr "N°DUC"
+#: model:ir.model.fields,field_description:mrp_hardware_revision.field_engineering_change_order__change_origin
+msgid "Change Origin"
+msgstr "Origine du changement"
 
 #. module: mrp_hardware_revision
 #: model_terms:ir.ui.view,arch_db:mrp_hardware_revision.engineering_change_order_form_view
@@ -835,7 +835,7 @@ msgstr ""
 #. module: mrp_hardware_revision
 #: model:ir.model.constraint,message:mrp_hardware_revision.constraint_product_hardware_revision_unique_plan_indice
 msgid "This revision already exists"
-msgstr "La révision exite déjà"
+msgstr "La révision existe déjà"
 
 #. module: mrp_hardware_revision
 #: model_terms:ir.ui.view,arch_db:mrp_hardware_revision.engineering_change_order_form_view
