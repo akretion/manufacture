@@ -21,12 +21,13 @@ class PurchaseOrder(models.Model):
         ongoing_ecos = self.env["engineering.change.order"].search(
             [("state", "not in", ("4-done",)), ("plan_ids", "in", plans.ids)]
         )
+        plans_under_change = ongoing_ecos.plan_ids
         message = ""
         if ongoing_ecos:
             message = self.env._(
                 "The plans %(plan_names)s are under change. The change orders are "
                 "the following : %(eco_names)s",
-                plan_names=plans.mapped("name"),
+                plan_names=plans_under_change.mapped("name"),
                 eco_names=ongoing_ecos.mapped("name"),
             )
         return message
