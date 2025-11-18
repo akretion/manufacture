@@ -11,6 +11,7 @@ class PurchaseOrderLine(models.Model):
         compute="_compute_hardware_revision_id",
         store=True,
         readonly=False,
+        copy=False,
     )
     product_tmpl_id = fields.Many2one(
         "product.template", related="product_id.product_tmpl_id"
