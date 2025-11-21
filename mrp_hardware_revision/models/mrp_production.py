@@ -60,7 +60,7 @@ class MrpProduction(models.Model):
         self.ensure_one()
         if self.product_id.plan_id:
             same_plan_component_moves = self.move_raw_ids.filtered(
-                lambda x: x.state == "done"
+                lambda x: x.state in ("assigned", "done")
                 and x.product_id.plan_id == self.product_id.plan_id
             )
             components_hardware_revision = (

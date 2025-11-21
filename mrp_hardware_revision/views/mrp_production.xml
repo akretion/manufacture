@@ -7,12 +7,12 @@
             <xpath expr="//div[@name='bom_div']" position="after">
                 <field
                     name="hardware_revision_id"
-                    readonly="state != 'draft'"
+                    readonly="state not in ('draft', 'confirmed', 'progress')"
                     domain="hardware_revision_domain"
                 />
                 <field
                     name="force_revision"
-                    readonly="state != 'draft'"
+                    readonly="state not in ('draft', 'confirmed', 'progress')"
                     groups="mrp_hardware_revision.group_hardware_revision_force_version"
                 />
             </xpath>
