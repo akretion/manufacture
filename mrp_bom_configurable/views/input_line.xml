@@ -22,7 +22,6 @@
         <field name='model'>input.line</field>
         <field name='arch' type='xml'>
             <list multi_edit="1" class="input_line_tree">
-                <field name="sequence" widget="handle" />
                 <button
                     name="open_form_pop_up"
                     class="fa fa-eye"
