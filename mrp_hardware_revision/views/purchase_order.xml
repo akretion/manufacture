@@ -21,6 +21,7 @@
                     name="hardware_revision_id"
                     options="{'no_create': True}"
                     domain="hardware_revision_domain"
+                    optional="hide"
                 />
                 <field
                     name="force_revision"
