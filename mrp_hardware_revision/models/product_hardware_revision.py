@@ -69,7 +69,9 @@ class ProductHardwareRevision(models.Model):
     @api.depends("plan_id.revision_ids.start_date")
     def _compute_is_current_revision(self):
         for rec in self:
-            revisions = rec.plan_id.revision_ids.filtered(lambda rec: rec.start_date)
+            revisions = rec.plan_id.revision_ids.filtered(
+                lambda rec: rec.start_date
+            ).sorted(key=lambda x: (x.start_date, x.name), reverse=True)
             if rec.start_date and rec == first(revisions):
                 rec.is_current_revision = True
             else:
