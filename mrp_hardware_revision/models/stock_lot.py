@@ -8,6 +8,7 @@ class StockLot(models.Model):
 
     hardware_revision_id = fields.Many2one(
         "product.hardware.revision",
+        tracking=1,
         domain="[('allowed_product_ids', 'in', product_id)]",
     )
     prototype = fields.Boolean(compute="_compute_prototype", store=True)
