@@ -63,8 +63,14 @@ class ProductProduct(models.Model):
                 lambda bom: bom.type != "phantom"
             ).with_context(active_test=False)
             for bom in used_in_boms.filtered("active"):
-                products = bom.product_id or bom.product_tmpl_id.product_variant_ids
-                to_link = products.filtered(lambda p: not p.plan_ids)
+                # a product inherit plan of component only if there is only one plan
+                # among it
+                if len(bom.bom_line_ids.product_id.plan_ids) != 1:
+                    continue
+                inheriting_products = (
+                    bom.product_id or bom.product_tmpl_id.product_variant_ids
+                )
+                to_link = inheriting_products.filtered(lambda p: not p.plan_ids)
                 derivated_products |= to_link
         return derivated_products
 
