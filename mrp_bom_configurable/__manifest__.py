@@ -7,7 +7,7 @@
     "website": "https://github.com/OCA/manufacture",
     "author": "Akretion, Odoo Community Association (OCA)",
     "license": "AGPL-3",
-    "depends": ["mrp", "sale", "web"],
+    "depends": ["mrp", "sale", "web", "mail"],
     "maintainer": [
         "bealdav",
     ],

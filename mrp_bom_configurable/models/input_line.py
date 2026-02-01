@@ -1,9 +1,10 @@
-from odoo import api, fields, models
+from odoo import api, tools, fields, models
 
 
 class Inputline(models.Model):
     _name = "input.line"
     _description = "Line configuration scenari"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
 
     name = fields.Char()
     sequence = fields.Integer()
