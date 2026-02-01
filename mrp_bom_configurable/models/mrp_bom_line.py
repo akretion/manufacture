@@ -1,7 +1,7 @@
 from ast import operator
 import logging
 
-from odoo import _, api, fields, models
+from odoo import _, tools, api, fields, models
 from odoo.exceptions import ValidationError
 from odoo.tools.safe_eval import safe_eval, wrap_module
 
@@ -74,6 +74,7 @@ def evaluate_domain_operand(domain, values, current_name, parent_name):
     if isinstance(domain, bool):
         return domain
     else:
+        values = dict(values)
         values["line_data"] = {"name": current_name}
 
         param, operator, value = domain
@@ -147,6 +148,7 @@ class MrpBomLine(models.Model):
         self._run_formula(eval_context)
         return eval_context.get("result", self.product_qty)
 
+    @tools.ormcache("self.id", "tuple(sorted(values.items()))")
     def check_domain(self, values):
         self.ensure_one()
         if not self.domain:
