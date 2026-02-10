@@ -1,4 +1,5 @@
 from odoo import api, tools, fields, models
+from functools import lru_cache
 
 
 class Inputline(models.Model):
@@ -28,11 +29,24 @@ class Inputline(models.Model):
         """_get_config_elements must be overriden and return
         the specific fields in the input line"""
 
-    def _get_input_line_values(self):
+    def _input_line_values(self):
         elements = dict()
         for elm in self._get_config_elements():
             elements[elm] = self[elm]
         return elements
+
+    @lru_cache
+    def _cached_get_input_line_values(self):
+        return self._input_line_values()
+
+    def _clear_cache_input_line_values(self):
+        return self._cached_get_input_line_values.cache_clear()
+
+    def _get_input_line_values(self):
+        if self.env.context.get("use_input_line_values_cache"):
+            return self._cached_get_input_line_values()
+
+        return self._input_line_values()
 
     def check_one_data(self):
         pass
