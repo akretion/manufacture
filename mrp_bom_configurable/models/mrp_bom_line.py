@@ -1,5 +1,6 @@
 from ast import operator
 import logging
+from collections.abc import Iterable
 
 from odoo import _, tools, api, fields, models
 from odoo.exceptions import ValidationError
@@ -79,13 +80,8 @@ def evaluate_domain_operand(domain, values, current_name, parent_name):
 
         param, operator, value = domain
 
-        # if param not in values:
-        #     raise UserError(
-        #         f"Wrong param name ({param}) for domain {current_name}"
-        #         + f"in {parent_name}"
-        #     )
         if operator == "ilike":
-            code = f"{repr(value)} in {param}"
+            code = f"{repr(value)} in ({param} if {param} else [])"
         else:
             code = f"{param} {operator} {repr(value)}"
 
