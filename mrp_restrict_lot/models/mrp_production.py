@@ -22,9 +22,17 @@ class MrpProduction(models.Model):
             if restricted_lot:
                 order.lot_producing_id = restricted_lot
 
+    def _compute_state(self):
+        if self.env.context.get("skip_compute_state"):
+            return
+        super()._compute_state()
+
     def _inverse_lot_producing_id(self):
         for order in self:
-            move_finished = order.move_finished_ids.filtered(
+            move_finished = order.with_context(
+                skip_compute_move_raw_ids=True,
+                skip_compute_state=True,
+            ).move_finished_ids.filtered(
                 lambda m, order=order: m.product_id == order.product_id
             )
             if move_finished:
