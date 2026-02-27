@@ -34,13 +34,22 @@ class StockPicking(models.Model):
         readonly=True, compute="_compute_inspection_required_message"
     )
 
-    @api.depends("qc_inspections_ids")
+    @api.depends("qc_inspections_ids", "move_ids.quantity", "move_ids.picked")
     def _compute_inspection_required_message(self):
         message = _("Control quality is required to validate this " "Transfert.")
         for rec in self:
+            # in case of partial transfer, we want to check only the mandatory
+            # inspections related to what we are about to transfer
+            picked_moves = rec.move_ids.filtered(lambda m: m.picked)
+            if not picked_moves:
+                picked_moves = rec.move_ids.filtered(lambda m: m.quantity > 0)
             if rec.qc_inspections_ids and rec.qc_inspections_ids.filtered(
-                lambda x: x.state not in ["success", "failed"]
+                lambda x, moves=picked_moves: x.state not in ["success", "failed"]
                 and x.is_mandatory_to_validate
+                and (
+                    x.object_id._name == "stock.picking"
+                    or (x.object_id._name == "stock.move" and x.object_id in moves)
+                )
             ):
                 rec.inspection_required_message = message
             else:
