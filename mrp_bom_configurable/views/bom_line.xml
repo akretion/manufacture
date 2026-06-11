@@ -12,7 +12,7 @@
                     <field
                         name="domain"
                         widget="domain"
-                        options="{'model': 'input.line'}"
+                        options="{'model': 'product.config'}"
                     />
                     <field name="condition" />
                     <field name="use_formula_compute_qty" />

@@ -5,4 +5,4 @@ class StockLot(models.Model):
     _name = "stock.lot"
     _inherit = "stock.lot"
 
-    input_line_id = fields.Many2one(comodel_name="input.line")
+    product_config_id = fields.Many2one(comodel_name="product.config")

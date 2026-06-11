@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <record id="input_line_form_window" model="ir.ui.view">
-        <field name="name">input.line.form.window</field>
-        <field name="model">input.line</field>
+    <record id="product_config_form_window" model="ir.ui.view">
+        <field name="name">product.config.form.window</field>
+        <field name="model">product.config</field>
         <field name="mode">primary</field>
         <field name="arch" type="xml">
             <form>
@@ -16,10 +16,10 @@
         </field>
     </record>
 
-    <record id='input_line_tree' model='ir.ui.view'>
-        <field name='model'>input.line</field>
+    <record id='product_config_tree' model='ir.ui.view'>
+        <field name='model'>product.config</field>
         <field name='arch' type='xml'>
-            <list multi_edit="1" class="input_line_tree">
+            <list multi_edit="1" class="product_config_tree">
                 <button
                     name="open_form_pop_up"
                     class="fa fa-eye"
@@ -34,8 +34,8 @@
         </field>
     </record>
 
-    <record id="input_line_search" model="ir.ui.view">
-        <field name="model">input.line</field>
+    <record id="product_config_search" model="ir.ui.view">
+        <field name="model">product.config</field>
         <field name="arch" type="xml">
             <search>
                 <filter name="name" />
@@ -49,10 +49,10 @@
         </field>
     </record>
 
-    <menuitem id="configurator_menu" name="Configurateur" parent="mrp.menu_mrp_root" />
+    <menuitem id="configurator_menu" name="Configurator" parent="mrp.menu_mrp_root" />
 
     <menuitem
-        id="input_config_menu_configurations"
+        id="product_configuration_menu"
         parent="configurator_menu"
         name="Configurations"
         sequence="10"

@@ -15,7 +15,7 @@ MAIN_FIELDS = [
 
 
 class Inputline(models.Model):
-    _name = "input.line"
+    _name = "product.config"
     _description = "Line configuration scenari"
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
@@ -42,7 +42,7 @@ class Inputline(models.Model):
         """Resulting fields are the specific ones dedicated to your own process"""
         fields_ = (
             self.env["ir.model.fields"]
-            .search([("model", "=", "input.line")])
+            .search([("model", "=", "product.config")])
             .filtered(lambda s: s.ttype not in ("many2many", "one2many"))
             .mapped("name")
         )
@@ -66,7 +66,7 @@ class Inputline(models.Model):
         ]
         return field_names
 
-    def _input_line_values(self):
+    def _product_config_values(self):
         elements = dict()
         for elm in self._get_config_elements():
             elements[elm] = self[elm]
@@ -75,17 +75,17 @@ class Inputline(models.Model):
     # We need to use a lru cache because this is called a lot and triggers
     # a lot of a read from the cache during mrp.production generation
     @lru_cache  # noqa: B019
-    def _cached_get_input_line_values(self):
-        return self._input_line_values()
+    def _cached_get_product_config_values(self):
+        return self._product_config_values()
 
-    def _clear_cache_input_line_values(self):
-        return self._cached_get_input_line_values.cache_clear()
+    def _clear_cache_product_config_values(self):
+        return self._cached_get_product_config_values.cache_clear()
 
-    def _get_input_line_values(self):
-        if self.env.context.get("use_input_line_values_cache"):
-            return self._cached_get_input_line_values()
+    def _get_product_config_values(self):
+        if self.env.context.get("use_product_config_values_cache"):
+            return self._cached_get_product_config_values()
 
-        return self._input_line_values()
+        return self._product_config_values()
 
     def check_one_data(self):
         pass
@@ -95,7 +95,7 @@ class Inputline(models.Model):
         return {
             "type": "ir.actions.act_window",
             "name": "Input line information",
-            "res_model": "input.line",
+            "res_model": "product.config",
             "view_mode": "form",
             "target": "new",
             "res_id": self.id,

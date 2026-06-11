@@ -42,8 +42,8 @@ msgid "Activity Type Icon"
 msgstr ""
 
 #. module: mrp_bom_configurable
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line__alert
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard__alert
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config__alert
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard__alert
 msgid "Alert"
 msgstr ""
 
@@ -79,13 +79,13 @@ msgstr ""
 #. module: mrp_bom_configurable
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_constraint__bom_id
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_line_configured__bom_id
-#: model_terms:ir.ui.view,arch_db:mrp_bom_configurable.input_line_search
+#: model_terms:ir.ui.view,arch_db:mrp_bom_configurable.product_config_search
 msgid "Bom"
 msgstr ""
 
 #. module: mrp_bom_configurable
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line__bom_data_preview
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard__bom_data_preview
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config__bom_data_preview
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard__bom_data_preview
 msgid "Bom Data Preview"
 msgstr ""
 
@@ -106,16 +106,16 @@ msgid "Condition"
 msgstr ""
 
 #. module: mrp_bom_configurable
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line__config_id
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard__config_id
-#: model_terms:ir.ui.view,arch_db:mrp_bom_configurable.input_line_search
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config__config_id
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard__config_id
+#: model_terms:ir.ui.view,arch_db:mrp_bom_configurable.product_config_search
 msgid "Config"
 msgstr ""
 
 #. module: mrp_bom_configurable
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_config__bom_id
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line__bom_id
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard__bom_id
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config__bom_id
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard__bom_id
 msgid "Configurable Product"
 msgstr ""
 
@@ -156,7 +156,7 @@ msgid "Configured Products"
 msgstr ""
 
 #. module: mrp_bom_configurable
-#: model_terms:ir.ui.view,arch_db:mrp_bom_configurable.input_line_form_wizard
+#: model_terms:ir.ui.view,arch_db:mrp_bom_configurable.product_config_form_wizard
 msgid "Confirm"
 msgstr ""
 
@@ -173,8 +173,8 @@ msgstr ""
 #. module: mrp_bom_configurable
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_config__create_uid
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_constraint__create_uid
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line__create_uid
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard__create_uid
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config__create_uid
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard__create_uid
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_configured__create_uid
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_line_configured__create_uid
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_configured__create_uid
@@ -184,8 +184,8 @@ msgstr ""
 #. module: mrp_bom_configurable
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_config__create_date
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_constraint__create_date
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line__create_date
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard__create_date
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config__create_date
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard__create_date
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_configured__create_date
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_line_configured__create_date
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_configured__create_date
@@ -200,8 +200,8 @@ msgstr ""
 #. module: mrp_bom_configurable
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_config__display_name
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_constraint__display_name
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line__display_name
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard__display_name
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config__display_name
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard__display_name
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_configured__display_name
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_line_configured__display_name
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_configured__display_name
@@ -261,8 +261,8 @@ msgstr ""
 #. module: mrp_bom_configurable
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_config__id
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_constraint__id
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line__id
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard__id
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config__id
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard__id
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_configured__id
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_line_configured__id
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_configured__id
@@ -294,7 +294,7 @@ msgid "If checked, some messages have a delivery error."
 msgstr ""
 
 #. module: mrp_bom_configurable
-#: model_terms:ir.ui.view,arch_db:mrp_bom_configurable.input_line_tree
+#: model_terms:ir.ui.view,arch_db:mrp_bom_configurable.product_config_tree
 msgid "Info"
 msgstr ""
 
@@ -305,7 +305,7 @@ msgid "Input Constraints"
 msgstr ""
 
 #. module: mrp_bom_configurable
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_configured__input_line_id
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_configured__product_config_id
 msgid "Input Line"
 msgstr ""
 
@@ -318,8 +318,8 @@ msgstr ""
 #. module: mrp_bom_configurable
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_config____last_update
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_constraint____last_update
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line____last_update
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard____last_update
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config____last_update
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard____last_update
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_configured____last_update
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_line_configured____last_update
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_configured____last_update
@@ -329,8 +329,8 @@ msgstr ""
 #. module: mrp_bom_configurable
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_config__write_uid
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_constraint__write_uid
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line__write_uid
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard__write_uid
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config__write_uid
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard__write_uid
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_configured__write_uid
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_line_configured__write_uid
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_configured__write_uid
@@ -340,8 +340,8 @@ msgstr ""
 #. module: mrp_bom_configurable
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_config__write_date
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_constraint__write_date
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line__write_date
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard__write_date
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config__write_date
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard__write_date
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_configured__write_date
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_mrp_bom_line_configured__write_date
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_configured__write_date
@@ -355,12 +355,12 @@ msgid "Line"
 msgstr ""
 
 #. module: mrp_bom_configurable
-#: model:ir.model,name:mrp_bom_configurable.model_input_line
+#: model:ir.model,name:mrp_bom_configurable.model_product_config
 msgid "Line configuration scenari"
 msgstr ""
 
 #. module: mrp_bom_configurable
-#: model:ir.actions.act_window,name:mrp_bom_configurable.input_line_form_wizard_action
+#: model:ir.actions.act_window,name:mrp_bom_configurable.product_config_form_wizard_action
 msgid "Line configurator"
 msgstr ""
 
@@ -395,11 +395,11 @@ msgstr ""
 
 #. module: mrp_bom_configurable
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_config__name
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line__name
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard__name
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config__name
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard__name
 #: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_configured__name
 #: model_terms:ir.ui.view,arch_db:mrp_bom_configurable.input_config_search
-#: model_terms:ir.ui.view,arch_db:mrp_bom_configurable.input_line_form_window
+#: model_terms:ir.ui.view,arch_db:mrp_bom_configurable.product_config_form_window
 msgid "Name"
 msgstr ""
 
@@ -458,8 +458,8 @@ msgid "Odoo syntax domain only"
 msgstr ""
 
 #. module: mrp_bom_configurable
-#: model:ir.model.fields,help:mrp_bom_configurable.field_input_line__alert
-#: model:ir.model.fields,help:mrp_bom_configurable.field_input_line_wizard__alert
+#: model:ir.model.fields,help:mrp_bom_configurable.field_product_config__alert
+#: model:ir.model.fields,help:mrp_bom_configurable.field_product_config_wizard__alert
 msgid "Outside limit configuration is reported here"
 msgstr ""
 
@@ -516,14 +516,14 @@ msgid "SMS Delivery error"
 msgstr ""
 
 #. module: mrp_bom_configurable
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line__satisfies_constraint
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard__satisfies_constraint
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config__satisfies_constraint
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard__satisfies_constraint
 msgid "Satisfies Constraint"
 msgstr ""
 
 #. module: mrp_bom_configurable
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line__sequence
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard__sequence
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config__sequence
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard__sequence
 msgid "Sequence"
 msgstr ""
 
@@ -553,14 +553,14 @@ msgid "Store"
 msgstr ""
 
 #. module: mrp_bom_configurable
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line__constraint_suggestions
-#: model:ir.model.fields,field_description:mrp_bom_configurable.field_input_line_wizard__constraint_suggestions
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config__constraint_suggestions
+#: model:ir.model.fields,field_description:mrp_bom_configurable.field_product_config_wizard__constraint_suggestions
 msgid "Suggestions"
 msgstr ""
 
 #. module: mrp_bom_configurable
-#: model:ir.model.fields,help:mrp_bom_configurable.field_input_line__satisfies_constraint
-#: model:ir.model.fields,help:mrp_bom_configurable.field_input_line_wizard__satisfies_constraint
+#: model:ir.model.fields,help:mrp_bom_configurable.field_product_config__satisfies_constraint
+#: model:ir.model.fields,help:mrp_bom_configurable.field_product_config_wizard__satisfies_constraint
 msgid "True if the input line satisfies the constraints"
 msgstr ""
 
@@ -602,6 +602,6 @@ msgid "Website communication history"
 msgstr ""
 
 #. module: mrp_bom_configurable
-#: model:ir.model,name:mrp_bom_configurable.model_input_line_wizard
+#: model:ir.model,name:mrp_bom_configurable.model_product_config_wizard
 msgid "Wizard model for input line"
 msgstr ""

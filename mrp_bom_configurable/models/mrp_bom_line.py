@@ -114,19 +114,19 @@ class MrpBomLine(models.Model):
     )
     condition = fields.Text(help="Comment explaining domain if needed")
 
-    def _create_formula_eval_context(self, input_line):
+    def _create_formula_eval_context(self, product_config):
         context = {
             "qty": self.product_qty,
         }
-        params = input_line._get_config_elements()
+        params = product_config._get_config_elements()
 
         for param in params:
-            if not input_line._fields[param].relational:
-                context[param] = input_line[param]
-            elif hasattr(input_line[param], "value") or hasattr(
-                input_line[param], "name"
+            if not product_config._fields[param].relational:
+                context[param] = product_config[param]
+            elif hasattr(product_config[param], "value") or hasattr(
+                product_config[param], "name"
             ):
-                context[param] = input_line[param]
+                context[param] = product_config[param]
         math_module = __import__("math")
         math = wrap_module(
             math_module, [f for f in math_module.__dict__ if "__" not in f]
@@ -137,8 +137,8 @@ class MrpBomLine(models.Model):
     def _run_formula(self, eval_context):
         safe_eval(self.qty_formula.strip(), eval_context, mode="exec", nocopy=True)
 
-    def compute_qty_from_formula(self, input_line):
-        eval_context = self._create_formula_eval_context(input_line)
+    def compute_qty_from_formula(self, product_config):
+        eval_context = self._create_formula_eval_context(product_config)
         self._run_formula(eval_context)
         return eval_context.get("result", self.product_qty)
 
@@ -152,18 +152,18 @@ class MrpBomLine(models.Model):
                 self.domain, values, self.product_id.name, self.bom_id.product_id.name
             )
 
-    def _should_not_be_included_in_bom(self, input_line):
-        return not self.check_domain(input_line._get_input_line_values())
+    def _should_not_be_included_in_bom(self, product_config):
+        return not self.check_domain(product_config._get_product_config_values())
 
     def _skip_bom_line(self, product, never_attribute_values=False):
         self.ensure_one()
         res = super()._skip_bom_line(product, never_attribute_values)
 
-        input_line_id = self.env.context.get("input_line_id", False)
-        if input_line_id:
-            input_line = self.env["input.line"].browse(input_line_id)
-            if input_line:
-                return self._should_not_be_included_in_bom(input_line)
+        product_config_id = self.env.context.get("product_config_id", False)
+        if product_config_id:
+            product_config = self.env["product.config"].browse(product_config_id)
+            if product_config:
+                return self._should_not_be_included_in_bom(product_config)
 
         return res
 

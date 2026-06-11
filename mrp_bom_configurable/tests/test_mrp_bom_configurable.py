@@ -11,7 +11,7 @@ class TestBomConfigurable(TransactionCase):
         cls.bom_obj = cls.env["mrp.bom"]
         cls.bom_line_obj = cls.env["mrp.bom.line"]
 
-        cls.input_config_line_obj = cls.env["input.line"]
+        cls.product_config_obj = cls.env["product.config"]
 
         # Create product
         cls.product_1 = cls.product_obj.create({"name": "TEST 01", "type": "product"})
@@ -74,14 +74,14 @@ class TestBomConfigurable(TransactionCase):
         )
 
         # Create config
-        cls.input_line = cls.input_config_line_obj.create(
+        cls.product_config = cls.product_config_obj.create(
             {
                 "name": "test_1",
                 "bom_id": cls.bom.id,
                 "test_config": True,
             }
         )
-        cls.input_line_2 = cls.input_config_line_obj.create(
+        cls.product_config_2 = cls.product_config_obj.create(
             {
                 "name": "test_1",
                 "bom_id": cls.bom.id,
@@ -90,8 +90,8 @@ class TestBomConfigurable(TransactionCase):
         )
 
     def test_01_configurable_bom(self):
-        self.input_line.populate_bom_data_preview()
-        self.input_line_2.populate_bom_data_preview()
+        self.product_config.populate_bom_data_preview()
+        self.product_config_2.populate_bom_data_preview()
         boms = self.env["mrp.bom"].search([("configuration_type", "=", "configured")])
         self.assertEqual(len(boms), 2)
         self.assertEqual(len(boms[0].bom_line_ids), 2)
