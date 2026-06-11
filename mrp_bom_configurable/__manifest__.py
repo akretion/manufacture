@@ -15,7 +15,7 @@
         "security/ir.model.access.csv",
         "views/bom.xml",
         "views/bom_line.xml",
-        "views/input_line.xml",
+        "views/product_config.xml",
         "views/input_constraint.xml",
     ],
     "demo": [],

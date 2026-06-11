@@ -1,6 +1,6 @@
 from . import (
     input_constraint,
-    input_line,
+    product_config,
     mrp_bom,
     mrp_bom_line,
     stock_lot,
