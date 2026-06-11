@@ -3,11 +3,23 @@ from functools import lru_cache
 from odoo import api, fields, models
 
 
+MAIN_FIELDS = [
+    "name",
+    "sequence",
+    "bom_id",
+    "alert",
+    "satisfies_constraint",
+    "constraint_suggestions",
+    "bom_data_preview",
+]
+
+
 class Inputline(models.Model):
     _name = "input.line"
     _description = "Line configuration scenari"
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
+    # fields in this class (not inherited ones) must be declared in MAIN_FIELDS
     name = fields.Char()
     sequence = fields.Integer()
     bom_id = fields.Many2one(
@@ -27,8 +39,32 @@ class Inputline(models.Model):
     bom_data_preview = fields.Json()
 
     def _get_config_elements(self):
-        """_get_config_elements must be overriden and return
-        the specific fields in the input line"""
+        """Resulting fields are the specific ones dedicated to your own process"""
+        fields_ = (
+            self.env["ir.model.fields"]
+            .search([("model", "=", "input.line")])
+            .filtered(lambda s: s.ttype not in ("many2many", "one2many"))
+            .mapped("name")
+        )
+        field_names = [
+            x
+            for x in fields_
+            # create_date, write_uid, ...
+            if x not in models.MAGIC_COLUMNS
+            and x not in MAIN_FIELDS
+            # these are chatter fields
+            and not x.startswith("message_")
+            # these are activity manager fields
+            and not x.startswith("activity_")
+            and x
+            not in (
+                "display_name",
+                "has_message",
+                "my_activity_date_deadline",
+                "order_line_id",  # comes from sale_mrp_bom_configurable module
+            )
+        ]
+        return field_names
 
     def _input_line_values(self):
         elements = dict()
