@@ -2,10 +2,6 @@ from functools import lru_cache
 
 from odoo import api, fields, models
 
-import logging
-
-logger = logging.getLogger(__name__)
-
 
 MAIN_FIELDS = [
     "name",
@@ -19,9 +15,8 @@ MAIN_FIELDS = [
 
 
 class Inputline(models.Model):
-    # TODO change with "product.config"
     _name = "input.line"
-    _description = "Product configuration scenari"
+    _description = "Line configuration scenari"
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
     # fields in this class (not inherited ones) must be declared in MAIN_FIELDS
@@ -45,9 +40,6 @@ class Inputline(models.Model):
 
     def _get_config_elements(self):
         """Resulting fields are the specific ones dedicated to your own process"""
-        if self._name == "input.line":
-            logger.warning(
-                f"Le nom du model 'input.line' doit etre changé en 'product.config'")
         fields_ = (
             self.env["ir.model.fields"]
             .search([("model", "=", "input.line")])
