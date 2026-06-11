@@ -1,8 +1,6 @@
-from ast import operator
 import logging
-from collections.abc import Iterable
 
-from odoo import _, tools, api, fields, models
+from odoo import _, fields, models, tools
 from odoo.exceptions import ValidationError
 from odoo.tools.safe_eval import safe_eval, wrap_module
 

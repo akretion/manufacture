@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-
     <record id="input_line_form_window" model="ir.ui.view">
         <field name="name">input.line.form.window</field>
         <field name="model">input.line</field>
@@ -11,8 +10,7 @@
                     <h1>
                         <field name="name" class="oe_inline" placeholder="Name" />
                     </h1>
-                    <group name="main">
-                    </group>
+                    <group name="main" />
                 </sheet>
             </form>
         </field>
@@ -59,5 +57,4 @@
         name="Configurations"
         sequence="10"
     />
-
 </odoo>

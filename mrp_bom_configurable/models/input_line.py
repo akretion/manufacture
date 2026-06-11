@@ -1,5 +1,6 @@
-from odoo import api, tools, fields, models
 from functools import lru_cache
+
+from odoo import api, fields, models
 
 
 class Inputline(models.Model):
@@ -35,7 +36,9 @@ class Inputline(models.Model):
             elements[elm] = self[elm]
         return elements
 
-    @lru_cache
+    # We need to use a lru cache because this is called a lot and triggers
+    # a lot of a read from the cache during mrp.production generation
+    @lru_cache  # noqa: B019
     def _cached_get_input_line_values(self):
         return self._input_line_values()
 

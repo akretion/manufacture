@@ -60,7 +60,8 @@ class MrpBom(models.Model):
                 break
 
     def _recompute_variable_quantity(self, quantity, input_line, boms_done, lines_done):
-        """This compute the quantity for components which have a parent that is computed from formula"""
+        """This compute the quantity for components which have a parent that is computed
+        from formula"""
         for _, bom_data in boms_done:
             if (
                 bom_data["parent_line"]

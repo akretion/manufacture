@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-
     <record id="mrp_bom_form_view" model="ir.ui.view">
         <field name="model">mrp.bom</field>
         <field name="inherit_id" ref="mrp.mrp_bom_form_view" />
@@ -43,21 +42,22 @@
         </field>
     </record>
 
-
     <record id="mrp_bom_configurable_form_action" model="ir.actions.act_window">
         <field name="name">Configurable BoM</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">mrp.bom</field>
-        <field name="domain">[]</field> <!-- force empty -->
+        <field name="domain">[]</field>
+        <!-- force empty -->
         <field name="view_mode">list,kanban,form</field>
         <field name="search_view_id" ref="view_mrp_bom_filter" />
         <field
             name="context"
         >{'default_company_id': allowed_company_ids[0], 'search_default_variable': True, 'search_default_configured': False}</field>
         <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
+            <p class="o_view_nocontent_smiling_face">
             No bill of materials found. Let's create one!
-          </p><p>
+          </p>
+            <p>
             Bills of materials allow you to define the list of required raw
             materials used to make a finished product; through a manufacturing
             order or a pack of products.
@@ -99,5 +99,4 @@
             </field>
         </field>
     </record>
-
 </odoo>
