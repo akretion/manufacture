@@ -1,6 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import models
+from odoo.fields import Command
 
 
 class StockRule(models.Model):
@@ -31,11 +32,11 @@ class StockRule(models.Model):
         )
         lot_id = values.get("restrict_lot_id")
         if lot_id:
-            vals["lot_producing_id"] = lot_id
+            vals["lot_producing_ids"] = [Command.link(lot_id)]
             lot = self.env["stock.lot"].browse(lot_id)
             mo_name = lot.name
             existing_mo = self.env["mrp.production"].search(
-                [("lot_producing_id", "=", lot_id)]
+                [("lot_producing_ids", "in", [lot_id])]
             )
             if existing_mo:
                 mo_name = f"{mo_name}-{len(existing_mo)}"
@@ -51,5 +52,5 @@ class StockRule(models.Model):
         restricted_lot = procurement.values.get("restrict_lot_id")
         if restricted_lot:
             # mind the last ,
-            domain += (("lot_producing_id", "=", restricted_lot),)
+            domain += (("lot_producing_ids", "in", [restricted_lot]),)
         return domain
