@@ -35,7 +35,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="bom_id" />
-                <group expand="0" string="Group By">
+                <group>
                     <filter name="bom_id" context="{'group_by': 'bom_id'}" />
                 </group>
             </search>
