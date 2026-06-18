@@ -24,11 +24,15 @@ class PurchaseOrder(models.Model):
         plans_under_change = ongoing_ecos.plan_ids
         message = ""
         if ongoing_ecos:
+            eco_lines = [
+                f"{eco.name}: {eco.description}" if eco.description else eco.name
+                for eco in ongoing_ecos
+            ]
             message = self.env._(
                 "The plans %(plan_names)s are under change. The change orders are "
-                "the following : %(eco_names)s",
-                plan_names=plans_under_change.mapped("name"),
-                eco_names=ongoing_ecos.mapped("name"),
+                "the following : \n- %(eco_names)s",
+                plan_names=", ".join(plans_under_change.mapped("name")),
+                eco_names="\n- ".join(eco_lines),
             )
         return message
 
