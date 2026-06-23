@@ -2,7 +2,7 @@
 {
     "name": "MRP Bom Configurable",
     "summary": "Skip components lines in bom according to conditions",
-    "version": "18.0.1.0.0",
+    "version": "19.0.1.0.0",
     "category": "Manufacture",
     "website": "https://github.com/OCA/manufacture",
     "author": "Akretion, Odoo Community Association (OCA)",
