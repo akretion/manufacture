@@ -148,9 +148,13 @@ class MrpBomLine(models.Model):
         if not self.domain:
             return True
         else:
+            domain = self._override_domain(values)
             return check_domain(
-                self.domain, values, self.product_id.name, self.bom_id.product_id.name
+                domain, values, self.product_id.name, self.bom_id.product_id.name
             )
+
+    def _override_domain(self, values):
+        return self.domain
 
     def _should_not_be_included_in_bom(self, product_config):
         return not self.check_domain(product_config._get_product_config_values())
