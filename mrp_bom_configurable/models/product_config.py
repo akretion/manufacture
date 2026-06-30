@@ -14,7 +14,7 @@ MAIN_FIELDS = [
 ]
 
 
-class Inputline(models.Model):
+class ProductConfig(models.Model):
     _name = "product.config"
     _description = "Line configuration scenari"
     _inherit = ["mail.thread", "mail.activity.mixin"]
