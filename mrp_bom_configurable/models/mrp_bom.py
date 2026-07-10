@@ -13,6 +13,7 @@ class MrpBom(models.Model):
         default="normal",
         required=True,
     )
+    expression = fields.Boolean(help="Expression instead of domain")
 
     def _compute_data_from_line_and_quantity(self, line, line_quantity):
         return {

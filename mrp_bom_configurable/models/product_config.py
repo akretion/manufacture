@@ -16,7 +16,7 @@ MAIN_FIELDS = [
 
 class ProductConfig(models.Model):
     _name = "product.config"
-    _description = "Line configuration scenari"
+    _description = "Product configuration scenari"
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
     # fields in this class (not inherited ones) must be declared in MAIN_FIELDS
@@ -37,6 +37,7 @@ class ProductConfig(models.Model):
     )
     constraint_suggestions = fields.Text()
     bom_data_preview = fields.Json()
+    expression = fields.Boolean(related="bom_id.expression")
 
     def _get_config_elements(self):
         """Resulting fields are the specific ones dedicated to your own process"""
@@ -94,7 +95,7 @@ class ProductConfig(models.Model):
         self.ensure_one()
         return {
             "type": "ir.actions.act_window",
-            "name": "Input line information",
+            "name": "Configuration",
             "res_model": "product.config",
             "view_mode": "form",
             "target": "new",

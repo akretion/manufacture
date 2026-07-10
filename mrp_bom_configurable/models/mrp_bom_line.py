@@ -106,6 +106,7 @@ class MrpBomLine(models.Model):
     _inherit = "mrp.bom.line"
 
     domain = fields.Text(help="Odoo syntax domain only")
+    expression = fields.Text(help="Python syntax")
     use_formula_compute_qty = fields.Boolean(
         string="Use formula to compute qty", default=False, required=False
     )
