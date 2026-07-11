@@ -6,7 +6,6 @@
         <field name="arch" type="xml">
             <field name="type" position="after">
                 <field name="configuration_type" />
-                <field name="expression" invisible="configuration_type != 'variable'" />
             </field>
             <xpath
                 expr="//field[@name='bom_line_ids']/list/field[@name='product_uom_id']"

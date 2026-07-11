@@ -40,7 +40,7 @@ class MrpProduction(models.Model):
             to_skip = []
             for raw in production.move_raw_ids:
                 if raw.bom_line_id:
-                    res = raw.bom_line_id._should_not_be_included_in_bom(product_config)
+                    res = raw.bom_line_id._should_skip_bom_line(product_config)
                     if res:
                         to_skip.append(raw.id)
             if to_skip:

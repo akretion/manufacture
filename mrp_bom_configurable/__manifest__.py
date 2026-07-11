@@ -17,6 +17,7 @@
         "views/bom_line.xml",
         "views/product_config.xml",
         "views/input_constraint.xml",
+        "data/config.xml",
     ],
     "demo": [],
     "installable": True,

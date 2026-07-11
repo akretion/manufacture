@@ -1,0 +1,8 @@
+<odoo>
+
+    <record id="bom_expression" model="ir.config_parameter">
+        <field name="key">bom_expression</field>
+        <field name="value">domain</field>
+    </record>
+
+</odoo>

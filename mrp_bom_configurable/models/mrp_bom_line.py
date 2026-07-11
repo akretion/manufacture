@@ -1,10 +1,12 @@
 import logging
 
-from odoo import _, fields, models, tools
+from odoo import _, fields, models
 from odoo.exceptions import ValidationError
 from odoo.tools.safe_eval import safe_eval, wrap_module
 
 logger = logging.getLogger(__name__)
+
+MODULE = __name__[12 : __name__.index(".", 13)]
 
 
 def check_domain(domain, values, current_name, parent_name):
@@ -157,8 +159,29 @@ class MrpBomLine(models.Model):
     def _override_domain(self, values):
         return self.domain
 
+    def _should_skip_bom_line(self, product_config):
+        bom_expression = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param(f"{MODULE}.bom_expression", default="domain")
+        )
+        if bom_expression == "domain":
+            # the original way
+            return not self.check_domain(product_config._get_product_config_values())
+        else:
+            # the new way to do it allow to win ~ 15% in performance
+            if not self.expression:
+                return False
+            return not safe_eval(
+                self.expression, product_config._get_product_config_values()
+            )
+
     def _should_not_be_included_in_bom(self, product_config):
-        return not self.check_domain(product_config._get_product_config_values())
+        logger.warning(
+            "_should_not_be_included_in_bom() is deprecated:"
+            + "use _should_skip_bom_line() instead"
+        )
+        return self._should_skip_bom_line(product_config)
 
     def _skip_bom_line(self, product, never_attribute_values=False):
         self.ensure_one()
@@ -168,7 +191,7 @@ class MrpBomLine(models.Model):
         if product_config_id:
             product_config = self.env["product.config"].browse(product_config_id)
             if product_config:
-                return self._should_not_be_included_in_bom(product_config)
+                return self._should_skip_bom_line(product_config)
 
         return res
 

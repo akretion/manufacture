@@ -13,7 +13,6 @@ class MrpBom(models.Model):
         default="normal",
         required=True,
     )
-    expression = fields.Boolean(help="Expression instead of domain")
 
     def _compute_data_from_line_and_quantity(self, line, line_quantity):
         return {
@@ -43,7 +42,9 @@ class MrpBom(models.Model):
 
         return qty
 
-    def _recompute_line_data_quantity(self, product_config, boms_done, bom_line, line_data):
+    def _recompute_line_data_quantity(
+        self, product_config, boms_done, bom_line, line_data
+    ):
         """This recompute the line data quantity during explode after"""
         parent_line = line_data["parent_line"]
 
@@ -60,7 +61,9 @@ class MrpBom(models.Model):
             else:
                 break
 
-    def _recompute_variable_quantity(self, quantity, product_config, boms_done, lines_done):
+    def _recompute_variable_quantity(
+        self, quantity, product_config, boms_done, lines_done
+    ):
         """This compute the quantity for components which have a parent that is computed
         from formula"""
         for _, bom_data in boms_done:

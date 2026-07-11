@@ -2,7 +2,6 @@ from functools import lru_cache
 
 from odoo import api, fields, models
 
-
 MAIN_FIELDS = [
     "name",
     "sequence",
@@ -37,7 +36,6 @@ class ProductConfig(models.Model):
     )
     constraint_suggestions = fields.Text()
     bom_data_preview = fields.Json()
-    expression = fields.Boolean(related="bom_id.expression")
 
     def _get_config_elements(self):
         """Resulting fields are the specific ones dedicated to your own process"""
