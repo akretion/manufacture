@@ -6,8 +6,6 @@ from odoo.tools.safe_eval import safe_eval, wrap_module
 
 logger = logging.getLogger(__name__)
 
-MODULE = __name__[12 : __name__.index(".", 13)]
-
 
 def check_domain(domain, values, current_name, parent_name):
     if domain is None or not isinstance(domain, str):
@@ -160,12 +158,7 @@ class MrpBomLine(models.Model):
         return self.domain
 
     def _should_skip_bom_line(self, product_config):
-        bom_expression = (
-            self.env["ir.config_parameter"]
-            .sudo()
-            .get_param(f"{MODULE}.bom_expression", default="domain")
-        )
-        if bom_expression == "domain":
+        if self._get_bom_expression_config_parameter() == "domain":
             # the original way
             return not self.check_domain(product_config._get_product_config_values())
         else:
@@ -205,3 +198,14 @@ class MrpBomLine(models.Model):
             "view_mode": "form",
             "target": "current",
         }
+
+    def _get_bom_expression_config_parameter(self):
+        bom_expression = (
+            self.env["ir.config_parameter"].sudo().get_param("bom_expression")
+        )
+        if not bom_expression:
+            message="""
+            Missing 'bom_expression' ir.config_parameter.
+            You need to create it with 'domain' or 'python' value.""" 
+            raise ValidationError(_(message))
+        return bom_expression
