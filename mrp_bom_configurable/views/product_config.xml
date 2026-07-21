@@ -11,6 +11,7 @@
                         <field name="name" class="oe_inline" placeholder="Name" />
                     </h1>
                     <group name="main" />
+                    <group name="footer" colspan="2" />
                 </sheet>
             </form>
         </field>
